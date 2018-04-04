@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
-  Image,
-  Dimensions,
   ImageBackground
 } from 'react-native';
 
@@ -14,10 +11,28 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: 'C2P1'
+      name: 'C2P1',
+      greetingText: 'empty'
     }
   }
 
+ componentWillMount() {
+   this.setState({
+     greetingText: this.getGreeting()
+   })
+ }
+
+  getGreeting() {
+    var date = new Date();
+    var hour = date.getHours();
+    if (hour > 11 && hour < 19) {
+      return 'afternoon';
+    } else if (hour > 18) {
+      return 'evening';
+    } else {
+      return 'morning';
+    }
+  }
 
   render() {
     return (
@@ -31,7 +46,7 @@ export default class App extends Component {
             style = {styles.paragraph}
             adjustsFontSizeToFit={true}
           >
-            Good evening, {"\n"}
+            Good {this.state.greetingText}, {"\n"}
             {this.state.name}.
           </Text>
         </View>
