@@ -12,7 +12,7 @@ export default class App extends Component {
     super(props)
     this.state = {
       name: 'C2P1',
-      greetingText: 'empty'
+      greetingText: 'day'
     }
   }
 
