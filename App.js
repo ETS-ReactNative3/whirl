@@ -8,18 +8,19 @@ import {
   TextInput,
   FlatList
 } from 'react-native';
+import MainFocusInput from './src/components/MainFocusInput/MainFocusInput';
+import TodoInput from './src/components/TodoInput/TodoInput';
+import TodoList from './src/components/TodoList/TodoList';
 
 
 
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: 'Conor',
-      greetingText: 'day',
-      mainFocus: null
-    }
+  state = {
+    name: 'Conor',
+    greetingText: 'day',
+    mainFocus: null,
+    todos: []
   }
 
  componentWillMount() {
@@ -40,6 +41,24 @@ export default class App extends Component {
     }
   }
 
+  todoAddedHandler = todo => {
+    this.setState(prevState => {
+      return {
+        todos: prevState.todos.concat({key: Math.random(), value: todo})
+      }
+    })
+  }
+
+  todoDeletedHandler = key => {
+    this.setState(prevState => {
+      return {
+        todos: prevState.todos.filter(todo => {
+          return todo.key !== key;
+        })
+      };
+    });
+  }
+
   render() {
     return (
       <ImageBackground
@@ -55,16 +74,13 @@ export default class App extends Component {
             {this.state.name}. 
           </Text>
           <Text style={styles.mainFocusHeader}> What is your main focus for today? </Text>
-          <TextInput
-            placeholder = ''
-            style = {styles.mainFocusInput}
-          />
+          <MainFocusInput/>
           <Text style={styles.TodoHeader}>Todo:</Text>
-          <TextInput
-            style={styles.TodoInput}
-            placeholder = 'New Todo'
+          <TodoInput onTodoAdded={this.todoAddedHandler}/>
+          <TodoList
+            todos = {this.state.todos}
+            onItemDeleted={this.todoDeletedHandler}
           />
-          <FlatList />
         </View>
       </ImageBackground>
     );
@@ -97,13 +113,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textShadowColor: '#000000'
   },
-  mainFocusInput: {
-    borderColor: '#ffffff',
-    borderBottomWidth: 2,
-    color: '#ffffff',
-    fontSize: 30,
-    textShadowColor: '#000000'
-  },
   TodoHeader: {
     padding: 10,
     color: '#ffffff',
@@ -112,10 +121,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontWeight: 'bold',
   },
-  TodoInput: {
-    fontSize: 20,
-    color: '#ffffff'
-  }
 });
 
 
