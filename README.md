@@ -5,4 +5,12 @@ When containing no user input for the main focus of the day or any items in to t
 
 <p align="center">
 <img src="https://github.com/C2P1/Whirl/blob/master/resources/img/Default.png" width="240">
+</p>   
+
+
+Example of some todo items having been added:   
+
+
+<p align="center">
+<img src="https://github.com/C2P1/Whirl/blob/master/resources/img/AddingTodo.png" width="240">
 </p>
