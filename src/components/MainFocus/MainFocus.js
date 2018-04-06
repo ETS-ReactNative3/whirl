@@ -16,18 +16,24 @@ class MainFocus extends Component {
         this.props.onMainFocusAdded(this.state.focus);
     }
 
-    focusAddedHandler = (focusAdded) => {
+    focusAddedHandler = (focus) => {
         this.setState({
             focusAdded: !this.state.focusAdded
         })
-        this.focusChangedHandler(focusAdded);
+        this.focusChangedHandler(focus);
     }
 
+    focusDeletedHandler = () => {
+        this.setState({
+            focusAdded: !this.state.focusAdded
+        })
+        this.focusChangedHandler('')
+    }
 
     render() {
         const focusText = this.state.focusAdded ? (
             // display when a focus has been added
-            <TodayFocus todaysFocus={this.state.focus} onDeletePressed={this.focusAddedHandler}/> 
+            <TodayFocus todaysFocus={this.state.focus} onDeletePressed={this.focusDeletedHandler}/> 
           ) : (
             // display when no focus added yet 
             <MainFocusInput onFocusAdded={this.focusAddedHandler} focusVal={this.state.focus}/>
