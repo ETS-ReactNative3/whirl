@@ -20,7 +20,7 @@ export default class Homescreen extends Component {
     todos: []
   }
 
- componentWillMount() {
+ componentDidMount() {
    this.setState({
      greetingText: this.getGreeting(),
      name: this.props.name,
@@ -77,7 +77,7 @@ export default class Homescreen extends Component {
           {/* Greeting */}
           <Text style = {styles.header}>
             Good {this.state.greetingText}, {"\n"}
-            {this.state.name}. 
+            {this.state.name}
           </Text>
 
           {/* Main Focus */}
@@ -87,7 +87,6 @@ export default class Homescreen extends Component {
           <Text style={styles.TodoHeader}>
             Todo:
           </Text>
-          
           <TodoInput onTodoAdded={this.todoAddedHandler}/>
           <TodoList
             todos = {this.state.todos}
