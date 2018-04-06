@@ -8,12 +8,9 @@ import {
   TextInput,
   FlatList
 } from 'react-native';
-import MainFocusInput from './src/components/MainFocusInput/MainFocusInput';
+import MainFocus from './src/components/MainFocus/MainFocus';
 import TodoInput from './src/components/TodoInput/TodoInput';
 import TodoList from './src/components/TodoList/TodoList';
-
-
-
 
 export default class App extends Component {
   state = {
@@ -32,13 +29,19 @@ export default class App extends Component {
   getGreeting() {
     var date = new Date();
     var hour = date.getHours();
-    if (hour > 11 && hour < 19) {
-      return 'afternoon';
-    } else if (hour > 18) {
+    if (hour > 17) {
       return 'evening';
+    } else if (hour > 11) {
+      return 'afternoon';
     } else {
       return 'morning';
     }
+  }
+
+  mainFocusAddedHandler = focus => {
+    this.setState({
+      mainFocus: focus,
+    })
   }
 
   todoAddedHandler = todo => {
@@ -63,19 +66,29 @@ export default class App extends Component {
     return (
       <ImageBackground
           style={styles.image}
-          // source={{url: 'https://source.unsplash.com/1600x900/daily?landscape'}}
+          // source={{url: 'https://source.unsplash.com/900x600/daily?landscape'}}
           // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
-          source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
+          // source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
+          // source = {{URI: '/resources/img/DefaultBackground.png'}}
+          source = {require('./resources/img/DefaultBackground.jpg')}
+          // /Users/ConorSpilsbury/Documents/workspace/Whirl/resources/img/DefaultBackground.jpg
           imageStyle={{resizeMode: 'cover'}}
       >
         <View style={styles.container}>
+          {/* Greeting */}
           <Text style = {styles.header}>
             Good {this.state.greetingText}, {"\n"}
             {this.state.name}. 
           </Text>
-          <Text style={styles.mainFocusHeader}> What is your main focus for today? </Text>
-          <MainFocusInput/>
-          <Text style={styles.TodoHeader}>Todo:</Text>
+
+          {/* Main Focus */}
+          <MainFocus onMainFocusAdded={this.mainFocusAddedHandler}/>
+
+          {/* Todo list */}
+          <Text style={styles.TodoHeader}>
+            Todo:
+          </Text>
+          
           <TodoInput onTodoAdded={this.todoAddedHandler}/>
           <TodoList
             todos = {this.state.todos}
@@ -100,10 +113,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
     textShadowColor: '#000000',
-    fontSize: 45
+    textShadowRadius: 1,
+    fontSize: 45,
+    textShadowOffset: {width: 0.5, height: 0.5},
+    fontFamily: 'Helvetica Neue',
   },
   container: {
-    flex: 1,
     top: '12%'
   },
   mainFocusHeader: {
@@ -111,15 +126,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
     fontSize: 30,
-    textShadowColor: '#000000'
+    fontFamily: 'Helvetica Neue',
   },
   TodoHeader: {
-    padding: 10,
+    padding: 5,
     color: '#ffffff',
     fontSize: 30,
     textShadowColor: '#000000',
+    textShadowRadius: 3,
     textAlign: 'left',
     fontWeight: 'bold',
+    textShadowOffset: {width: 1, height: 1},
+    // backgroundColor: 'rgba(0,0,0,.2)',
+    // borderRadius: 20,
   },
 });
 
