@@ -27,7 +27,6 @@ class MainFocusInput extends Component {
                 <View style = {styles.inputContainer}>
                     <TextInput 
                         placeholder = {this.focus}
-                        value={this.focus} 
                         onChangeText={this.focusChangedHandler}
                         style = {styles.focusInput}
                         multiline = {true}
@@ -45,8 +44,6 @@ class MainFocusInput extends Component {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        // flex: 1,
-        // width: "100%",
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

@@ -26,12 +26,11 @@ class MainFocus extends Component {
 
     render() {
         const focusText = this.state.focusAdded ? (
-            // true
-            // <Text style={styles.focusText}>{this.state.focus}</Text>
-            <TodayFocus todaysFocus={this.state.focus} /> 
+            // display when a focus has been added
+            <TodayFocus todaysFocus={this.state.focus} onDeletePressed={this.focusAddedHandler}/> 
           ) : (
-            // false
-            <MainFocusInput onFocusAdded={this.focusAddedHandler}/>
+            // display when no focus added yet 
+            <MainFocusInput onFocusAdded={this.focusAddedHandler} focusVal={this.state.focus}/>
           )
 
         return (

@@ -26,7 +26,13 @@ class TodayFocus extends Component {
         return (
             <TouchableOpacity style={styles.container} onPress={this.focusPressed}>
                 <Text style={styles.todayHeader}> TODAY </Text>
+                 {/* main focus */} 
                 {text}
+
+                {/* delete button */}
+                <TouchableOpacity onPress={this.props.onDeletePressed} style={styles.deleteButton}>
+                    <Text style={styles.deleteButtonText}> X </Text>
+                </TouchableOpacity> 
             </TouchableOpacity>
         )
     }
@@ -64,6 +70,17 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textDecorationLine: 'line-through',
     },
+    deleteButton: {
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: '#fff',
+        alignItems: 'center',
+        marginLeft: 5,
+    },
+    deleteButtonText: {
+        color: '#ffffff',
+    },
+
 })
 
 export default TodayFocus;
