@@ -8,8 +8,6 @@ class TodoInput extends Component {
         allTodo: []
     }
 
-    // creates a method where the javascript 'this' keyword always
-    // refers to the class
     todoChangedHandler = val => {
         this.setState({
         todo: val
