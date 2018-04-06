@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Button, Text } from 'react-native';
+import { StyleSheet, View, TextInput, Button, Text, AsyncStorage } from 'react-native';
 import MainFocusInput from '../MainFocusInput/MainFocusInput'; 
 import TodayFocus from '../TodayFocus/TodayFocus';
 
@@ -9,10 +9,46 @@ class MainFocus extends Component {
         focusAdded: false,
     }
 
+    async componentDidMount() {
+        try {
+            const value = await AsyncStorage.getItem('focus').then((keyvalue) => {
+                if (keyvalue !== null) {
+                    this.setState({
+                        focus: keyvalue,
+                        focusAdded: true,
+                    })
+                    console.log(keyvalue)
+                } else {
+                    console.log('no focus item in storage')
+                }})
+        } catch (error) {
+            console.log('theres been an error getting the focus item')
+        }
+    }
+
+    async storeFocus(focus)  {
+        try {
+            await AsyncStorage.setItem('focus', focus);
+        } catch (error) {
+            console.log('error setting the focus item')
+        }
+    }
+
+    async removeStorage() {
+        try {
+            await AsyncStorage.removeItem('focus');
+            return true;
+        } catch (error) {
+            console.log('error removing focus from storage');
+            return false;
+        }
+    }
+
     focusChangedHandler = val => {
         this.setState({
             focus: val,
         })
+        this.storeFocus(val);
         this.props.onMainFocusAdded(this.state.focus);
     }
 
@@ -20,13 +56,16 @@ class MainFocus extends Component {
         this.setState({
             focusAdded: !this.state.focusAdded
         })
+        this.storeFocus(focus)
         this.focusChangedHandler(focus);
     }
 
     focusDeletedHandler = () => {
         this.setState({
-            focusAdded: !this.state.focusAdded
+            focusAdded: !this.state.focusAdded,
         })
+        const res = this.removeStorage();
+        console.log(res)
         this.focusChangedHandler('')
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage } from 'react-native';
 
 class TodayFocus extends Component {
     state = {
@@ -7,13 +7,49 @@ class TodayFocus extends Component {
         strikethrough: false,
     }
 
+    async componentDidMount() {
+        try {
+            const value = await AsyncStorage.getItem('strikethrough').then((keyvalue) => {
+                if (keyvalue !== null) {
+                    this.setState({
+                        strikethrough: true,
+                    })
+                    console.log(keyvalue)
+                } else {
+                    console.log('getting strikethrough returned null')
+                }});
+        } catch (error) {
+            console.log('theres been an error getting strikethrough')
+        }
+    }
+
+    async storeStrikethrough(strikethrough) {
+        try {
+            await AsyncStorage.setItem('strikethrough', strikethrough.toString());
+        } catch (error) {
+            console.log('error setting strikethrough item')
+        }
+    }
+
+    async removeStrikethrough() {
+        try {
+            await AsyncStorage.removeItem('strikethrough');
+            return true;
+        } catch (error) {
+            console.log('error removing strikethrough from storage');
+            return false;
+        }
+    }
+
     focusPressed = () => {
         this.setState({
             strikethrough: !this.state.strikethrough
         })
+        this.storeStrikethrough(this.state.strikethrough);
     }
 
     deletePressed() {
+        this.removeStrikethrough();
         this.props.onEditPressed
     }
 
