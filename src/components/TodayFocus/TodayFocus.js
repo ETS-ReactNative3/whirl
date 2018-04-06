@@ -1,20 +1,33 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 class TodayFocus extends Component {
-    constructor(props) {
-        super(props);
-        state = {
-            focus: this.props.todaysFocus
-        }
+    state = {
+        focus: this.props.todaysFocus,
+        strikethrough: false,
+    }
+
+    focusPressed = () => {
+        this.setState({
+            strikethrough: !this.state.strikethrough
+        })
+    }
+
+    deletePressed() {
+        this.props.onEditPressed
     }
 
     render() {
+        const text = this.state.strikethrough ? (
+            <Text style={styles.focusTextComplete}>{this.props.todaysFocus}</Text>
+        ) : (
+            <Text style={styles.focusText}>{this.props.todaysFocus}</Text>
+        )
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={this.focusPressed}>
                 <Text style={styles.todayHeader}> TODAY </Text>
-                <Text style={styles.focusText}>{this.props.todaysFocus}</Text>
-            </View>
+                {text}
+            </TouchableOpacity>
         )
     }
 }
@@ -22,7 +35,6 @@ class TodayFocus extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         paddingTop: 20,
         paddingBottom: 10,
         width: "100%",
@@ -36,13 +48,21 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
     },
     focusText: {
-        // width: '80%',
         borderColor: '#ffffff',
         borderBottomWidth: 2,
         color: '#ffffff',
         fontSize: 30,
         textShadowColor: '#000000',
         textAlign: 'center',
+    },
+    focusTextComplete: {
+        borderColor: '#ffffff',
+        borderBottomWidth: 2,
+        color: '#ffffff',
+        fontSize: 30,
+        textShadowColor: '#000000',
+        textAlign: 'center',
+        textDecorationLine: 'line-through',
     },
 })
 
