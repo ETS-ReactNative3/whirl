@@ -27,9 +27,10 @@ export default ({ title, onPress, isLoading }) => (
 const styles = StyleSheet.create({
   button: {
     marginTop: 25,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   buttonText: {
+    fontWeight: 'bold',
     color: colors.primary,
     fontFamily: fonts.light,
     fontSize: 22,
