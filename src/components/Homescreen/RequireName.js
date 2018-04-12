@@ -78,11 +78,12 @@ const styles = StyleSheet.create({
       fontFamily: 'Helvetica Neue',
     },
     nameInput: {
-        fontSize: 20,
+        fontSize: 30,
         color: '#ffffff',
         textAlignVertical: 'top',
         textAlign: 'center',
-        padding: 20
+        padding: 20,
+        fontWeight: 'bold',
     },
     nameButton: {
         padding: 5,

@@ -16,7 +16,6 @@ export default class Homescreen extends Component {
   state = {
     name: '',
     greetingText: 'day',
-    mainFocus: null,
     todos: []
   }
 
@@ -25,7 +24,36 @@ export default class Homescreen extends Component {
      greetingText: this.getGreeting(),
      name: this.props.name,
    })
+  //  this.getTodoList();
  }
+
+//  async getTodoList() {
+//    try {
+//       const value = await AsyncStorage.getItem('todos').then((keyvalue) => {
+//         if (keyvalue !== null) {
+//             this.setState({
+//                 todos: JSON.parse(keyvalue),
+//             })
+//             console.log(keyvalue)
+//         } else {
+//             console.log('no todos item in storage')
+//         }})
+//   } catch (error) {
+//     console.log('theres been an error getting the todos item')
+//     console.log(error);
+//   } 
+//  }
+
+//  async storeTodoList(todos) {
+//     try {
+//       console.log(JSON.stringify(todos));
+//       await AsyncStorage.setItem('todos', JSON.stringify(todos));
+//   } catch (error) {
+//       console.log('error setting the todos item')
+//       console.log(JSON.stringify(todos))
+//       console.log(error);
+//   }
+//  }
 
   getGreeting() {
     var date = new Date();
@@ -51,6 +79,7 @@ export default class Homescreen extends Component {
         todos: prevState.todos.concat({key: this.state.todos.length, value: todo})
       }
     })
+    // this.storeTodoList(this.state.todos);
   }
 
   todoDeletedHandler = key => {
@@ -61,6 +90,7 @@ export default class Homescreen extends Component {
         })
       };
     });
+    // this.storeTodoList(this.state.todos);
   }
 
   render() {
