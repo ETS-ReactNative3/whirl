@@ -42,8 +42,6 @@ function signUpFailure(err) {
 export function createUser(username, password, given_name) {
   return (dispatch) => {
     dispatch(signUp())
-    // given_name = "Conor"
-    Alert.alert('Sign up with given name', given_name)
     Auth.signUp({
       username,
       password,
@@ -55,10 +53,29 @@ export function createUser(username, password, given_name) {
       console.log('data from signUp: ', data)
       dispatch(signUpSuccess(data))
       dispatch(showSignUpConfirmationModal())
+      setTimeout(() => {
+        Alert.alert('Your signed up!', "Please verify your email address by following the link in the email sent to you. You must do this before using the app.")
+      }, 0)
+
     })
     .catch(err => {
       console.log('error signing up: ', err)
       dispatch(signUpFailure(err))
+
+      console.log('err msg: ', err.message)
+      if (err.message == null) {
+        errorMsg = err
+      } else {
+        errorMsg = err.message
+      }
+
+      if (errorMsg.replace(/\s+/g, '') === "Usernamecannotbeempty") {
+        errorMsg = "Email address cannot be empty"
+      }
+
+      setTimeout(() => {
+        Alert.alert('Error signing up', errorMsg)
+      }, 0)
     });
   }
 }
@@ -100,8 +117,20 @@ export function authenticate(username, password) {
       .catch(err => {
         console.log('errror from signIn: ', err)
         dispatch(logInFailure(err))
+        
+        console.log('err msg: ', err.message)
+        if (err.message == null) {
+          errorMsg = err
+        } else {
+          errorMsg = err.message
+        }
+
+        if (errorMsg.replace(/\s+/g, '') === "Usernamecannotbeempty") {
+          errorMsg = "Email address cannot be empty"
+        }
+
         setTimeout(() => {
-          Alert.alert('Error logging in', err.message)
+          Alert.alert('Error signing up', errorMsg)
         }, 0)
       });
   }
