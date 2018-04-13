@@ -35,7 +35,6 @@ class SignIn extends Component {
   componentDidMount() {
     this.setState({
       greetingText: this.getGreeting(),
-      // source: {url: 'https://source.unsplash.com/900x600/daily?nature'}
     })
   }
   
@@ -97,21 +96,25 @@ class SignIn extends Component {
           Sign in to continue
         </Text>
         <View style={styles.inputContainer}>
+          <View style={styles.inputLineContainer}>
           <Input
             placeholder="Email Address"
-            placeholderTextColor="#000000"
+            placeholderTextColor="#ffffff"
             type='username'
             onChangeText={this.onChangeText}
             value={this.state.username}
           />
+          </View>
+          <View style={styles.inputLineContainer}>
           <Input
             placeholder="Password"
-            placeholderTextColor="#000000"
+            placeholderTextColor="#ffffff"
             type='password'
             onChangeText={this.onChangeText}
             value={this.state.password}
             secureTextEntry
           />
+          </View>
         </View>
         <Button
           isLoading={isAuthenticating}
@@ -123,30 +126,6 @@ class SignIn extends Component {
           <Text style={{fontSize: 22, fontWeight: 'bold', color: colors.primary, fontFamily: fonts.light}}>Sign In</Text>
         </TouchableOpacity>    
         </View> */}
-
-        <Text style={[styles.errorMessage, signInError && { color: '#FF0000', fontWeight: 'bold'}]}>Error logging in. Please try again.</Text>
-        <Text style={[styles.errorMessage, signInError && { color: '#FF0000', fontWeight: 'bold'}]}>{signInErrorMessage}</Text>
-        {
-          showSignInConfirmationModal && (
-            <Modal>
-              <View style={styles.modal}>
-                <Input
-                  placeholder="Authorization Code"
-                  type='authCode'
-                  keyboardType='numeric'
-                  onChangeText={this.onChangeText}
-                  value={this.state.authCode}
-                  keyboardType='numeric'
-                />
-                <Button
-                  title='Confirm'
-                  onPress={this.confirm.bind(this)}
-                  isLoading={isAuthenticating}
-                />
-              </View>
-            </Modal>
-          )
-        }
       </View>
       </ImageBackground>
     );
@@ -173,20 +152,12 @@ const styles = StyleSheet.create({
   heading: {
     flexDirection: 'row'
   },
-  errorMessageView: {
-    fontSize: 12,
-    marginTop: 10,
-    color: 'transparent',
-    fontFamily: fonts.base,
-  },
-  errorMessage: {
-    fontSize: 12,
-    // marginTop: 10,
-    color: 'transparent',
-    fontFamily: fonts.base,
-  },
   inputContainer: {
-    marginTop: 20
+    marginTop: 20,
+  },
+  inputLineContainer: {
+    marginTop: 20,
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
   container: {
     flex: 1,

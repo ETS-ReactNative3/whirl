@@ -39,14 +39,15 @@ function signUpFailure(err) {
   }
 }
 
-export function createUser(username, password, email, given_name) {
+export function createUser(username, password, given_name) {
   return (dispatch) => {
     dispatch(signUp())
+    // given_name = "Conor"
+    Alert.alert('Sign up with given name', given_name)
     Auth.signUp({
       username,
       password,
       attributes: {
-        email,
         given_name
       }
     })
@@ -99,6 +100,9 @@ export function authenticate(username, password) {
       .catch(err => {
         console.log('errror from signIn: ', err)
         dispatch(logInFailure(err))
+        setTimeout(() => {
+          Alert.alert('Error logging in', err.message)
+        }, 0)
       });
   }
 }
