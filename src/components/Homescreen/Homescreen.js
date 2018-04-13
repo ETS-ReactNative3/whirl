@@ -6,7 +6,9 @@ import {
   ImageBackground,
   AsyncStorage,
   TextInput,
-  FlatList
+  FlatList,
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import MainFocus from '../MainFocus/MainFocus';
 import TodoInput from '../TodoInput/TodoInput';
@@ -24,36 +26,7 @@ export default class Homescreen extends Component {
      greetingText: this.getGreeting(),
      name: this.props.name,
    })
-  //  this.getTodoList();
  }
-
-//  async getTodoList() {
-//    try {
-//       const value = await AsyncStorage.getItem('todos').then((keyvalue) => {
-//         if (keyvalue !== null) {
-//             this.setState({
-//                 todos: JSON.parse(keyvalue),
-//             })
-//             console.log(keyvalue)
-//         } else {
-//             console.log('no todos item in storage')
-//         }})
-//   } catch (error) {
-//     console.log('theres been an error getting the todos item')
-//     console.log(error);
-//   } 
-//  }
-
-//  async storeTodoList(todos) {
-//     try {
-//       console.log(JSON.stringify(todos));
-//       await AsyncStorage.setItem('todos', JSON.stringify(todos));
-//   } catch (error) {
-//       console.log('error setting the todos item')
-//       console.log(JSON.stringify(todos))
-//       console.log(error);
-//   }
-//  }
 
   getGreeting() {
     var date = new Date();
@@ -79,7 +52,6 @@ export default class Homescreen extends Component {
         todos: prevState.todos.concat({key: this.state.todos.length, value: todo})
       }
     })
-    // this.storeTodoList(this.state.todos);
   }
 
   todoDeletedHandler = key => {
@@ -90,7 +62,6 @@ export default class Homescreen extends Component {
         })
       };
     });
-    // this.storeTodoList(this.state.todos);
   }
 
   render() {
@@ -100,9 +71,16 @@ export default class Homescreen extends Component {
           // source={{url: 'https://source.unsplash.com/900x600/daily?landscape'}}
           // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
         //   source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
-          source = {require('../../../resources/img/DefaultBackground.jpg')}
+          source = {require('../../assets/DefaultBackground.jpg')}
           imageStyle={{resizeMode: 'cover'}}
       >
+        <TouchableOpacity style={styles.headerBar} onPress={() => this.props.navigation.navigate('DrawerOpen')}>
+          <Image 
+            source={require('../../assets/menuIcon.png')}
+            style={{width: 30, height: 30}}
+            
+          />
+        </TouchableOpacity>
         <View style={styles.container}>
           {/* Greeting */}
           <Text style = {styles.header}>
@@ -166,6 +144,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textShadowOffset: {width: 1, height: 1},
   },
+  headerBar: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    flexDirection: 'row',
+    flex: 1,
+    padding: 10,
+  }
 });
 
 
