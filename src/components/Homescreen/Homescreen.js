@@ -8,7 +8,9 @@ import {
   TextInput,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import MainFocus from '../MainFocus/MainFocus';
 import TodoInput from '../TodoInput/TodoInput';
@@ -71,12 +73,15 @@ export default class Homescreen extends Component {
           // source={{url: 'https://source.unsplash.com/900x600/daily?landscape'}}
           // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
         //   source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
-          source = {require('../../assets/DefaultBackground.jpg')}
+          // source = {require('../../assets/DefaultBackground.jpg')}
+          source = {{url: 'https://s3.amazonaws.com/123rf-chrome/images/44117949_xl.jpg'}}
           imageStyle={{resizeMode: 'cover'}}
       >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+        <View style={{flex: 1}}>
         <TouchableOpacity style={styles.headerBar} onPress={() => this.props.navigation.navigate('DrawerOpen')}>
           <Image 
-            source={require('../../assets/menuIcon.png')}
+            source={require('../../assets/menuIconPink.png')}
             style={{width: 30, height: 30}}
             
           />
@@ -101,6 +106,8 @@ export default class Homescreen extends Component {
             onItemDeleted={this.todoDeletedHandler}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
       </ImageBackground>
     );
   }
@@ -151,6 +158,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     padding: 10,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    // borderRadius: 20,
   }
 });
 

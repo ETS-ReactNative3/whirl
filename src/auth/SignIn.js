@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   Text,
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
-  Modal,
   ImageBackground,
-  Alert
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import { Auth } from 'aws-amplify'
@@ -66,6 +65,9 @@ class SignIn extends Component {
     this.props.dispatchConfirmUserLogin(authCode)
   }
 
+  dismiss() {
+    Alert.alert("keyboard dismiss time!")
+  }
   
   render() {
     const { fontsLoaded } = this.state
@@ -87,46 +89,43 @@ class SignIn extends Component {
           imageStyle={{resizeMode: 'cover'}}
           onLoadEnd={ ()=>{ this.setState({ loading: false })}}
       >
-      <ActivityIndicator animating={ this.state.loading } size="large"/>
-      <View style={styles.container}>
-        <Text style={[styles.greeting]}>
-          Good {this.state.greetingText}
-        </Text>
-        <Text style={[styles.greeting2]}>
-          Sign in to continue
-        </Text>
-        <View style={styles.inputContainer}>
-          <View style={styles.inputLineContainer}>
-          <Input
-            placeholder="Email Address"
-            placeholderTextColor="#ffffff"
-            type='username'
-            onChangeText={this.onChangeText}
-            value={this.state.username}
-          />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+        <View style={{flex: 1}}>
+        <ActivityIndicator animating={ this.state.loading } size="large"/>
+        <View style={styles.container}>
+          <Text style={[styles.greeting]}>
+            Good {this.state.greetingText}
+          </Text>
+          <Text style={[styles.greeting2]}>
+            Sign in to continue
+          </Text>
+          <View style={styles.inputContainer}>
+            <View style={styles.inputLineContainer}>
+            <Input
+              placeholder="Email Address"
+              type='username'
+              onChangeText={this.onChangeText}
+              value={this.state.username}
+            />
+            </View>
+            <View style={styles.inputLineContainer}>
+            <Input
+              placeholder="Password"
+              type='password'
+              onChangeText={this.onChangeText}
+              value={this.state.password}
+              secureTextEntry
+            />
+            </View>
           </View>
-          <View style={styles.inputLineContainer}>
-          <Input
-            placeholder="Password"
-            placeholderTextColor="#ffffff"
-            type='password'
-            onChangeText={this.onChangeText}
-            value={this.state.password}
-            secureTextEntry
-          />
-          </View>
+          <Button
+            isLoading={isAuthenticating}
+            title='Sign In'
+            onPress={this.signIn.bind(this)}
+          />  
         </View>
-        <Button
-          isLoading={isAuthenticating}
-          title='Sign In'
-          onPress={this.signIn.bind(this)}
-        />  
-        {/* <View style={{ flex: 0.1, backgroundColor: 'blue'}}>
-        <TouchableOpacity style={{marginTop: 10, flex: 0}}>
-          <Text style={{fontSize: 22, fontWeight: 'bold', color: colors.primary, fontFamily: fonts.light}}>Sign In</Text>
-        </TouchableOpacity>    
-        </View> */}
       </View>
+      </TouchableWithoutFeedback>
       </ImageBackground>
     );
   }
@@ -144,11 +143,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   heading: {
     flexDirection: 'row'
   },

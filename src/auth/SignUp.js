@@ -10,7 +10,9 @@ import {
   ActivityIndicator,
   Modal,
   Alert,
-  ImageBackground
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 
 import { Auth } from 'aws-amplify'
@@ -82,6 +84,8 @@ class SignUp extends Component {
           imageStyle={{resizeMode: 'cover'}}
           onLoadEnd={ ()=>{ this.setState({ loading: false })}}
       >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+        <View style={{flex: 1}}>
       <ActivityIndicator animating={ this.state.loading } size="large"/>
       <View style={styles.container}>
         <Text style={styles.greeting}>
@@ -102,7 +106,7 @@ class SignUp extends Component {
           <View style={styles.inputLineContainer}>
           <Input
             value={this.state.username}
-            placeholder="User Name"
+            placeholder="Email address"
             type='username'
             onChangeText={this.onChangeText}
           />
@@ -122,7 +126,7 @@ class SignUp extends Component {
           onPress={this.signUp.bind(this)}
           isLoading={isAuthenticating}
         />
-        <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>Error logging in. Please try again.</Text>
+        {/* <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>Error logging in. Please try again.</Text>
         <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>{signUpErrorMessage}</Text>
         {
           showSignUpConfirmationModal 
@@ -140,8 +144,10 @@ class SignUp extends Component {
               </View>
             </Modal>
           )
-        }
+        } */}
       </View>
+      </View>
+      </TouchableWithoutFeedback>
       </ImageBackground>
     );
   }
