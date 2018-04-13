@@ -21,16 +21,13 @@ export default ({ placeholder, onChangeText, type, placeholderTextColor="#ffffff
 
 const styles = StyleSheet.create({
   input: {
-    // height: 45,
     color: '#ffffff',
     padding: 10,
-    // marginBottom: 15,
     borderBottomWidth: 1.5,
     fontSize: 16,
     borderBottomColor: colors.primary,
     fontFamily: fonts.light,
     fontWeight: 'bold',
-    // backgroundColor: 'rgba(0,0,0,0.4)',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   }
