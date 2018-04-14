@@ -1,16 +1,21 @@
 # Whirl
-Whirl is a Chrome extension and mobile application for managing tasks. 
+Whirl is a mobile application and chrome extension for managing tasks. 
 
-When containing no user input for the main focus of the day or any items in to todo list, the default look for the app is as follows:
+# Application Usage
+
+
+Sign in to access your tasks which are synced with those in the chrome extension.   
+
 
 <p align="center">
-<img src="https://github.com/C2P1/Whirl/blob/master/resources/img/Default.png" width="240">
+<img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/LogInScreen.png" width="240">
 </p>   
 
 
-Example of some todo items having been added:   
+Or, switch tabs to sign up for a new account.    
 
 
 <p align="center">
-<img src="https://github.com/C2P1/Whirl/blob/master/resources/img/AddingTodo.png" width="240">
-</p>
+<img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/SignUpScreen.png" width="240">
+</p>   
+
