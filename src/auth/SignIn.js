@@ -5,9 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   ImageBackground,
-  Alert,
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -25,10 +23,7 @@ class SignIn extends Component {
   state = {
     username: '',
     password: '',
-    accessCode: '',
-    greetingText: 'day',
-    source: '',
-    loading: true,
+    greetingText: '',
   }
 
   componentDidMount() {
@@ -64,10 +59,6 @@ class SignIn extends Component {
     const { authCode } = this.state
     this.props.dispatchConfirmUserLogin(authCode)
   }
-
-  dismiss() {
-    Alert.alert("keyboard dismiss time!")
-  }
   
   render() {
     const { fontsLoaded } = this.state
@@ -80,52 +71,43 @@ class SignIn extends Component {
     return (
       <ImageBackground
           style={styles.image}
-          // source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
           source = {require('../assets/DefaultBackground2.jpeg')}
-          // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
-          // source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
-          // source = {require('../assets/DefaultBackground.jpg')}
-          // source = {this.state.source}
           imageStyle={{resizeMode: 'cover'}}
-          onLoadEnd={ ()=>{ this.setState({ loading: false })}}
       >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
-        <View style={{flex: 1}}>
-        <ActivityIndicator animating={ this.state.loading } size="large"/>
-        <View style={styles.container}>
-          <Text style={[styles.greeting]}>
-            Good {this.state.greetingText}
-          </Text>
-          <Text style={[styles.greeting2]}>
-            Sign in to continue
-          </Text>
-          <View style={styles.inputContainer}>
-            <View style={styles.inputLineContainer}>
-            <Input
-              placeholder="Email Address"
-              type='username'
-              onChangeText={this.onChangeText}
-              value={this.state.username}
-            />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+          <View style={styles.container}>
+            <Text style={[styles.greeting]}>
+              Good {this.state.greetingText}
+            </Text>
+            <Text style={[styles.greeting2]}>
+              Sign in to continue
+            </Text>
+            <View style={styles.inputContainer}>
+              <View style={styles.inputLineContainer}>
+                <Input
+                  placeholder="Email Address"
+                  type='username'
+                  onChangeText={this.onChangeText}
+                  value={this.state.username}
+                />
+              </View>
+              <View style={styles.inputLineContainer}>
+                <Input
+                  placeholder="Password"
+                  type='password'
+                  onChangeText={this.onChangeText}
+                  value={this.state.password}
+                  secureTextEntry
+                />
+              </View>
             </View>
-            <View style={styles.inputLineContainer}>
-            <Input
-              placeholder="Password"
-              type='password'
-              onChangeText={this.onChangeText}
-              value={this.state.password}
-              secureTextEntry
-            />
-            </View>
+            <Button
+              isLoading={isAuthenticating}
+              title='Sign In'
+              onPress={this.signIn.bind(this)}
+            />  
           </View>
-          <Button
-            isLoading={isAuthenticating}
-            title='Sign In'
-            onPress={this.signIn.bind(this)}
-          />  
-        </View>
-      </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
       </ImageBackground>
     );
   }

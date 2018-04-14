@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   Text,
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  Modal,
-  Alert,
   ImageBackground,
   TouchableWithoutFeedback,
   Keyboard
@@ -75,79 +70,51 @@ class SignUp extends Component {
     return (
       <ImageBackground
           style={styles.image}
-          // source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
           source = {require('../assets/DefaultBackground2.jpeg')}
-          // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
-          // source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
-          // source = {require('../assets/DefaultBackground.jpg')}
-          // source = {this.state.source}
           imageStyle={{resizeMode: 'cover'}}
-          onLoadEnd={ ()=>{ this.setState({ loading: false })}}
       >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
-        <View style={{flex: 1}}>
-      <ActivityIndicator animating={ this.state.loading } size="large"/>
-      <View style={styles.container}>
-        <Text style={styles.greeting}>
-          Welcome,
-        </Text>
-        <Text style={styles.greeting2}>
-          sign up to continue
-        </Text>
-        <View style={styles.inputContainer}>
-          <View style={styles.inputLineContainer}>
-          <Input
-              placeholder="First Name"
-              type='given_name'
-              onChangeText={this.onChangeText}
-              value={this.state.given_name}
-          />
-          </View>
-          <View style={styles.inputLineContainer}>
-          <Input
-            value={this.state.username}
-            placeholder="Email address"
-            type='username'
-            onChangeText={this.onChangeText}
-          />
-          </View>
-          <View style={styles.inputLineContainer}>
-          <Input
-            value={this.state.password}
-            placeholder="Password"
-            secureTextEntry
-            type='password'
-            onChangeText={this.onChangeText}
-          />
-          </View>
-        </View>
-        <Button
-          title='Sign Up'
-          onPress={this.signUp.bind(this)}
-          isLoading={isAuthenticating}
-        />
-        {/* <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>Error logging in. Please try again.</Text>
-        <Text style={[styles.errorMessage, signUpError && { color: 'black' }]}>{signUpErrorMessage}</Text>
-        {
-          showSignUpConfirmationModal 
-          && (
-            <Modal>
-              <View style={styles.modal}>
-                <Text>
-                  Please verify your email address by following the link in the email sent to you! You won't be able to use the app until you have done this.
-                </Text>
-                <Button
-                  title='Confirm'
-                  onPress={this.confirm.bind(this)}
-                  isLoading={isAuthenticating}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+          <View style={styles.container}>
+            <Text style={styles.greeting}>
+              Welcome,
+            </Text>
+            <Text style={styles.greeting2}>
+              sign up to continue
+            </Text>
+            <View style={styles.inputContainer}>
+              <View style={styles.inputLineContainer}>
+                <Input
+                    placeholder="First Name"
+                    type='given_name'
+                    onChangeText={this.onChangeText}
+                    value={this.state.given_name}
                 />
               </View>
-            </Modal>
-          )
-        } */}
-      </View>
-      </View>
-      </TouchableWithoutFeedback>
+              <View style={styles.inputLineContainer}>
+                <Input
+                  value={this.state.username}
+                  placeholder="Email address"
+                  type='username'
+                  onChangeText={this.onChangeText}
+                />
+              </View>
+              <View style={styles.inputLineContainer}>
+                <Input
+                  value={this.state.password}
+                  placeholder="Password"
+                  secureTextEntry
+                  type='password'
+                  onChangeText={this.onChangeText}
+                />
+              </View>
+            </View>
+            <Button
+              title='Sign Up'
+              onPress={this.signUp.bind(this)}
+              isLoading={isAuthenticating}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </ImageBackground>
     );
   }
@@ -188,19 +155,6 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 24,
     marginTop: 5
-  },
-  heading: {
-    flexDirection: 'row'
-  },
-  headingImage: {
-    width: 38,
-    height: 38
-  },
-  errorMessage: {
-    fontFamily: fonts.base,
-    fontSize: 12,
-    marginTop: 10,
-    color: 'transparent'
   },
   image: {
     flexGrow:1,
