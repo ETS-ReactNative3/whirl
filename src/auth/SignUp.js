@@ -79,7 +79,7 @@ class SignUp extends Component {
               Welcome,
             </Text>
             <Text style={styles.greeting2}>
-              sign up to continue
+              Sign up to continue
             </Text>
             <View style={styles.inputContainer}>
               <View style={styles.inputLineContainer}>
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   greeting: {
     marginTop: 20,
     fontFamily: fonts.light,
-    fontSize: 24
+    fontSize: 31
   },
   greeting2: {
     fontFamily: fonts.light,

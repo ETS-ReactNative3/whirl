@@ -1,6 +1,8 @@
 # Whirl
 Whirl is a mobile application and chrome extension for managing tasks. 
 
+Built using React-Native and AWS (Cognito, DynamoDB, Api Gateway, Lambda, S3)
+
 # Application Usage
 
 

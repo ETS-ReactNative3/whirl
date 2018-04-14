@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  AsyncStorage,
-  TextInput,
-  FlatList,
-  Button,
-  StatusBar,
-  Alert
+  StatusBar,  
 } from 'react-native';
 
-import { connect } from 'react-redux'
-import { Auth } from 'aws-amplify'
+import { connect } from 'react-redux';
+import Amplify, { Auth, API } from 'aws-amplify';
+import aws_exports from './aws-exports';
 
-import Tabs from './auth/Tabs'
-import Nav from './nav/Nav'
+import Tabs from './auth/Tabs';
+import Nav from './nav/Nav';
 
 class App extends Component {
   state = {
