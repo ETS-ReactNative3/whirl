@@ -1,21 +1,50 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Button, Text } from 'react-native';
+import { 
+    StyleSheet, 
+    View, 
+    TextInput, 
+    Text,
+    TouchableOpacity,
+    TouchableHighlight,
+    Modal,
+    ImageBackground,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Image,
+} from 'react-native';
+
+import Input from '../Input';
+import Button from '../Button';
+import { colors, fonts } from '../../theme';
 
 class MainFocusInput extends Component {
     state = {
         focus: '',
+        modalVisible: false,
     }
 
     focusChangedHandler = val => {
         this.setState({
             focus: val
         })
+        console.log(val)
     }
+
+    onChangeText = (key, value) => {
+        console.log(key + " " + value)
+        this.setState({
+          [key]: value
+        })
+      }
 
     focusAddedHandler = () => {
         if (this.state.focus.trim() === "") return;
         
         this.props.onFocusAdded(this.state.focus);
+    }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible})
     }
 
     render() {
@@ -24,20 +53,106 @@ class MainFocusInput extends Component {
                 <View>
                 <Text style={styles.mainFocusHeader}> What is your main focus for today? </Text>
                 </View>
-                <View style = {styles.inputContainer}>
-                    <TextInput 
-                        placeholder = {this.focus}
-                        onChangeText={this.focusChangedHandler}
-                        style = {styles.focusInput}
-                        multiline = {true}
-                    />
-                    <Button
-                        title = "Add"
-                        style = {styles.focusButton}
-                        onPress = {this.focusAddedHandler}
-                    />
-                </View>
+                {/* <View style = {styles.inputContainer}>  */}
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        // alert('Modal has been closed.');
+                    }}>
+                    <ImageBackground
+                        style={styles.image}
+                        source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
+                        imageStyle={{resizeMode: 'cover'}}
+                    >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+                    <View style={{flex: 1}}>
+                        <View style={styles.header}>
+                            {/* close button in top left */}
+                            <TouchableHighlight
+                                onPress={() => {
+                                this.setModalVisible(!this.state.modalVisible);
+                                }}
+                                style={styles.close}
+                            >
+                                <Image 
+                                    source={require('../../assets/cross.png')}
+                                    style={{width: 50, height: 50}}
+                                />
+                                
+                            </TouchableHighlight>
+
+                            {/* Page title */}
+                            <Text style={styles.headerText}>
+                                Add a main focus
+                            </Text>
+
+                            {/* add button in top right */}
+                            <TouchableHighlight
+                                onPress={() => {
+                                    // add the new focus
+                                    this.focusAddedHandler()
+                                    
+                                    // hide modal at the same time
+                                    this.setModalVisible(!this.state.modalVisible);
+                                }}
+                                style={styles.add}
+                            >
+                                <Image 
+                                    source={require('../../assets/tick.png')}
+                                    style={{width: 50, height: 50}}
+                                />
+                                
+                            </TouchableHighlight>
+
+                        </View>
+                        <View style={styles.container}>
+                            <View style={styles.inputLineContainer}>
+                                <Input 
+                                    placeholder="Focus"
+                                    type='focus'
+                                    onChangeText={this.onChangeText}
+                                    value={this.state.focus}
+                                    multiline={true}
+                                />
+                            </View>
+                            <View style={styles.button}>
+                                <Button
+                                    title='Add Focus'
+                                    onPress={() => {
+                                        // add the new focus
+                                        this.focusAddedHandler()
+                                        
+                                        // hide modal at the same time
+                                        this.setModalVisible(!this.state.modalVisible);
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                    </TouchableWithoutFeedback>
+                    </ImageBackground>
+                </Modal>
+
+                <TouchableOpacity
+                    onPress={() => {
+                        this.setModalVisible(true);
+                    }}
+                    style={styles.focusInput}>
+                </TouchableOpacity>
+                {/* </View> */}
+                {/* <TextInput 
+                            placeholder = {this.focus}
+                            onChangeText={this.focusChangedHandler}
+                            placeholder="add a main focus"
+                            placeholderTextColor="#ffffff"
+                            style = {styles.focusInput}
+                            multiline = {true}
+                        /> */}
             </View>
+
+            
         )
     }
 }
@@ -46,30 +161,73 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-
+    container: {
+        flex: 1,
+        // justifyContent: 'center',
+        paddingTop: 60,
+        paddingHorizontal: 40
+      },
     focusInput: {
-        width: '80%',
+        // width: '90%',
         borderColor: '#ffffff',
         borderBottomWidth: 2,
-        color: '#ffffff',
-        fontSize: 30,
-        textShadowColor: '#000000',
-        textAlign:"center"
-    },
-    
-    focusButton: {
-        width: '20%',
-        color: '#000000'
+        paddingTop: 25,
+        marginBottom: 10,
     },
     mainFocusHeader: {
         padding: 15,
         textAlign: 'center',
         color: '#ffffff',
         fontSize: 30,
-        textShadowColor: '#000000'
-      },
+        textShadowColor: '#000000',
+        fontFamily: fonts.light,
+    },
+    image: {
+        flexGrow:1,
+        height: null,
+        width:null,
+        // alignItems: 'center',
+        // justifyContent:'center',
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        alignItems: 'center',
+    },
+    headerText: {
+        margin: 5,
+        color: '#ffffff',
+        // fontWeight: 'bold',
+        fontSize: 30,
+        fontFamily: fonts.light,
+    },
+    close: {
+    },
+    add: {
+    },
+    body: {
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        borderBottomWidth: 0.2,
+        borderColor: colors.primary,
+    },
+    inputLineContainer: {
+        marginTop: 20,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+    },
+    button: {
+        // flex: 1,
+        // top: '-50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // margin: 60,
+    }
 })
 
 export default MainFocusInput;

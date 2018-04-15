@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 20,
         paddingBottom: 10,
-        width: "100%",
-        alignItems: 'center'
+        padding: 8,
+        alignItems: 'center',
     },
     todayHeader: {
         fontSize: 25,

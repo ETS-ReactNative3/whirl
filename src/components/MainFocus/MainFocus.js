@@ -90,13 +90,12 @@ const styles = StyleSheet.create({
     inputContainer: {
         // flex: 1,
         // width: "100%",
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+        // flexDirection: 'row',
+        justifyContent: 'center',
+        // alignItems: 'center'
     },
 
     focusText: {
-        // width: '80%',
         borderColor: '#ffffff',
         borderBottomWidth: 2,
         color: '#ffffff',

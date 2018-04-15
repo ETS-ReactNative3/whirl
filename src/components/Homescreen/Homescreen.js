@@ -11,24 +11,42 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView
 } from 'react-native';
 import MainFocus from '../MainFocus/MainFocus';
 import TodoInput from '../TodoInput/TodoInput';
 import TodoList from '../TodoList/TodoList';
+import Amplify, { Auth, API } from 'aws-amplify';
+import { fonts } from '../../theme';
 
 export default class Homescreen extends Component {
   state = {
     name: '',
     greetingText: 'day',
-    todos: []
+    todos: [],
+    loaded: false,
+    user: {},
   }
 
- componentDidMount() {
+printOut = (err, content) => {
+  console.log(err)
+  var name = content[2]["Value"]
+  console.log(name)
+  this.setState({
+    name: name
+  })
+}
+
+ async componentDidMount() {
+  const user = await Auth.currentAuthenticatedUser()
    this.setState({
      greetingText: this.getGreeting(),
+     user,
      name: this.props.name,
    })
- }
+   user.getUserAttributes(this.printOut)
+  }
+
 
   getGreeting() {
     var date = new Date();
@@ -66,26 +84,36 @@ export default class Homescreen extends Component {
     });
   }
 
+
   render() {
     return (
       <ImageBackground
           style={styles.image}
-          // source={{url: 'https://source.unsplash.com/900x600/daily?landscape'}}
+          source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
+          // source={{uri: 'https://source.unsplash.com/900x600/daily?landscape'}}
+          // uri = {this.state.loaded ? this.state.uri : ''}
           // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
-        //   source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
+          // source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
           // source = {require('../../assets/DefaultBackground.jpg')}
-          source = {{url: 'https://s3.amazonaws.com/123rf-chrome/images/44117949_xl.jpg'}}
+          // source = {{url: 'https://s3.amazonaws.com/123rf-chrome/images/44117949_xl.jpg'}}
           imageStyle={{resizeMode: 'cover'}}
+          // onLoad={ ()=>{ this.setState({ loaded: true })}}
       >
+       
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
-        <View style={{flex: 1}}>
-        <TouchableOpacity style={styles.headerBar} onPress={() => this.props.navigation.navigate('DrawerOpen')}>
-          <Image 
-            source={require('../../assets/menuIconPink.png')}
-            style={{width: 30, height: 30}}
-            
-          />
-        </TouchableOpacity>
+       <View>
+         <View style={styles.headerBar}>
+          <TouchableOpacity style={styles.headerMenu} onPress={() => this.props.navigation.navigate('DrawerOpen')}>
+            <Image 
+              source={require('../../assets/menuIconPink.png')}
+              style={{width: 30, height: 30}}
+              
+            />
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
         <View style={styles.container}>
           {/* Greeting */}
           <Text style = {styles.header}>
@@ -104,9 +132,11 @@ export default class Homescreen extends Component {
           <TodoList
             todos = {this.state.todos}
             onItemDeleted={this.todoDeletedHandler}
+            style={styles.TodoList}
           />
         </View>
-        </View>
+        </ScrollView>
+       </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
     );
@@ -115,11 +145,11 @@ export default class Homescreen extends Component {
 
 const styles = StyleSheet.create({
   image: {
-    flexGrow:1,
+    flex:1,
     height: null,
     width:null,
     alignItems: 'center',
-    // justifyContent:'center',
+    justifyContent:'center',
   },
   header: {
     textAlign: 'center',
@@ -129,10 +159,11 @@ const styles = StyleSheet.create({
     textShadowRadius: 1,
     fontSize: 45,
     textShadowOffset: {width: 0.5, height: 0.5},
-    fontFamily: 'Helvetica Neue',
+    fontFamily: fonts.bold,
   },
   container: {
-    top: '12%'
+    flex: 1,
+    // top: '12%'
   },
   mainFocusHeader: {
     padding: 15,
@@ -152,14 +183,18 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: 1, height: 1},
   },
   headerBar: {
-    position: 'absolute',
-    top: 5,
-    left: 5,
     flexDirection: 'row',
-    flex: 1,
-    padding: 10,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    // borderRadius: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  headerMenu: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    padding: 5,
+  },
+  TodoList: {
+    marginBottom: 30,
   }
 });
 
