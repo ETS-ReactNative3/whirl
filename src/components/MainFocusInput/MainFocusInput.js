@@ -30,12 +30,12 @@ class MainFocusInput extends Component {
         console.log(val)
     }
 
-    onChangeText = (key, value) => {
-        console.log(key + " " + value)
+    onChangeText = (value) => {
+        console.log(value)
         this.setState({
-          [key]: value
+          todo: value
         })
-      }
+    }
 
     focusAddedHandler = () => {
         if (this.state.focus.trim() === "") return;
@@ -60,7 +60,8 @@ class MainFocusInput extends Component {
                     visible={this.state.modalVisible}
                     onRequestClose={() => {
                         // alert('Modal has been closed.');
-                    }}>
+                    }}
+                    onShow={() => { this.textInput.focus() }}>
                     <ImageBackground
                         style={styles.image}
                         source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
@@ -109,12 +110,23 @@ class MainFocusInput extends Component {
                         </View>
                         <View style={styles.container}>
                             <View style={styles.inputLineContainer}>
-                                <Input 
+                                {/* <Input 
                                     placeholder="Focus"
                                     type='focus'
                                     onChangeText={this.onChangeText}
                                     value={this.state.focus}
                                     multiline={true}
+                                /> */}
+                                <TextInput
+                                    autoCapitalize='none'
+                                    autoCorrect={false}
+                                    style={styles.input}
+                                    placeholder={"New Todo"}
+                                    placeholderTextColor='#ffffff'
+                                    onChangeText={(value) => this.onChangeText(value)}
+                                    underlineColorAndroid='transparent'
+                                    multiline={true}
+                                    ref={(input) => { this.textInput = input; }}
                                 />
                             </View>
                             <View style={styles.button}>
@@ -227,6 +239,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         // margin: 60,
+    },
+    input: {
+        color: '#ffffff',
+        padding: 10,
+        borderBottomWidth: 1.5,
+        fontSize: 16,
+        borderBottomColor: colors.primary,
+        fontFamily: fonts.light,
+        fontWeight: 'bold',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     }
 })
 

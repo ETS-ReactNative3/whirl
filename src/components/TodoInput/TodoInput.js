@@ -31,10 +31,10 @@ class TodoInput extends Component {
         })
     }
 
-    onChangeText = (key, value) => {
-        console.log(key + " " + value)
+    onChangeText = (value) => {
+        console.log(value)
         this.setState({
-          [key]: value
+          todo: value
         })
       }
 
@@ -58,7 +58,8 @@ class TodoInput extends Component {
                     visible={this.state.modalVisible}
                     onRequestClose={() => {
                         // alert('Modal has been closed.');
-                    }}>
+                    }}
+                    onShow={() => { this.textInput.focus() }}>
                     <ImageBackground
                         style={styles.image}
                         source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
@@ -107,12 +108,24 @@ class TodoInput extends Component {
                         </View>
                         <View style={styles.container}>
                             <View style={styles.inputLineContainer}>
-                                <Input 
+                                {/* <Input 
                                     placeholder="New Todo"
                                     type='todo'
                                     onChangeText={this.onChangeText}
                                     value={this.state.focus}
                                     multiline={true}
+                                    ref={(input) => { this.textInput = input; }}
+                                /> */}
+                                <TextInput
+                                    autoCapitalize='none'
+                                    autoCorrect={false}
+                                    style={styles.input}
+                                    placeholder={"New Todo"}
+                                    placeholderTextColor='#ffffff'
+                                    onChangeText={(value) => this.onChangeText(value)}
+                                    underlineColorAndroid='transparent'
+                                    multiline={true}
+                                    ref={(input) => { this.textInput = input; }}
                                 />
                             </View>
                             <View style={styles.button}>
@@ -230,6 +243,17 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         paddingHorizontal: 40
     },
+    input: {
+        color: '#ffffff',
+        padding: 10,
+        borderBottomWidth: 1.5,
+        fontSize: 16,
+        borderBottomColor: colors.primary,
+        fontFamily: fonts.light,
+        fontWeight: 'bold',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    }
 })
 
 export default TodoInput;
