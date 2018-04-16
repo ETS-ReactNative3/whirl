@@ -33,7 +33,7 @@ class MainFocusInput extends Component {
     onChangeText = (value) => {
         console.log(value)
         this.setState({
-          todo: value
+          focus: value
         })
     }
 
@@ -53,7 +53,6 @@ class MainFocusInput extends Component {
                 <View>
                 <Text style={styles.mainFocusHeader}> What is your main focus for today? </Text>
                 </View>
-                {/* <View style = {styles.inputContainer}>  */}
                 <Modal
                     animationType="slide"
                     transparent={false}
@@ -153,15 +152,6 @@ class MainFocusInput extends Component {
                     }}
                     style={styles.focusInput}>
                 </TouchableOpacity>
-                {/* </View> */}
-                {/* <TextInput 
-                            placeholder = {this.focus}
-                            onChangeText={this.focusChangedHandler}
-                            placeholder="add a main focus"
-                            placeholderTextColor="#ffffff"
-                            style = {styles.focusInput}
-                            multiline = {true}
-                        /> */}
             </View>
 
             
