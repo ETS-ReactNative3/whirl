@@ -60,15 +60,18 @@ class TodayFocus extends Component {
             <Text style={styles.focusText}>{this.props.todaysFocus}</Text>
         )
         return (
-            <TouchableOpacity style={styles.container} onPress={this.focusPressed}>
+            // <TouchableOpacity style={styles.container} onPress={this.focusPressed}>
+            <TouchableOpacity style={styles.container} onPress={this.props.onDeletePressed}>
                 <Text style={styles.todayHeader}> TODAY </Text>
                  {/* main focus */} 
-                {text}
+                <View style={styles.focus}>
+                    {text}
+                </View>
 
                 {/* delete button */}
-                <TouchableOpacity onPress={this.props.onDeletePressed} style={styles.deleteButton}>
+                {/* <TouchableOpacity onPress={this.props.onDeletePressed} style={styles.deleteButton}>
                     <Text style={styles.deleteButtonText}> X </Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>  */}
             </TouchableOpacity>
         )
     }
@@ -80,7 +83,9 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 10,
         padding: 8,
-        alignItems: 'center',
+        // alignItems: 'center',
+        width: '100%',
+
     },
     todayHeader: {
         fontSize: 25,
@@ -116,6 +121,9 @@ const styles = StyleSheet.create({
     deleteButtonText: {
         color: '#ffffff',
     },
+    focus: {
+        flex: 1,
+    }
 
 })
 

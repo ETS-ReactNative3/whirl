@@ -106,8 +106,7 @@ printOut = (err, content) => {
           <TouchableOpacity style={styles.headerMenu} onPress={() => this.props.navigation.navigate('DrawerOpen')}>
             <Image 
               source={require('../../assets/menuIconPink.png')}
-              style={{width: 30, height: 30}}
-              
+              style={{width: 30, height: 30}}          
             />
           </TouchableOpacity>
         </View>
@@ -122,18 +121,22 @@ printOut = (err, content) => {
           </Text>
 
           {/* Main Focus */}
-          <MainFocus onMainFocusAdded={this.mainFocusAddedHandler}/>
+          <View style={styles.mainFocus}>
+            <MainFocus onMainFocusAdded={this.mainFocusAddedHandler} />
+          </View>
 
           {/* Todo list */}
-          <Text style={styles.TodoHeader}>
-            Todo:
-          </Text>
-          <TodoInput onTodoAdded={this.todoAddedHandler}/>
-          <TodoList
-            todos = {this.state.todos}
-            onItemDeleted={this.todoDeletedHandler}
-            style={styles.TodoList}
-          />
+          <View style={styles.todos}>
+            <Text style={styles.TodoHeader}>
+              Todo:
+            </Text>
+            <TodoInput onTodoAdded={this.todoAddedHandler}/>
+            <TodoList
+              todos = {this.state.todos}
+              onItemDeleted={this.todoDeletedHandler}
+              style={styles.TodoList}
+            />
+          </View>
         </View>
         </ScrollView>
        </View>
@@ -145,11 +148,9 @@ printOut = (err, content) => {
 
 const styles = StyleSheet.create({
   image: {
-    flex:1,
+    flexGrow:1,
     height: null,
     width:null,
-    alignItems: 'center',
-    justifyContent:'center',
   },
   header: {
     textAlign: 'center',
@@ -160,10 +161,11 @@ const styles = StyleSheet.create({
     fontSize: 45,
     textShadowOffset: {width: 0.5, height: 0.5},
     fontFamily: fonts.bold,
+    
   },
   container: {
-    flex: 1,
-    // top: '12%'
+    // flex: 1,
+    // top: '12%',
   },
   mainFocusHeader: {
     padding: 15,
@@ -184,17 +186,23 @@ const styles = StyleSheet.create({
   },
   headerBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 20,
   },
   headerMenu: {
     backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 5,
+    marginLeft: 5,
   },
   TodoList: {
     marginBottom: 30,
+  },
+  mainFocus: {
+    alignItems: 'center',
+  },
+  todos: {
+    marginLeft: 10,
+    marginRight: 10,
   }
 });
 
