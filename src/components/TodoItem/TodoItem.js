@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
 
 class TodoItem extends Component {
   constructor(props) {
@@ -29,7 +29,10 @@ class TodoItem extends Component {
 
                       {/* delete button */}
                       <TouchableOpacity onPress={this.props.onItemPressed} style={styles.deleteButton}>
-                        <Text style={styles.todoText}> X </Text>
+                        <Image
+                          source={require('../../assets/cross.png')}
+                          style={{width: 40, height: 40}}
+                        />
                       </TouchableOpacity> 
               </TouchableOpacity>
       )
@@ -41,9 +44,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 10,
-        paddingRight:5,
-        margin: 5,
+        paddingLeft:5,
+        marginTop: 10,
+        marginLeft: 5,
         backgroundColor: 'rgba(0,0,0,.5)',
     },
     todoText: {
@@ -54,11 +57,7 @@ const styles = StyleSheet.create({
         textDecorationLine: 'line-through',
     },
     deleteButton: {
-        borderRadius: 50,
-        borderWidth: 1,
-        borderColor: '#fff',
         alignItems: 'center',
-        marginLeft: 5
     }
 })
 

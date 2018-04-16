@@ -36,7 +36,7 @@ class TodoInput extends Component {
         this.setState({
           todo: value
         })
-      }
+    }
 
     todoAddedHandler = () => {
         if (this.state.todo.trim() === "") return;
@@ -153,23 +153,13 @@ class TodoInput extends Component {
                                 this.setModalVisible(!this.state.modalVisible);
                             }}
                     >
-                    {/* <TextInput 
-                        placeholder = "New Todo"
-                        placeholderTextColor = "#808080"
-                        value={this.todo} 
-                        onChangeText={this.todoChangedHandler}
-                        style = {styles.todoInput}
-                        clearTextOnFocus
-                        ref={input => { this.textInput = input }}
-                        multiline = {true}
-                    /> */}
-                    <Text style={styles.todoInput}>
-                        New Todo
-                    </Text>
-                    <Image 
-                        source={require('../../assets/add.png')}
-                        style={{width: 40, height: 40}}
-                    />
+                        <Text style={styles.todoInput}>
+                            New Todo
+                        </Text>
+                        <Image 
+                            source={require('../../assets/add.png')}
+                            style={{width: 40, height: 40}}
+                        />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -190,6 +180,7 @@ const styles = StyleSheet.create({
     todoInput: {
         marginTop: 7,
         marginLeft: 10,
+        // marginBottom: 5,
         fontSize: 20,
         color: '#808080',
         textAlignVertical: 'top',
