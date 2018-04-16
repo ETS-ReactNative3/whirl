@@ -30,6 +30,15 @@ Adding a new main focus:
 </p>
 
 
+Adding a new todo item:
+
+
+<p align="center">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/NewTodo.png" width="240">
+</p>
+
+
+
 
 
   

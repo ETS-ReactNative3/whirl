@@ -9,7 +9,7 @@ const todoList = props => {
             data = {props.todos}
             renderItem = {(info) => (
                 <TodoItem 
-                    todo = {info.item.value} // value from the key-valuye in App.js
+                    todo = {info.item.value}
                     onItemPressed = {() => props.onItemDeleted(info.item.key)}
                 />
             )}
