@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 
 class TodayFocus extends Component {
     state = {
         focus: this.props.todaysFocus,
         strikethrough: false,
+        textColor: '#ffffff'
     }
 
     async componentDidMount() {
@@ -12,7 +13,7 @@ class TodayFocus extends Component {
             const value = await AsyncStorage.getItem('strikethrough').then((keyvalue) => {
                 if (keyvalue !== null) {
                     this.setState({
-                        strikethrough: true,
+                        strikethrough: (keyvalue == 'true'),
                     })
                     console.log(keyvalue)
                 } else {
@@ -20,6 +21,20 @@ class TodayFocus extends Component {
                 }});
         } catch (error) {
             console.log('theres been an error getting strikethrough')
+        }
+
+        try {
+            const value = await AsyncStorage.getItem('textColor').then((keyvalue) => {
+                if (keyvalue !== null) {
+                    this.setState({
+                        textColor: keyvalue,
+                    })
+                    console.log(keyvalue)
+                } else {
+                    console.log('todayfocus: getting textColor returned null')
+                }});
+        } catch (error) {
+            console.log('todayfocus: theres been an error getting textColor')
         }
     }
 
@@ -45,33 +60,42 @@ class TodayFocus extends Component {
         this.setState({
             strikethrough: !this.state.strikethrough
         })
+    }
+
+    componentWillUnmount() {
         this.storeStrikethrough(this.state.strikethrough);
     }
 
     deletePressed() {
-        this.removeStrikethrough();
+        if(!this.removeStrikethrough()) {
+            Alert.alert('Something went wrong', 'Please try again')
+        }
         this.props.onEditPressed
     }
 
     render() {
+        const color = {
+            color: this.state.textColor 
+        }
+
         const text = this.state.strikethrough ? (
-            <Text style={styles.focusTextComplete}>{this.props.todaysFocus}</Text>
+            <Text style={[styles.focusTextComplete, color]}>{this.props.todaysFocus}</Text>
         ) : (
-            <Text style={styles.focusText}>{this.props.todaysFocus}</Text>
+            <Text style={[styles.focusText, color]}>{this.props.todaysFocus}</Text>
         )
         return (
-            // <TouchableOpacity style={styles.container} onPress={this.focusPressed}>
-            <TouchableOpacity style={styles.container} onPress={this.props.onDeletePressed}>
-                <Text style={styles.todayHeader}> TODAY </Text>
+            <TouchableOpacity style={styles.container} onPress={this.focusPressed}>
+            {/* <TouchableOpacity style={styles.container} onPress={this.props.onDeletePressed}> */}
+                <Text style={[styles.todayHeader, color]}> TODAY </Text>
                  {/* main focus */} 
                 <View style={styles.focus}>
                     {text}
                 </View>
 
                 {/* delete button */}
-                {/* <TouchableOpacity onPress={this.props.onDeletePressed} style={styles.deleteButton}>
+                <TouchableOpacity onPress={this.props.onDeletePressed} style={styles.deleteButton}>
                     <Text style={styles.deleteButtonText}> X </Text>
-                </TouchableOpacity>  */}
+                </TouchableOpacity> 
             </TouchableOpacity>
         )
     }
