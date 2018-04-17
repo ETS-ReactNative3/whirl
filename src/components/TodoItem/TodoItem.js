@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
+import { fonts, colors } from '../../theme'
 
 class TodoItem extends Component {
   constructor(props) {
@@ -18,12 +19,25 @@ class TodoItem extends Component {
 
   render() {
     const text = !this.state.strikethrough ? (
-      <Text style={styles.todoText}>{this.props.todo}</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+        <Image
+          source={require('../../assets/circle.png')}
+          style={{width: 8, height: 8, marginRight: 10}}
+        />
+        <Text style={styles.todoText}>{this.props.todo}</Text>
+      </View>
     ) : (
-      <Text style={styles.todoTextCompleted}>{this.props.todo}</Text>
+      <View>
+        <Image
+          source={require('../../assets/circle.png')}
+          style={{width: 8, height: 8}}
+        />
+        <Text style={styles.todoTextCompleted}>{this.props.todo}</Text>
+      </View>
     )
       return (
               <TouchableOpacity onPress={this.onItemPressed} style={styles.listItem}>
+                      
                       {/* Todo Item */}
                       {text}
 
@@ -51,10 +65,12 @@ const styles = StyleSheet.create({
     },
     todoText: {
         color: '#ffffff',
+        fontFamily: fonts.base
     },
     todoTextCompleted: {
         color: '#ffffff',
         textDecorationLine: 'line-through',
+        fontFamily: fonts.base
     },
     deleteButton: {
         alignItems: 'center',
