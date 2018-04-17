@@ -22,7 +22,7 @@ The homescreen contains options for the user to add a main focus for the day (by
 </p>
 
 
-Adding a new main focus:
+Adding a new focus or todo item opens a modal for the users input. Example of the new main focus input is as follows: 
 
 
 <p align="center">
@@ -30,11 +30,11 @@ Adding a new main focus:
 </p>
 
 
-Adding a new todo item:
+This is how the screen looks when populated with a main focus and a couple of todo items.
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/NewTodo.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/populated.png" width="240">
 </p>
 
 
