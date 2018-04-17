@@ -1,18 +1,22 @@
 import React from 'react'
 import { StackNavigator, TabNavigator, DrawerNavigator } from 'react-navigation'
 
-import Home from '../components/Homescreen/Homescreen'
-import LougOut from '../auth/LogOut'
+import { Auth } from 'aws-amplify'
+import { logOut } from '../actions'
+
+import Home from '../screens/Homescreen'
+import LogOut from '../auth/LogOut'
+import db from '../screens/db';
+import Settings from '../screens/Settings'
 
 const routeConfig = {
   Home: { screen: Home },
-  LogOut: { screen: LougOut },
+  Settings: Settings,
+  LogOut: LogOut,
+  Database: db,
 }
 
-// const StackNav = StackNavigator(routeConfig)
-// const TabNav = TabNavigator(routeConfig)
 const DrawerNav = DrawerNavigator(routeConfig)
-
 
 class Nav extends React.Component {
   render() {

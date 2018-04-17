@@ -11,6 +11,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     TouchableHighlight,
+    AsyncStorage
 } from 'react-native';
 
 import Input from '../Input';
@@ -23,6 +24,24 @@ class TodoInput extends Component {
         todo: '',
         allTodo: [],
         modalVisible: false,
+        backgroundSource: 'https://source.unsplash.com/collection/1065412/900x1600/daily'
+    }
+
+    async componentDidMount() {
+        try {
+            const value = await AsyncStorage.getItem('backgroundSource').then((keyvalue) => {
+            if (keyvalue !== null) {
+                this.setState({
+                    backgroundSource: keyvalue,
+                })
+                console.log(keyvalue)
+            } else {
+                console.log('TodoInput: no backgroundSource item in storage')
+            }})
+          } catch (error) {
+            console.log('TodoInput: theres been an error getting the backgroundSource item')
+            console.log(error)
+        }
     }
 
     todoChangedHandler = val => {
@@ -62,7 +81,7 @@ class TodoInput extends Component {
                     onShow={() => { this.textInput.focus() }}>
                     <ImageBackground
                         style={styles.image}
-                        source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
+                        source={{url: this.state.backgroundSource}}
                         imageStyle={{resizeMode: 'cover'}}
                     >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>

@@ -88,20 +88,7 @@ class MainFocus extends Component {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        // flex: 1,
-        // width: "100%",
-        // flexDirection: 'row',
         justifyContent: 'center',
-        // alignItems: 'center'
-    },
-
-    focusText: {
-        borderColor: '#ffffff',
-        borderBottomWidth: 2,
-        color: '#ffffff',
-        fontSize: 30,
-        textShadowColor: '#000000',
-        textAlign: 'center',
     },
 })
 

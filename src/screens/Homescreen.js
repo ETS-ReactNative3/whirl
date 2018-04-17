@@ -11,13 +11,13 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
-  ScrollView
+  ScrollView,
 } from 'react-native';
-import MainFocus from '../MainFocus/MainFocus';
-import TodoInput from '../TodoInput/TodoInput';
-import TodoList from '../TodoList/TodoList';
+import MainFocus from '../components/MainFocus/MainFocus';
+import TodoInput from '../components/TodoInput/TodoInput';
+import TodoList from '../components/TodoList/TodoList';
 import Amplify, { Auth, API } from 'aws-amplify';
-import { fonts } from '../../theme';
+import { fonts } from '../theme';
 
 export default class Homescreen extends Component {
   state = {
@@ -26,6 +26,8 @@ export default class Homescreen extends Component {
     todos: [],
     loaded: false,
     user: {},
+    backgroundSource: 'https://source.unsplash.com/collection/1065412/900x1600/daily',
+    textColor: '#ffffff'
   }
 
 printOut = (err, content) => {
@@ -35,6 +37,16 @@ printOut = (err, content) => {
   this.setState({
     name: name
   })
+  this.storeName(this.state.name)
+}
+
+async storeName(name)  {
+  try {
+      await AsyncStorage.setItem('name', name);
+  } catch (error) {
+      console.log('error setting the name item in storage: ')
+      console.log(error)
+  }
 }
 
  async componentDidMount() {
@@ -43,9 +55,59 @@ printOut = (err, content) => {
      greetingText: this.getGreeting(),
      user,
      name: this.props.name,
+     
    })
-   user.getUserAttributes(this.printOut)
-  }
+   
+  try {
+    const value = await AsyncStorage.getItem('backgroundSource').then((keyvalue) => {
+    if (keyvalue !== null) {
+        this.setState({
+            backgroundSource: keyvalue,
+        })
+        console.log(keyvalue)
+    } else {
+        console.log('Home: no backgroundSource item in storage')
+    }})
+  } catch (error) {
+    console.log('Home: theres been an error getting the backgroundSource item')
+}
+
+try {
+  const value = await AsyncStorage.getItem('textColor').then((keyvalue) => {
+  if (keyvalue !== null) {
+      this.setState({
+        textColor: keyvalue,
+      })
+      console.log("Home: successfully loaded textColor")
+  } else {
+      this.setState({
+          textColor: '#ffffff',
+      })
+      console.log('Home: no textColor item in storage')
+  }})
+  } catch (error) {
+  console.log('Home: theres been an error getting the textColor item')
+}
+
+
+try {
+  const value = await AsyncStorage.getItem('name').then((keyvalue) => {
+  if (keyvalue !== null) {
+      this.setState({
+        name: keyvalue,
+      })
+      console.log("Home: successfully loaded name")
+  } else {
+    console.log('Home: no name item in storage')
+    user.getUserAttributes(this.printOut)
+  }})
+  } catch (error) {
+  console.log('Home: theres been an error getting the name item')
+  console.log(error)
+}
+
+   
+}
 
 
   getGreeting() {
@@ -84,28 +146,34 @@ printOut = (err, content) => {
     });
   }
 
+  // getTextColor() {
+  //   return (String) (this.state.textColor)
+  // }
+
+  
 
   render() {
+
+    const textColorVariable = {
+      color: this.state.textColor,
+    }
+
     return (
       <ImageBackground
           style={styles.image}
-          source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
-          // source={{uri: 'https://source.unsplash.com/900x600/daily?landscape'}}
-          // uri = {this.state.loaded ? this.state.uri : ''}
-          // source = {{url: 'https://images.unsplash.com/collections/1065412/1600x900'}}
-          // source = {{url: 'https://source.unsplash.com/collection/1065412/900x1600/daily'}}
-          // source = {require('../../assets/DefaultBackground.jpg')}
-          // source = {{url: 'https://s3.amazonaws.com/123rf-chrome/images/44117949_xl.jpg'}}
+          source={{url: this.state.backgroundSource}}
           imageStyle={{resizeMode: 'cover'}}
-          // onLoad={ ()=>{ this.setState({ loaded: true })}}
       >
-       
+
+      {/* Add a default ImageBackground here whilst the one above loads? */}
+      {/* {defaultBackground} */}
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
        <View>
          <View style={styles.headerBar}>
           <TouchableOpacity style={styles.headerMenu} onPress={() => this.props.navigation.navigate('DrawerOpen')}>
             <Image 
-              source={require('../../assets/menuIconPink.png')}
+              source={require('../assets/menuIconPink.png')}
               style={{width: 30, height: 30}}          
             />
           </TouchableOpacity>
@@ -115,19 +183,19 @@ printOut = (err, content) => {
         >
         <View style={styles.container}>
           {/* Greeting */}
-          <Text style = {styles.header}>
+          <Text style={[styles.header, textColorVariable]}>
             Good {this.state.greetingText}, {"\n"}
             {this.state.name}
           </Text>
 
           {/* Main Focus */}
           <View style={styles.mainFocus}>
-            <MainFocus onMainFocusAdded={this.mainFocusAddedHandler} />
+            <MainFocus onMainFocusAdded={this.mainFocusAddedHandler} color={this.state.textColor} />
           </View>
 
           {/* Todo list */}
           <View style={styles.todos}>
-            <Text style={styles.TodoHeader}>
+            <Text style={[styles.TodoHeader, textColorVariable]}>
               Todo:
             </Text>
             <TodoInput onTodoAdded={this.todoAddedHandler}/>
@@ -154,18 +222,14 @@ const styles = StyleSheet.create({
   },
   header: {
     textAlign: 'center',
-    color: '#ffffff',
     fontWeight: 'bold',
     textShadowColor: '#000000',
     textShadowRadius: 1,
     fontSize: 45,
     textShadowOffset: {width: 0.5, height: 0.5},
     fontFamily: fonts.bold,
-    
   },
   container: {
-    // flex: 1,
-    // top: '12%',
   },
   mainFocusHeader: {
     padding: 15,

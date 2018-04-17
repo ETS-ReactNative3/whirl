@@ -11,6 +11,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     Image,
+    AsyncStorage
 } from 'react-native';
 
 import Input from '../Input';
@@ -21,6 +22,41 @@ class MainFocusInput extends Component {
     state = {
         focus: '',
         modalVisible: false,
+        textColor: '#ffffff',
+        backgroundSource: 'https://source.unsplash.com/collection/1065412/900x1600/daily'
+    }
+
+    async componentDidMount() {
+        try {
+            const value = await AsyncStorage.getItem('textColor').then((keyvalue) => {
+            if (keyvalue !== null) {
+                this.setState({
+                  textColor: keyvalue,
+                })
+                console.log("MainFocusInput: successfully loaded textColor")
+            } else {
+                this.setState({
+                    textColor: '#ffffff',
+                })
+                console.log('MainFocusInput: no textColor item in storage')
+            }})
+            } catch (error) {
+            console.log('MainFocusInput: theres been an error getting the textColor item')
+          }
+
+          try {
+            const value = await AsyncStorage.getItem('backgroundSource').then((keyvalue) => {
+            if (keyvalue !== null) {
+                this.setState({
+                    backgroundSource: keyvalue,
+                })
+                console.log(keyvalue)
+            } else {
+                console.log('MainFocusInput: no backgroundSource item in storage')
+            }})
+          } catch (error) {
+            console.log('MainFocusInput: theres been an error getting the backgroundSource item')
+        }
     }
 
     focusChangedHandler = val => {
@@ -48,10 +84,19 @@ class MainFocusInput extends Component {
     }
 
     render() {
+
+        const textColorVariable = {
+            color: this.state.textColor,
+        }
+
+        const borderColor = {
+            borderColor: this.state.textColor,
+        }
+
         return (
             <View>
                 <View>
-                <Text style={styles.mainFocusHeader}> What is your main focus for today? </Text>
+                <Text style={[styles.mainFocusHeader, textColorVariable]}> What is your main focus for today? </Text>
                 </View>
                 <Modal
                     animationType="slide"
@@ -63,7 +108,7 @@ class MainFocusInput extends Component {
                     onShow={() => { this.textInput.focus() }}>
                     <ImageBackground
                         style={styles.image}
-                        source={{url: 'https://source.unsplash.com/900x600/daily?nature'}}
+                        source={{url: this.state.backgroundSource}}
                         imageStyle={{resizeMode: 'cover'}}
                     >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
@@ -109,18 +154,11 @@ class MainFocusInput extends Component {
                         </View>
                         <View style={styles.container}>
                             <View style={styles.inputLineContainer}>
-                                {/* <Input 
-                                    placeholder="Focus"
-                                    type='focus'
-                                    onChangeText={this.onChangeText}
-                                    value={this.state.focus}
-                                    multiline={true}
-                                /> */}
                                 <TextInput
                                     autoCapitalize='none'
                                     autoCorrect={false}
                                     style={styles.input}
-                                    placeholder={"New Todo"}
+                                    placeholder={"Focus"}
                                     placeholderTextColor='#ffffff'
                                     onChangeText={(value) => this.onChangeText(value)}
                                     underlineColorAndroid='transparent'
@@ -150,7 +188,7 @@ class MainFocusInput extends Component {
                     onPress={() => {
                         this.setModalVisible(true);
                     }}
-                    style={styles.focusInput}>
+                    style={[styles.focusInput, borderColor]}>
                 </TouchableOpacity>
             </View>
 
@@ -168,13 +206,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        // justifyContent: 'center',
         paddingTop: 60,
         paddingHorizontal: 40
       },
     focusInput: {
-        // width: '90%',
-        borderColor: '#ffffff',
         borderBottomWidth: 2,
         paddingTop: 25,
         marginBottom: 10,
@@ -182,7 +217,6 @@ const styles = StyleSheet.create({
     mainFocusHeader: {
         padding: 15,
         textAlign: 'center',
-        color: '#ffffff',
         fontSize: 30,
         textShadowColor: '#000000',
         fontFamily: fonts.light,
@@ -191,8 +225,6 @@ const styles = StyleSheet.create({
         flexGrow:1,
         height: null,
         width:null,
-        // alignItems: 'center',
-        // justifyContent:'center',
     },
     header: {
         flexDirection: 'row',
@@ -203,7 +235,6 @@ const styles = StyleSheet.create({
     headerText: {
         margin: 5,
         color: '#ffffff',
-        // fontWeight: 'bold',
         fontSize: 30,
         fontFamily: fonts.light,
     },

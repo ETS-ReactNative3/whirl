@@ -6,7 +6,7 @@ import {
 
 import { colors, fonts } from '../theme'
 
-export default ({ placeholder, onChangeText, type, placeholderTextColor="#ffffff", multiline=false,...props }) => (
+export default ({ placeholder, onChangeText, type, placeholderTextColor="#ffffff", multiline=false, ref, ...props }) => (
   <TextInput
     autoCapitalize='none'
     autoCorrect={false}
@@ -16,6 +16,7 @@ export default ({ placeholder, onChangeText, type, placeholderTextColor="#ffffff
     onChangeText={value => onChangeText(type, value)}
     underlineColorAndroid='transparent'
     multiline={multiline}
+    ref={ref}
     {...props}
   />
 )
