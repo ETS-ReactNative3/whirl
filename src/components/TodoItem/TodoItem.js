@@ -17,6 +17,8 @@ class TodoItem extends Component {
     })
   }
 
+
+
   render() {
     const text = !this.state.strikethrough ? (
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
@@ -27,10 +29,10 @@ class TodoItem extends Component {
         <Text style={styles.todoText}>{this.props.todo}</Text>
       </View>
     ) : (
-      <View>
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <Image
           source={require('../../assets/circle.png')}
-          style={{width: 8, height: 8}}
+          style={{width: 8, height: 8, marginRight: 10}}
         />
         <Text style={styles.todoTextCompleted}>{this.props.todo}</Text>
       </View>
