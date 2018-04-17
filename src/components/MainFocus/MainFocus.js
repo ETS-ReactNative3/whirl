@@ -75,7 +75,7 @@ class MainFocus extends Component {
             <TodayFocus todaysFocus={this.state.focus} onDeletePressed={this.focusDeletedHandler}/> 
           ) : (
             // display when no focus added yet 
-            <MainFocusInput onFocusAdded={this.focusAddedHandler} focusVal={this.state.focus}/>
+            <MainFocusInput onFocusAdded={this.focusAddedHandler}/>
           )
 
         return (

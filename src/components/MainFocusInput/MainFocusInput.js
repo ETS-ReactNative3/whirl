@@ -23,10 +23,20 @@ class MainFocusInput extends Component {
         focus: '',
         modalVisible: false,
         textColor: '#ffffff',
-        backgroundSource: 'https://source.unsplash.com/collection/1065412/900x1600/daily'
+        backgroundSource: 'https://source.unsplash.com/collection/1065412/900x1600/daily',
+        mounted: false,
     }
 
     async componentDidMount() {
+        this.mounted = true;
+        this.setValues()
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+    }
+
+    async setValues() {
         try {
             const value = await AsyncStorage.getItem('textColor').then((keyvalue) => {
             if (keyvalue !== null) {
@@ -35,9 +45,13 @@ class MainFocusInput extends Component {
                 })
                 console.log("MainFocusInput: successfully loaded textColor")
             } else {
-                this.setState({
-                    textColor: '#ffffff',
-                })
+                if (this.mounted) {
+                    this.setState({
+                        textColor: '#ffffff',
+                    })
+                } else {
+                    console.log('mainfocusinput unmounted')
+                }
                 console.log('MainFocusInput: no textColor item in storage')
             }})
             } catch (error) {
@@ -47,9 +61,13 @@ class MainFocusInput extends Component {
           try {
             const value = await AsyncStorage.getItem('backgroundSource').then((keyvalue) => {
             if (keyvalue !== null) {
-                this.setState({
-                    backgroundSource: keyvalue,
-                })
+                if (this.mounted) {
+                    this.setState({
+                        backgroundSource: keyvalue,
+                    })
+                } else {
+                    console.log('mainfocusinput unmounted')
+                }
                 console.log(keyvalue)
             } else {
                 console.log('MainFocusInput: no backgroundSource item in storage')
