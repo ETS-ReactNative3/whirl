@@ -127,14 +127,7 @@ class TodoInput extends Component {
                         </View>
                         <View style={styles.container}>
                             <View style={styles.inputLineContainer}>
-                                {/* <Input 
-                                    placeholder="New Todo"
-                                    type='todo'
-                                    onChangeText={this.onChangeText}
-                                    value={this.state.focus}
-                                    multiline={true}
-                                    ref={(input) => { this.textInput = input; }}
-                                /> */}
+                                {/* use ref to textinput to open keyboard upon opening modal */}
                                 <TextInput
                                     autoCapitalize='none'
                                     autoCorrect={false}

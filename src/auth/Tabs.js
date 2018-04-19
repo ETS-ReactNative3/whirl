@@ -6,14 +6,8 @@ import { colors, fonts } from '../theme'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 26,
-    height: 26
-  }
-})
-
 const routes = {
+  // load sign in screen
   SignIn: {
     screen: SignIn,
     navigationOptions: {
@@ -26,6 +20,8 @@ const routes = {
       )
     }
   },
+
+  // Load sign up screen
   SignUp: {
     screen: SignUp,
     navigationOptions: {
@@ -40,6 +36,7 @@ const routes = {
   }
 }
 
+// Tab bar route
 const routeConfig = {
   tabBarPosition: 'bottom',
   tabBarOptions: {
@@ -58,5 +55,12 @@ const routeConfig = {
     },
   }
 }
+
+const styles = StyleSheet.create({
+  icon: {
+    width: 26,
+    height: 26
+  }
+})
 
 export default TabNavigator(routes, routeConfig)
