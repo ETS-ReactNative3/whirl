@@ -14,7 +14,7 @@ const routes = {
       title: 'Sign In',
       tabBarIcon: ({ tintColor }) => (
         <Image
-          source={require('../assets/signInButton.png')}
+          source={require('../assets/icons/signIn.png')}
           style={[styles.icon, { tintColor }]}
         />
       )
@@ -28,7 +28,7 @@ const routes = {
       title: 'Sign Up',
       tabBarIcon: ({ tintColor }) => (
         <Image
-          source={require('../assets/signUpButton.png')}
+          source={require('../assets/icons/signUp.png')}
           style={[styles.icon, { tintColor }]}
         />
       )

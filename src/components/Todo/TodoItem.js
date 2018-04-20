@@ -23,7 +23,7 @@ class TodoItem extends Component {
     const text = !this.state.strikethrough ? (
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <Image
-          source={require('../../assets/circle.png')}
+          source={require('../../assets/icons/circle.png')}
           style={{width: 8, height: 8, marginRight: 10}}
         />
         <Text style={styles.todoText}>{this.props.todo}</Text>
@@ -31,7 +31,7 @@ class TodoItem extends Component {
     ) : (
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <Image
-          source={require('../../assets/circle.png')}
+          source={require('../../assets/icons/circle.png')}
           style={{width: 8, height: 8, marginRight: 10}}
         />
         <Text style={styles.todoTextCompleted}>{this.props.todo}</Text>
@@ -46,7 +46,7 @@ class TodoItem extends Component {
                       {/* delete button */}
                       <TouchableOpacity onPress={this.props.onItemPressed} style={styles.deleteButton}>
                         <Image
-                          source={require('../../assets/cross.png')}
+                          source={require('../../assets/icons/cross.png')}
                           style={{width: 40, height: 40}}
                         />
                       </TouchableOpacity> 
@@ -67,12 +67,14 @@ const styles = StyleSheet.create({
     },
     todoText: {
         color: '#ffffff',
-        fontFamily: fonts.base
+        fontFamily: fonts.base,
+        fontSize: 20,
     },
     todoTextCompleted: {
         color: '#ffffff',
         textDecorationLine: 'line-through',
-        fontFamily: fonts.base
+        fontFamily: fonts.base,
+        fontSize: 20,
     },
     deleteButton: {
         alignItems: 'center',

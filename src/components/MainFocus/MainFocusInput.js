@@ -183,7 +183,7 @@ class MainFocusInput extends Component {
                     style={styles.close}
                   >
                     <Image
-                      source={require("../../assets/cross.png")}
+                      source={require("../../assets/icons/cross.png")}
                       style={{ width: 50, height: 50 }}
                     />
                   </TouchableHighlight>
@@ -203,7 +203,7 @@ class MainFocusInput extends Component {
                     style={styles.add}
                   >
                     <Image
-                      source={require("../../assets/tick.png")}
+                      source={require("../../assets/icons/tick.png")}
                       style={{ width: 50, height: 50 }}
                     />
                   </TouchableHighlight>

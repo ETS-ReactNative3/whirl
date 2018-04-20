@@ -40,7 +40,7 @@ class LogOut extends Component {
           onPress={() => this.props.navigation.navigate("DrawerOpen")}
         >
           <Image
-            source={require("../assets/menuIcon.png")}
+            source={require("../assets/icons/menu.png")}
             style={{ width: 30, height: 30 }}
           />
         </TouchableOpacity>

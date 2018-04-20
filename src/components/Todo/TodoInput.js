@@ -95,7 +95,7 @@ class TodoInput extends Component {
                                 style={styles.close}
                             >
                                 <Image 
-                                    source={require('../../assets/cross.png')}
+                                    source={require('../../assets/icons/cross.png')}
                                     style={{width: 50, height: 50}}
                                 />
                                 
@@ -118,7 +118,7 @@ class TodoInput extends Component {
                                 style={styles.add}
                             >
                                 <Image 
-                                    source={require('../../assets/tick.png')}
+                                    source={require('../../assets/icons/tick.png')}
                                     style={{width: 50, height: 50}}
                                 />
                                 
@@ -169,7 +169,7 @@ class TodoInput extends Component {
                             New Todo
                         </Text>
                         <Image 
-                            source={require('../../assets/add.png')}
+                            source={require('../../assets/icons/add.png')}
                             style={{width: 40, height: 40}}
                         />
                     </TouchableOpacity>

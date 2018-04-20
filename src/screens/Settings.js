@@ -153,7 +153,7 @@ export default class Settings extends Component {
             onPress={() => this.props.navigation.navigate("DrawerOpen")}
           >
             <Image
-              source={require("../assets/menuIconPink.png")}
+              source={require("../assets/icons/menuPink.png")}
               style={{ width: 30, height: 30 }}
             />
           </TouchableOpacity>
@@ -162,7 +162,7 @@ export default class Settings extends Component {
           <View style={styles.title}>
             <Text style={styles.headerTitle}>Settings</Text>
             <Image
-              source={require("../assets/settings.png")}
+              source={require("../assets/icons/settings.png")}
               style={{ width: 30, height: 30 }}
             />
           </View>

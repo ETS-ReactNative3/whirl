@@ -13,9 +13,14 @@ import {
   TouchableWithoutFeedback,
   ScrollView
 } from "react-native";
+
+// components
 import MainFocus from "../components/MainFocus/MainFocus";
 import TodoInput from "../components/Todo/TodoInput";
 import TodoList from "../components/Todo/TodoList";
+// import Background from "../components/Background";
+
+
 import Amplify, { Auth, API } from "aws-amplify";
 import { fonts } from "../theme";
 
@@ -202,7 +207,7 @@ export default class Homescreen extends Component {
               onPress={() => this.props.navigation.navigate("DrawerOpen")}
             >
               <Image
-                source={require("../assets/menuIconPink.png")}
+                source={require("../assets/icons/menuPink.png")}
                 style={{ width: 30, height: 30 }}
               />
             </TouchableOpacity>

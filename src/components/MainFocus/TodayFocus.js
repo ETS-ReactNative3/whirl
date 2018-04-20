@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   deleteButtonText: {
-    color: "#ffffff"
+    color: "#ffffff",
+    fontSize: 30,
   },
   focus: {
     flex: 1
