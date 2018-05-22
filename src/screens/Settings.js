@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,21 @@ import {
   StyleSheet,
   Picker,
   AsyncStorage
-} from "react-native";
+} from 'react-native';
 import {
   StackNavigator,
   TabNavigator,
-  DrawerNavigator
-} from "react-navigation";
-import { fonts, colors } from "../theme";
-import CONSTANTS from "../constants";
+  DrawerNavigator,
+  DrawerActions
+} from 'react-navigation';
+
+import { fonts, colors } from '../theme';
+import CONSTANTS from '../constants';
 
 export default class Settings extends Component {
   state = {
-    backgroundSource: "",
-    textColor: "#ffffff",
+    backgroundSource: '',
+    textColor: '#ffffff',
     changes: false
   };
 
@@ -30,44 +32,45 @@ export default class Settings extends Component {
   async componentDidMount() {
     // load backgroundSource
     try {
-      const value = await AsyncStorage.getItem("backgroundSource").then(
+      const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
           if (keyvalue !== null) {
             this.setState({
               backgroundSource: keyvalue
             });
-            console.log("settings: successfully loaded background source");
+            console.log('settings: successfully loaded background source');
           } else {
             this.setState({
-              backgroundSource: WALLPAPER
+              backgroundSource: CONSTANTS.BACKGROUNDS.WALLPAPER
             });
-            console.log("Settings: no backgroundSource item in storage");
+            console.log('Settings: no backgroundSource item in storage');
           }
         }
       );
     } catch (error) {
       console.log(
-        "Settings: theres been an error getting the backgroundSource item"
+        'Settings: theres been an error getting the backgroundSource item'
       );
+      console.log(error);
     }
 
     // load textColor
     try {
-      const value = await AsyncStorage.getItem("textColor").then(keyvalue => {
+      const value = await AsyncStorage.getItem('textColor').then(keyvalue => {
         if (keyvalue !== null) {
           this.setState({
             textColor: keyvalue
           });
-          console.log("settings: successfully loaded textColor");
+          console.log('settings: successfully loaded textColor');
         } else {
           this.setState({
-            textColor: "#ffffff"
+            textColor: '#ffffff'
           });
-          console.log("Settings: no textColor item in storage");
+          console.log('Settings: no textColor item in storage');
         }
       });
     } catch (error) {
-      console.log("Settings: theres been an error getting the textColor item");
+      console.log('Settings: theres been an error getting the textColor item');
     }
   }
 
@@ -94,26 +97,26 @@ export default class Settings extends Component {
 
   /**
    * store the backgroundSource URL to local storage
-   * @param {String} backgroundSource 
+   * @param {String} backgroundSource
    */
   async storeBackground(backgroundSource) {
     try {
-      await AsyncStorage.setItem("backgroundSource", backgroundSource);
+      await AsyncStorage.setItem('backgroundSource', backgroundSource);
     } catch (error) {
-      console.log("error setting the background source item in storage: ");
+      console.log('error setting the background source item in storage: ');
       console.log(error);
     }
   }
 
   /**
    * store the textColor to local storage
-   * @param {Sting} textColor 
+   * @param {Sting} textColor
    */
   async storeTextColor(textColor) {
     try {
-      await AsyncStorage.setItem("textColor", textColor);
+      await AsyncStorage.setItem('textColor', textColor);
     } catch (error) {
-      console.log("error setting the textColor item in storage: ");
+      console.log('error setting the textColor item in storage: ');
       console.log(error);
     }
   }
@@ -129,31 +132,32 @@ export default class Settings extends Component {
         disabled={!this.state.changes}
         onPress={this.saveChanges.bind(this)}
       >
-        <Text style={{ color: "#ffffff", fontFamily: fonts.base }}>
+        <Text style={{ color: '#ffffff', fontFamily: fonts.base }}>
           SAVE CHANGES
         </Text>
       </TouchableOpacity>
     ) : (
-        // if no changes, then dont show anything. Just an empty view. 
+      // if no changes, then dont show anything. Just an empty view.
       <View />
     );
 
     return (
       <ImageBackground
         style={styles.image}
-        source={require("../assets/DefaultBackground2.jpeg")}
-        imageStyle={{ resizeMode: "cover" }}
+        source={require('../assets/DefaultBackground2.jpeg')}
+        imageStyle={{ resizeMode: 'cover' }}
       >
         {/* Header containing page title and menu icon */}
         <View style={styles.headerBar}>
-
-            {/* open drawer menu button */}
+          {/* open drawer menu button */}
           <TouchableOpacity
             style={styles.headerMenu}
-            onPress={() => this.props.navigation.navigate("DrawerOpen")}
+            onPress={() =>
+              this.props.navigation.dispatch(DrawerActions.openDrawer())
+            }
           >
             <Image
-              source={require("../assets/icons/menuPink.png")}
+              source={require('../assets/icons/menuPink.png')}
               style={{ width: 30, height: 30 }}
             />
           </TouchableOpacity>
@@ -162,7 +166,7 @@ export default class Settings extends Component {
           <View style={styles.title}>
             <Text style={styles.headerTitle}>Settings</Text>
             <Image
-              source={require("../assets/icons/settings.png")}
+              source={require('../assets/icons/settings.png')}
               style={{ width: 30, height: 30 }}
             />
           </View>
@@ -195,7 +199,7 @@ export default class Settings extends Component {
               }}
               style={{ width: 200 }}
             >
-                {/* Background options */}
+              {/* Background options */}
               <Picker.Item
                 label="Nature"
                 value={CONSTANTS.BACKGROUNDS.NATURE}
@@ -218,7 +222,6 @@ export default class Settings extends Component {
           {/* Change the font colors on the homepage */}
           <Text style={styles.sectionTitle}> Text color on homepage </Text>
           <View style={styles.backgroundSelection}>
-
             {/* Example of how selected text color will look over the selected background */}
             <View style={styles.textImage}>
               <Image
@@ -228,13 +231,13 @@ export default class Settings extends Component {
               <Text
                 style={{
                   color: this.state.textColor,
-                  position: "absolute",
+                  position: 'absolute',
                   top: 30,
-                  fontWeight: "bold"
+                  fontWeight: 'bold'
                 }}
               >
-                {" "}
-                Example{" "}
+                {' '}
+                Example{' '}
               </Text>
             </View>
 
@@ -248,9 +251,9 @@ export default class Settings extends Component {
                 });
               }}
               style={{ width: 200 }}
-              itemStyle={{ color: "white" }}
+              itemStyle={{ color: 'white' }}
             >
-            {/* text color options */}
+              {/* text color options */}
               <Picker.Item
                 label="Pink"
                 value={colors.primary}
@@ -289,63 +292,63 @@ const styles = StyleSheet.create({
   },
   headerBar: {
     marginBottom: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#ffffff",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#ffffff',
+    alignItems: 'center'
   },
   headerTitle: {
     fontSize: 30,
     fontFamily: fonts.bold,
-    color: "#2f2f2f"
+    color: '#2f2f2f'
   },
   title: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1
   },
   backgroundSelection: {
-    borderColor: "#808080",
+    borderColor: '#808080',
     borderTopWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
   body: {
-    alignItems: "center"
+    alignItems: 'center'
   },
   sectionTitle: {
     fontFamily: fonts.base,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20
   },
   SaveButton: {
-    backgroundColor: "#61B329",
-    borderColor: "green",
+    backgroundColor: '#61B329',
+    borderColor: 'green',
     borderWidth: 2,
     padding: 10,
-    alignItems: "center",
-    width: "50%",
-    justifyContent: "space-around",
+    alignItems: 'center',
+    width: '50%',
+    justifyContent: 'space-around',
     marginBottom: 20,
     borderRadius: 10
   },
   textColors: {
-    flexDirection: "column",
-    justifyContent: "space-between"
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   colorSelection: {
-    borderColor: "#808080",
+    borderColor: '#808080',
     borderTopWidth: 1
   },
   backgroundImage: {
     width: 100,
     height: 170,
-    borderColor: "#808080",
+    borderColor: '#808080',
     borderWidth: 0.4
   },
   textImage: {
-    alignItems: "center"
+    alignItems: 'center'
   }
 });

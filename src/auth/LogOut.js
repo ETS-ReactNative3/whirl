@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -6,24 +6,26 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet
-} from "react-native";
-import { connect } from "react-redux";
-import { Auth } from "aws-amplify";
+} from 'react-native';
+import { connect } from 'react-redux';
+import { Auth } from 'aws-amplify';
 
-import { logOut } from "../actions";
-import { fonts, colors } from "../theme";
+import { DrawerActions } from 'react-navigation';
+
+import { logOut } from '../actions';
+import { fonts, colors } from '../theme';
 
 class LogOut extends Component {
-    /**
-     * Log the current user out from their current session
-     */
+  /**
+   * Log the current user out from their current session
+   */
   logout() {
     Auth.signOut()
       .then(() => {
         this.props.dispatchLogout();
       })
       .catch(err => {
-        console.log("err: ", err);
+        console.log('err: ', err);
       });
   }
 
@@ -31,16 +33,18 @@ class LogOut extends Component {
     return (
       <ImageBackground
         style={styles.image}
-        source={require("../assets/DefaultBackground2.jpeg")}
-        imageStyle={{ resizeMode: "cover" }}
+        source={require('../assets/DefaultBackground2.jpeg')}
+        imageStyle={{ resizeMode: 'cover' }}
       >
         {/* Header bar contains just the menu button */}
         <TouchableOpacity
           style={styles.headerBar}
-          onPress={() => this.props.navigation.navigate("DrawerOpen")}
+          onPress={() =>
+            this.props.navigation.dispatch(DrawerActions.openDrawer())
+          }
         >
           <Image
-            source={require("../assets/icons/menu.png")}
+            source={require('../assets/icons/menu.png')}
             style={{ width: 30, height: 30 }}
           />
         </TouchableOpacity>
@@ -49,7 +53,6 @@ class LogOut extends Component {
         <TouchableOpacity onPress={this.logout.bind(this)} style={{ flex: 1 }}>
           <Text style={styles.button}>Logout</Text>
         </TouchableOpacity>
-
       </ImageBackground>
     );
   }
@@ -68,24 +71,24 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     height: null,
     width: null,
-    alignItems: "center"
+    alignItems: 'center'
   },
   headerBar: {
-    position: "absolute",
+    position: 'absolute',
     top: 5,
     left: 5,
-    flexDirection: "row",
+    flexDirection: 'row',
     flex: 1,
     padding: 10
   },
   button: {
-    justifyContent: "center",
-    alignItems: "center",
-    fontWeight: "bold",
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontWeight: 'bold',
     color: colors.primary,
     fontFamily: fonts.light,
-    top: "40%",
-    backgroundColor: "#ffffff",
+    top: '40%',
+    backgroundColor: '#ffffff',
     fontSize: 40,
     borderRadius: 20
   }
