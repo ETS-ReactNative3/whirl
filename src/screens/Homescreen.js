@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,44 +11,79 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
-  ScrollView
-} from "react-native";
+  ScrollView,
+  ActivityIndicator
+} from 'react-native';
 
 // components
-import MainFocus from "../components/MainFocus/MainFocus";
-import TodoInput from "../components/Todo/TodoInput";
-import TodoList from "../components/Todo/TodoList";
-// import Background from "../components/Background";
+import MainFocus from '../components/MainFocus/MainFocus';
+import TodoInput from '../components/Todo/TodoInput';
+import TodoList from '../components/Todo/TodoList';
 
+import { DrawerActions } from 'react-navigation';
 
-import Amplify, { Auth, API } from "aws-amplify";
-import { fonts } from "../theme";
+import Amplify, { Auth, API } from 'aws-amplify';
+import { fonts } from '../theme';
 
-export default class Homescreen extends Component {
+/******************************************
+ * TODO:
+ *  check to see if there is an email saved to local storage,
+ *  download all todos from database,
+ *
+ */
+
+class Homescreen extends Component {
   state = {
-    name: "",
-    greetingText: "day",
+    name: '',
+    greetingText: 'day',
     todos: [],
     loaded: false,
     user: {},
     backgroundSource:
-      "https://source.unsplash.com/collection/1065412/900x1600/daily",
-    textColor: "#ffffff"
+      'https://source.unsplash.com/collection/1065412/900x1600/daily',
+    textColor: '#ffffff',
+    email: '',
+    apiResponse: '',
+    isLoading: true,
+    remount: 0
   };
 
   /**
    * callback function for getting user attributes.
-   * This function specifically gets and stores the given_name of the user.
+   *
+   * This function specifically gets and stores both the given_name and
+   * email (id) of the user.
    */
   getName = (err, content) => {
     console.log(err);
-    var name = content[2]["Value"];
-    console.log(name);
+    var name = content[2]['Value'];
+    var email = content[3]['Value'];
+    console.log(content);
+    console.log('name: ' + name);
+
     this.setState({
-      name: name
+      name: name,
+      email: email.replace('@', '.at.')
     });
     this.storeName(this.state.name);
+    this.storeEmail(this.state.email);
+    console.log('email: ' + this.state.email);
   };
+
+  async getListItems() {
+    console.log('getting list items');
+    const path = '/Todo/' + this.state.email;
+    try {
+      const apiResponse = await API.get('TodoCRUD', path);
+      this.setState({
+        apiResponse,
+        isLoading: !this.state.isLoading
+      });
+      console.log(this.state.dataSource);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   /**
    * Store the given_name of the user to async storage
@@ -56,9 +91,22 @@ export default class Homescreen extends Component {
    */
   async storeName(name) {
     try {
-      await AsyncStorage.setItem("name", name);
+      await AsyncStorage.setItem('name', name);
     } catch (error) {
-      console.log("error setting the name item in storage: ");
+      console.log('error setting the name item in storage: ');
+      console.log(error);
+    }
+  }
+
+  /**
+   * Store the email of the user to async storage
+   * @param {String} email
+   */
+  async storeEmail(email) {
+    try {
+      await AsyncStorage.setItem('email', email);
+    } catch (error) {
+      console.log('error setting the email item in storage: ');
       console.log(error);
     }
   }
@@ -73,67 +121,87 @@ export default class Homescreen extends Component {
     const user = await Auth.currentAuthenticatedUser();
     this.setState({
       greetingText: this.getGreeting(),
-      user,
+      // user,
       name: this.props.name
     });
 
+    // user.getUserAttributes(this.getName);
+    // load the string given_name from local storage
+    try {
+      const value = AsyncStorage.getItem('name').then(keyvalue => {
+        if (keyvalue !== null) {
+          this.setState({
+            name: keyvalue
+          });
+          console.log('Home: successfully loaded name');
+        } else {
+          console.log('Home: no name item in storage');
+          user.getUserAttributes(this.getName);
+        }
+      });
+    } catch (error) {
+      console.log('Home: theres been an error getting the name item: ' + error);
+    }
+
+    try {
+      const value = AsyncStorage.getItem('email').then(keyvalue => {
+        if (keyvalue !== null) {
+          this.setState({
+            email: keyvalue
+          });
+          console.log('Home: successfully loaded email');
+        } else {
+          console.log('Home: no email item in storage');
+          user.getUserAttributes(this.getName);
+        }
+      });
+    } catch (error) {
+      console.log(
+        'Home: theres been an error getting the email item: ' + error
+      );
+    }
+
     // load the url backgroundSource from local storage
     try {
-      const value = await AsyncStorage.getItem("backgroundSource").then(
+      const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
           if (keyvalue !== null) {
             this.setState({
               backgroundSource: keyvalue
             });
-            console.log("Home: background source: " + keyvalue);
+            console.log('Home: background source: ' + keyvalue);
           } else {
-            console.log("Home: no backgroundSource item in storage");
+            console.log('Home: no backgroundSource item in storage');
           }
         }
       );
     } catch (error) {
       console.log(
-        "Home: theres been an error getting the backgroundSource item: " + error
+        'Home: theres been an error getting the backgroundSource item: ' + error
       );
     }
 
     // load the hex code string textColor from local storage
     try {
-      const value = await AsyncStorage.getItem("textColor").then(keyvalue => {
+      const value = await AsyncStorage.getItem('textColor').then(keyvalue => {
         if (keyvalue !== null) {
           this.setState({
             textColor: keyvalue
           });
-          console.log("Home: successfully loaded textColor");
+          console.log('Home: successfully loaded textColor');
         } else {
           this.setState({
-            textColor: "#ffffff"
+            textColor: '#ffffff'
           });
-          console.log("Home: no textColor item in storage");
+          console.log('Home: no textColor item in storage');
         }
       });
     } catch (error) {
       console.log(
-        "Home: theres been an error getting the textColor item: " + error
+        'Home: theres been an error getting the textColor item: ' + error
       );
     }
-
-    // load the string given_name from local storage
-    try {
-      const value = await AsyncStorage.getItem("name").then(keyvalue => {
-        if (keyvalue !== null) {
-          this.setState({
-            name: keyvalue
-          });
-          console.log("Home: successfully loaded name");
-        } else {
-          console.log("Home: no name item in storage");
-          user.getUserAttributes(this.getName);
-        }
-      });
-    } catch (error) {
-      console.log("Home: theres been an error getting the name item: " + error);
-    }
+    this.getListItems();
   }
 
   /**
@@ -144,42 +212,22 @@ export default class Homescreen extends Component {
     var date = new Date();
     var hour = date.getHours();
     if (hour > 17) {
-      return "evening";
+      return 'evening';
     } else if (hour > 11) {
-      return "afternoon";
+      return 'afternoon';
     } else {
-      return "morning";
+      return 'morning';
     }
   }
 
-  /**
-   * concat a new todo item to the todo items array
-   */
-  todoAddedHandler = todo => {
-    this.setState(prevState => {
-      return {
-        todos: prevState.todos.concat({
-          key: this.state.todos.length,
-          value: todo
-        })
-      };
-    });
-  };
+  forceRemount() {
+    console.log('forcing remount');
+    this.setState(this.state);
+  }
 
-  /**
-   * delete a todo item
-   *
-   * removes the todo item from the array storing all todo items, by using its key
-   */
-  todoDeletedHandler = key => {
-    this.setState(prevState => {
-      return {
-        todos: prevState.todos.filter(todo => {
-          return todo.key !== key;
-        })
-      };
-    });
-  };
+  todoAddedHandler() {
+    this.getListItems();
+  }
 
   render() {
     // use const to store the current text color.
@@ -188,11 +236,24 @@ export default class Homescreen extends Component {
       color: this.state.textColor
     };
 
+    const list = this.state.isLoading ? (
+      <View style={{ flex: 1, paddingTop: 20 }}>
+        <ActivityIndicator />
+      </View>
+    ) : (
+      <TodoList
+        todos={this.state.todos}
+        style={styles.TodoList}
+        apiResponse={this.state.apiResponse}
+      />
+    );
+
     return (
       <ImageBackground
         style={styles.image}
         source={{ url: this.state.backgroundSource }}
-        imageStyle={{ resizeMode: "cover" }}
+        imageStyle={{ resizeMode: 'cover' }}
+        // loadingIndicatorSource={require('../assets/DefaultBackground2.jpeg')}
       >
         {/* Add a default ImageBackground here whilst the one above loads? */}
         {/* {defaultBackground} */}
@@ -204,10 +265,12 @@ export default class Homescreen extends Component {
           <View style={styles.headerBar}>
             <TouchableOpacity
               style={styles.headerMenu}
-              onPress={() => this.props.navigation.navigate("DrawerOpen")}
+              onPress={() =>
+                this.props.navigation.dispatch(DrawerActions.openDrawer())
+              }
             >
               <Image
-                source={require("../assets/icons/menuPink.png")}
+                source={require('../assets/icons/menuPink.png')}
                 style={{ width: 30, height: 30 }}
               />
             </TouchableOpacity>
@@ -219,7 +282,7 @@ export default class Homescreen extends Component {
           >
             {/* Greeting */}
             <Text style={[styles.header, textColorConst]}>
-              Good {this.state.greetingText}, {"\n"}
+              Good {this.state.greetingText}, {'\n'}
               {this.state.name}
             </Text>
 
@@ -231,12 +294,8 @@ export default class Homescreen extends Component {
             {/* Todo list */}
             <View style={styles.todos}>
               <Text style={[styles.TodoHeader, textColorConst]}>Todo:</Text>
-              <TodoInput onTodoAdded={this.todoAddedHandler} />
-              <TodoList
-                todos={this.state.todos}
-                onItemDeleted={this.todoDeletedHandler}
-                style={styles.TodoList}
-              />
+              <TodoInput onTodoAded={this.forceRemount} />
+              {list}
             </View>
           </ScrollView>
         </View>
@@ -252,9 +311,9 @@ const styles = StyleSheet.create({
     width: null
   },
   header: {
-    textAlign: "center",
-    fontWeight: "bold",
-    textShadowColor: "#000000",
+    textAlign: 'center',
+    fontWeight: 'bold',
+    textShadowColor: '#000000',
     textShadowRadius: 1,
     fontSize: 45,
     textShadowOffset: { width: 0.5, height: 0.5 },
@@ -262,28 +321,28 @@ const styles = StyleSheet.create({
   },
   mainFocusHeader: {
     padding: 15,
-    textAlign: "center",
-    color: "#ffffff",
+    textAlign: 'center',
+    color: '#ffffff',
     fontSize: 30,
-    fontFamily: "Helvetica Neue"
+    fontFamily: 'Helvetica Neue'
   },
   TodoHeader: {
     padding: 5,
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 30,
-    textShadowColor: "#000000",
+    textShadowColor: '#000000',
     textShadowRadius: 3,
-    textAlign: "left",
-    fontWeight: "bold",
+    textAlign: 'left',
+    fontWeight: 'bold',
     textShadowOffset: { width: 1, height: 1 }
   },
   headerBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 5,
     marginBottom: 20
   },
   headerMenu: {
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 5,
     marginLeft: 5
   },
@@ -291,10 +350,12 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   mainFocus: {
-    alignItems: "center"
+    alignItems: 'center'
   },
   todos: {
     marginLeft: 10,
     marginRight: 10
   }
 });
+
+export default Homescreen;
