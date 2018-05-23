@@ -121,6 +121,15 @@ export default class Settings extends Component {
     }
   }
 
+  static navigationOptions = {
+    drawerIcon: (
+      <Image
+        source={require('../assets/icons/settingsBlue.png')}
+        style={{ height: 24, width: 24 }}
+      />
+    )
+  };
+
   render() {
     /*
      * Save changes button

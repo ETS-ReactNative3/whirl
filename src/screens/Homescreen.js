@@ -229,6 +229,15 @@ class Homescreen extends Component {
     this.getListItems();
   }
 
+  static navigationOptions = {
+    drawerIcon: (
+      <Image
+        source={require('../assets/icons/home.png')}
+        style={{ height: 24, width: 24 }}
+      />
+    )
+  };
+
   render() {
     // use const to store the current text color.
     // neccessary for overriding textColor in any style presets.
@@ -253,7 +262,6 @@ class Homescreen extends Component {
         style={styles.image}
         source={{ url: this.state.backgroundSource }}
         imageStyle={{ resizeMode: 'cover' }}
-        // loadingIndicatorSource={require('../assets/DefaultBackground2.jpeg')}
       >
         {/* Add a default ImageBackground here whilst the one above loads? */}
         {/* {defaultBackground} */}

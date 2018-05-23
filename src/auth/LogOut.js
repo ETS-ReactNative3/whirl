@@ -29,6 +29,15 @@ class LogOut extends Component {
       });
   }
 
+  static navigationOptions = {
+    drawerIcon: (
+      <Image
+        source={require('../assets/icons/logout.png')}
+        style={{ height: 24, width: 24 }}
+      />
+    )
+  };
+
   render() {
     return (
       <ImageBackground
