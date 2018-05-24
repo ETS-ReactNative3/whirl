@@ -209,6 +209,11 @@ export default class Settings extends Component {
               style={{ width: 200 }}
             >
               {/* Background options */}
+              <Picker.Item label="City" value={CONSTANTS.BACKGROUNDS.CITY} />
+              <Picker.Item
+                label="Above the trees"
+                value={CONSTANTS.BACKGROUNDS.ABOVETREE}
+              />
               <Picker.Item
                 label="Nature"
                 value={CONSTANTS.BACKGROUNDS.NATURE}
@@ -221,6 +226,12 @@ export default class Settings extends Component {
                 label="Landscapes"
                 value={CONSTANTS.BACKGROUNDS.LANDSCAPES}
               />
+              <Picker.Item
+                label="Landscapes 2"
+                value={CONSTANTS.BACKGROUNDS.LANDSCAPES2}
+              />
+              <Picker.Item label="Roads" value={CONSTANTS.BACKGROUNDS.ROADS} />
+              <Picker.Item label="Space" value={CONSTANTS.BACKGROUNDS.SPACE} />
             </Picker>
             <Image
               source={{ url: this.state.backgroundSource }}
