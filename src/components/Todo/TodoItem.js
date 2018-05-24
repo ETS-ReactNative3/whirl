@@ -12,7 +12,7 @@ import { fonts, colors } from '../../theme';
 class TodoItem extends Component {
   state = {
     todo: '',
-    strikethrough: false,
+    strikethrough: this.props.strikethrough,
     user: ''
   };
 
@@ -20,6 +20,8 @@ class TodoItem extends Component {
     this.setState({
       strikethrough: !this.state.strikethrough
     });
+
+    // update strikethough in dynamo db
   };
 
   render() {

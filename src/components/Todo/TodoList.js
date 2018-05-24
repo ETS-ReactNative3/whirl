@@ -12,9 +12,8 @@ import Amplify, { API, Auth } from 'aws-amplify';
 
 class todoList extends Component {
   state = {
-    apiResponse: '',
+    // apiResponse: '',
     isLoading: true
-    // email: 'conorspilsbury.at.outlook.com'
   };
 
   async componentDidMount() {
@@ -36,7 +35,7 @@ class todoList extends Component {
     try {
       const apiResponse = await API.del('TodoCRUD', path);
       console.log(
-        'response from deleteing note: ' + JSON.stringify(apiResponse)
+        'response from deleting note: ' + JSON.stringify(apiResponse)
       );
       this.setState({
         apiResponse,
@@ -59,6 +58,7 @@ class todoList extends Component {
           <TodoItem
             todo={rowData.Content}
             user={rowData.User}
+            strikethrough={rowData.Strikethrough}
             onDeletePressed={() =>
               this.onDeletePressed(rowData.Content, rowData.User)
             }

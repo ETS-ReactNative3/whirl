@@ -17,10 +17,9 @@ import {
 
 // components
 import MainFocus from '../components/MainFocus/MainFocus';
-import TodoInput from '../components/Todo/TodoInput';
-import TodoList from '../components/Todo/TodoList';
+import Todo from '../components/Todo/Todo';
 
-import { DrawerActions } from 'react-navigation';
+import { DrawerActions, createStackNavigator } from 'react-navigation';
 
 import Amplify, { Auth, API } from 'aws-amplify';
 import { fonts } from '../theme';
@@ -69,21 +68,6 @@ class Homescreen extends Component {
     this.storeEmail(this.state.email);
     console.log('email: ' + this.state.email);
   };
-
-  async getListItems() {
-    console.log('getting list items');
-    const path = '/Todo/' + this.state.email;
-    try {
-      const apiResponse = await API.get('TodoCRUD', path);
-      this.setState({
-        apiResponse,
-        isLoading: !this.state.isLoading
-      });
-      console.log(this.state.dataSource);
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   /**
    * Store the given_name of the user to async storage
@@ -201,7 +185,6 @@ class Homescreen extends Component {
         'Home: theres been an error getting the textColor item: ' + error
       );
     }
-    this.getListItems();
   }
 
   /**
@@ -244,18 +227,6 @@ class Homescreen extends Component {
     const textColorConst = {
       color: this.state.textColor
     };
-
-    const list = this.state.isLoading ? (
-      <View style={{ flex: 1, paddingTop: 20 }}>
-        <ActivityIndicator />
-      </View>
-    ) : (
-      <TodoList
-        todos={this.state.todos}
-        style={styles.TodoList}
-        apiResponse={this.state.apiResponse}
-      />
-    );
 
     return (
       <ImageBackground
@@ -301,9 +272,7 @@ class Homescreen extends Component {
 
             {/* Todo list */}
             <View style={styles.todos}>
-              <Text style={[styles.TodoHeader, textColorConst]}>Todo:</Text>
-              <TodoInput onTodoAded={this.forceRemount} />
-              {list}
+              <Todo navigation={this.props.navigation} />
             </View>
           </ScrollView>
         </View>
@@ -334,16 +303,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Helvetica Neue'
   },
-  TodoHeader: {
-    padding: 5,
-    color: '#ffffff',
-    fontSize: 30,
-    textShadowColor: '#000000',
-    textShadowRadius: 3,
-    textAlign: 'left',
-    fontWeight: 'bold',
-    textShadowOffset: { width: 1, height: 1 }
-  },
   headerBar: {
     flexDirection: 'row',
     marginTop: 5,
@@ -353,9 +312,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 5,
     marginLeft: 5
-  },
-  TodoList: {
-    marginBottom: 30
   },
   mainFocus: {
     alignItems: 'center'

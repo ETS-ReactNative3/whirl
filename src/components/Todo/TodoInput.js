@@ -14,13 +14,17 @@ import {
   AsyncStorage
 } from 'react-native';
 
+import { createStackNavigator } from 'react-navigation';
+
 import Amplify, { API, Auth } from 'aws-amplify';
 
 import Input from '../Input';
 import Button from '../Button';
-// import Todo from './Todo';
 import { colors, fonts } from '../../theme';
 
+/**
+ * Class is deprecated.
+ */
 class TodoInput extends Component {
   state = {
     todo: '',
@@ -84,13 +88,6 @@ class TodoInput extends Component {
     if (this.state.todo.trim() === '') return;
 
     this.saveNote();
-
-    // var newTodo = {
-    //   text: this.state.todo,
-    //   strikethrough: false
-    // };
-
-    // this.props.onTodoAdded;
   };
 
   // Create a new Note according to the columns we defined earlier
@@ -101,7 +98,7 @@ class TodoInput extends Component {
         Date: date.getTime(),
         Completed: 'false',
         User: this.state.User,
-        Content: this.state.todo
+        Content: this.state.todo.trim()
       }
     };
     const path = '/Todo/';
@@ -123,116 +120,25 @@ class TodoInput extends Component {
     }
   }
 
-  // toggle visibility of the modal
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
+  updateData = data => {
+    console.log(data);
+    alert('come back status: ' + data);
+    this.setState({
+      modalVisible: data
+    });
+  };
 
   render() {
     return (
       <View>
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            // if theres an error saving the todo item then throw an alert
-            // alert('There was a problem saving the todo item.');
-            this.props.onTodoAdded;
-          }}
-          onDismiss={() => {
-            this.props.onTodoAdded;
-          }}
-          onShow={() => {
-            this.textInput.focus();
-          }}
-        >
-          <ImageBackground
-            style={styles.image}
-            source={{ url: this.state.backgroundSource }}
-            imageStyle={{ resizeMode: 'cover' }}
-          >
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}
-              style={{ flex: 1 }}
-            >
-              <View style={{ flex: 1 }}>
-                <View style={styles.header}>
-                  {/* close button in top left */}
-                  <TouchableHighlight
-                    onPress={() => {
-                      this.setModalVisible(!this.state.modalVisible);
-                    }}
-                    style={styles.close}
-                  >
-                    <Image
-                      source={require('../../assets/icons/cross.png')}
-                      style={{ width: 50, height: 50 }}
-                    />
-                  </TouchableHighlight>
-
-                  {/* Page title */}
-                  <Text style={styles.headerText}>Add a Todo</Text>
-
-                  {/* add button in top right */}
-                  <TouchableHighlight
-                    onPress={() => {
-                      // add the new focus
-                      this.todoAddedHandler();
-
-                      // hide modal at the same time
-                      this.setModalVisible(!this.state.modalVisible);
-                    }}
-                    style={styles.add}
-                  >
-                    <Image
-                      source={require('../../assets/icons/tick.png')}
-                      style={{ width: 50, height: 50 }}
-                    />
-                  </TouchableHighlight>
-                </View>
-                <View style={styles.container}>
-                  <View style={styles.inputLineContainer}>
-                    {/* use ref to textinput to open keyboard upon opening modal */}
-                    <TextInput
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      style={styles.input}
-                      placeholder={'New Todo'}
-                      placeholderTextColor="#ffffff"
-                      onChangeText={value => this.onChangeText(value)}
-                      underlineColorAndroid="transparent"
-                      multiline={true}
-                      ref={input => {
-                        this.textInput = input;
-                      }}
-                    />
-                  </View>
-                  <View style={styles.button}>
-                    <Button
-                      title="Add Todo"
-                      onPress={() => {
-                        // add the new focus
-                        this.todoAddedHandler();
-
-                        // hide modal at the same time
-                        this.setModalVisible(!this.state.modalVisible);
-                      }}
-                    />
-                  </View>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </ImageBackground>
-        </Modal>
-
         <View style={styles.inputContainer}>
           <TouchableOpacity
             style={styles.todoButton}
-            onPress={() => {
-              this.setModalVisible(!this.state.modalVisible);
-            }}
+            onPress={() =>
+              this.props.navigation.navigate('MyModal', {
+                updateData: this.updateData
+              })
+            }
           >
             <Text style={styles.todoInput}>New Todo</Text>
             <Image
