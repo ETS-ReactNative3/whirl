@@ -29,33 +29,45 @@ class TodoItem extends Component {
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center'
+          alignItems: 'flex-start',
+          justifyContent: 'space-around'
         }}
       >
-        <Image
+        {/* <Image
           source={require('../../assets/icons/circle.png')}
-          style={{ width: 8, height: 8, marginRight: 10 }}
-        />
+          style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
+        /> */}
         <Text style={styles.todoText}>{this.props.todo}</Text>
       </View>
     ) : (
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center'
+          alignItems: 'flex-start',
+          justifyContent: 'space-around'
         }}
       >
-        <Image
+        {/* <Image
           source={require('../../assets/icons/circle.png')}
-          style={{ width: 8, height: 8, marginRight: 10 }}
-        />
+          style={{
+            width: 8,
+            height: 8,
+            marginRight: 5,
+            marginLeft: 5
+          }}
+        /> */}
         <Text style={styles.todoTextCompleted}>{this.props.todo}</Text>
       </View>
     );
     return (
       <TouchableOpacity onPress={this.onItemPressed} style={styles.listItem}>
+        {/* Bullet point */}
+        <Image
+          source={require('../../assets/icons/circle.png')}
+          style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
+        />
+        {/* <View style={{ marginRight: 10, marginLeft: 5 }} /> */}
+
         {/* Todo Item */}
         {text}
 
@@ -87,16 +99,22 @@ const styles = StyleSheet.create({
   todoText: {
     color: '#ffffff',
     fontFamily: fonts.base,
-    fontSize: 20
+    fontSize: 20,
+    textAlign: 'left',
+    paddingRight: 70
+    // paddingLeft: 10
   },
   todoTextCompleted: {
     color: '#ffffff',
     textDecorationLine: 'line-through',
     fontFamily: fonts.base,
-    fontSize: 20
+    fontSize: 20,
+    textAlign: 'left',
+    paddingRight: 70
   },
   deleteButton: {
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: -60
   }
 });
 

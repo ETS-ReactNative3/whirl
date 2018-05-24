@@ -60,13 +60,50 @@ class Todo extends Component {
     );
   }
 
+  async deleteTodo(content, user) {
+    // path is /todo/object/username/contentWithSpacesRemoved
+    const path = '/Todo/object/' + user + '/' + content; //.trim().replace(/\s/g, '+');
+    console.log(path);
+    try {
+      const apiResponse = await API.del('TodoCRUD', path);
+      console.log(
+        'response from deleting note: ' + JSON.stringify(apiResponse)
+      );
+      this.setState({
+        apiResponse,
+        isLoading: true
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    this.todoDeleted();
+  }
+
+  async todoDeleted() {
+    const todoItemsUpdatedCount = this.state.todoItemCount - 1;
+    do {
+      await this.updateData();
+    } while (todoItemsUpdatedCount != this.state.todoItemCount);
+
+    console.log(
+      'updated count: ' +
+        todoItemsUpdatedCount +
+        ' | number downloaded: ' +
+        this.state.todoItemCount
+    );
+  }
+
   render() {
     const list = this.state.isLoading ? (
       <View style={{ flex: 1, paddingTop: 20 }}>
         <ActivityIndicator />
       </View>
     ) : (
-      <TodoList style={styles.TodoList} apiResponse={this.state.apiResponse} />
+      <TodoList
+        style={styles.TodoList}
+        apiResponse={this.state.apiResponse}
+        onDeletePressed={this.deleteTodo.bind(this)}
+      />
     );
 
     return (

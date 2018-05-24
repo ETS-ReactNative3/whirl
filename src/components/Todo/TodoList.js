@@ -12,7 +12,6 @@ import Amplify, { API, Auth } from 'aws-amplify';
 
 class todoList extends Component {
   state = {
-    // apiResponse: '',
     isLoading: true
   };
 
@@ -25,25 +24,6 @@ class todoList extends Component {
       dataSource: ds.cloneWithRows(this.props.apiResponse),
       isLoading: !this.state.isLoading
     });
-  }
-
-  async onDeletePressed(content, user) {
-    // path is /todo/object/username/contentWithSpacesRemoved
-    const path =
-      '/Todo/object/' + user + '/' + content.trim().replace(/\s/g, '+');
-    console.log(path);
-    try {
-      const apiResponse = await API.del('TodoCRUD', path);
-      console.log(
-        'response from deleting note: ' + JSON.stringify(apiResponse)
-      );
-      this.setState({
-        apiResponse,
-        isLoading: false
-      });
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   render() {
@@ -60,7 +40,7 @@ class todoList extends Component {
             user={rowData.User}
             strikethrough={rowData.Strikethrough}
             onDeletePressed={() =>
-              this.onDeletePressed(rowData.Content, rowData.User)
+              this.props.onDeletePressed(rowData.Content, rowData.User)
             }
           />
         )}
