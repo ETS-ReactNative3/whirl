@@ -1,10 +1,12 @@
-import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Image, Text, Button } from 'react-native';
 import {
   StackNavigator,
   TabNavigator,
   DrawerNavigator,
-  DrawerItems
+  DrawerItems,
+  createStackNavigator,
+  createDrawerNavigator
 } from 'react-navigation';
 
 import { Auth } from 'aws-amplify';
@@ -14,6 +16,7 @@ import Home from '../screens/Homescreen';
 import LogOut from '../auth/LogOut';
 import db from '../screens/db';
 import Settings from '../screens/Settings';
+import ModalScreen from '../components/ModalScreen';
 
 const CustomDrawerContentComponent = props => (
   <View style={styles.view}>
@@ -26,9 +29,8 @@ const CustomDrawerContentComponent = props => (
 );
 
 // screens in the app. They will appear in the menu in the same order
-// const routeConfig =
 
-const DrawerNav = DrawerNavigator(
+const DrawerNav = createDrawerNavigator(
   {
     Home: { screen: Home },
     Settings: Settings,
@@ -41,9 +43,25 @@ const DrawerNav = DrawerNavigator(
   }
 );
 
-class Nav extends React.Component {
+const RootStack = createStackNavigator(
+  {
+    Main: {
+      screen: DrawerNav
+    },
+    MyModal: {
+      screen: ModalScreen
+    }
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'Main'
+  }
+);
+
+class Nav extends Component {
   render() {
-    return <DrawerNav />;
+    return <RootStack />;
   }
 }
 
@@ -52,11 +70,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }
-  // view: {
-  //   // flexDirection: 'row',
-  //   marginBottom: 10,
-  //   alignItems: 'center'
-  // }
 });
 
-export default DrawerNav;
+export default Nav;
