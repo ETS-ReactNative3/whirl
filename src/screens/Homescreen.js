@@ -27,7 +27,6 @@ import { fonts } from '../theme';
 /******************************************
  * TODO:
  *  check to see if there is an email saved to local storage,
- *  download all todos from database,
  *
  */
 

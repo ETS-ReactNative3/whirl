@@ -13,17 +13,19 @@ import { Auth } from 'aws-amplify';
 import { logOut } from '../actions';
 
 import Home from '../screens/Homescreen';
+import About from '../screens/About';
 import LogOut from '../auth/LogOut';
-import db from '../screens/db';
 import Settings from '../screens/Settings';
 import ModalScreen from '../components/ModalScreen';
 
 const CustomDrawerContentComponent = props => (
   <View style={styles.view}>
-    <Image
-      source={require('../assets/icons/tornado.png')}
-      style={styles.drawerImage}
-    />
+    <View style={{ alignItems: 'center' }}>
+      <Image
+        source={require('../assets/icons/tornado.png')}
+        style={styles.drawerImage}
+      />
+    </View>
     <DrawerItems {...props} />
   </View>
 );
@@ -35,7 +37,7 @@ const DrawerNav = createDrawerNavigator(
     Home: { screen: Home },
     Settings: Settings,
     LogOut: LogOut,
-    Database: db
+    About: About
   },
   {
     initialRouteName: 'Home',
