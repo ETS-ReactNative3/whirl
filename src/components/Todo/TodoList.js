@@ -16,7 +16,9 @@ class todoList extends Component {
   };
 
   async componentDidMount() {
-    const path = '/Todo/' + this.state.email;
+    // const path = '/Todo/' + this.state.email;
+    console.log('Todolist api response: ');
+    console.log(this.props.apiResponse);
     var ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
@@ -24,6 +26,8 @@ class todoList extends Component {
       dataSource: ds.cloneWithRows(this.props.apiResponse),
       isLoading: !this.state.isLoading
     });
+    // console.log('datasource: ');
+    // console.log(dataSource);
   }
 
   render() {
@@ -40,7 +44,7 @@ class todoList extends Component {
             user={rowData.User}
             strikethrough={rowData.Strikethrough}
             onDeletePressed={() =>
-              this.props.onDeletePressed(rowData.Content, rowData.User)
+              this.props.onDeletePressed(rowData.Date, rowData.User)
             }
           />
         )}

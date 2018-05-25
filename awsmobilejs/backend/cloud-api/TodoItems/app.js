@@ -15,16 +15,16 @@ AWS.config.update({ region: process.env.REGION });
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 const mhprefix  = process.env.MOBILE_HUB_DYNAMIC_PREFIX;
-let tableName = "Notes";
+let tableName = "TodoItems";
 const hasDynamicPrefix = true;
 
 const userIdPresent = false;
-const partitionKeyName = "NoteId";
+const partitionKeyName = "User";
 const partitionKeyType = "S"
-const sortKeyName = "";
-const sortKeyType = "";
-const hasSortKey = false;
-const path = "/Notes";
+const sortKeyName = "Date";
+const sortKeyType = "S";
+const hasSortKey = true;
+const path = "/TodoItems";
 
 const awsmobile = {}
 
@@ -56,7 +56,7 @@ const convertUrlType = (param, type) => {
  * HTTP Get method for list objects *
  ********************************/
 
-app.get('/Notes/:NoteId', function(req, res) {
+app.get('/TodoItems/:User', function(req, res) {
   var condition = {}
   condition[partitionKeyName] = {
     ComparisonOperator: 'EQ'
@@ -90,7 +90,7 @@ app.get('/Notes/:NoteId', function(req, res) {
  * HTTP Get method for get single object *
  *****************************************/
 
-app.get('/Notes/object/:NoteId', function(req, res) {
+app.get('/TodoItems/object/:User/:Date', function(req, res) {
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -179,7 +179,7 @@ app.post(path, function(req, res) {
 * HTTP remove method to delete object *
 ***************************************/
 
-app.delete('/Notes/object/:NoteId', function(req, res) {
+app.delete('/TodoItems/object/:User/:Date', function(req, res) {
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;

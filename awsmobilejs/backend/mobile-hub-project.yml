@@ -4,44 +4,38 @@ apps:
 features:
   cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic 
     components:
-      TodoCRUD: !com.amazonaws.mobilehub.v0.API 
+      TodoItemsCRUD: !com.amazonaws.mobilehub.v0.API 
         attributes:
-          name: TodoCRUD
+          name: TodoItemsCRUD
           requires-signin: false
           sdk-generation-stage-name: Development
         paths:
-          /Todo: !com.amazonaws.mobilehub.v0.Function 
-            codeFilename: uploads/Todo-20180422204511.zip
-            description: 'Handler for calls to resource path : /Todo/{proxy+}'
+          /TodoItems: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/TodoItems-20180525204907.zip
+            description: 'Handler for calls to resource path : /TodoItems/{proxy+}'
             enableCORS: true
             environment: {}
             handler: lambda.handler
-            hashcode: R3vpefw0n/YTCbdIveHzmmXrjdOegdDiUhiOahFrozA=
+            hashcode: 0nTRduX8+i3O6veSmIqpmL2ijNcAhgV/PAAWHM49x48=
             memorySize: '128'
-            modified: '2018-04-22T19:46:07.369+0000'
-            name: Todo
+            modified: '2018-05-25T19:50:07.301+0000'
+            name: TodoItems
             runtime: nodejs6.10
             timeout: '3'
-            version: B2lBUmdQ4mtARqwvPv2wBcRcgIIObFIO
-          '/Todo/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
-            codeFilename: uploads/Todo-20180422204511.zip
-            description: 'Handler for calls to resource path : /Todo/{proxy+}'
+            version: jX7seWdpXCOCoxJKSohnSg2tKJ5t4VLg
+          '/TodoItems/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/TodoItems-20180525204907.zip
+            description: 'Handler for calls to resource path : /TodoItems/{proxy+}'
             enableCORS: true
             environment: {}
             handler: lambda.handler
-            hashcode: R3vpefw0n/YTCbdIveHzmmXrjdOegdDiUhiOahFrozA=
+            hashcode: 0nTRduX8+i3O6veSmIqpmL2ijNcAhgV/PAAWHM49x48=
             memorySize: '128'
-            modified: '2018-04-22T19:46:07.369+0000'
-            name: Todo
+            modified: '2018-05-25T19:50:07.301+0000'
+            name: TodoItems
             runtime: nodejs6.10
             timeout: '3'
-            version: oos4vgJYuzha9wqjZHhCl7xKd_qGE2TG
-  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery 
-    attributes:
-      enabled: true
-      visibility: public-global
-    components:
-      release: !com.amazonaws.mobilehub.v0.Bucket {}
+            version: ouJawMeAAdIEDomcKs4DkSC1ns9Z9i1W
   database: !com.amazonaws.mobilehub.v0.Database 
     components:
       database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase 
@@ -54,9 +48,9 @@ features:
               User: S
             hashKeyName: User
             hashKeyType: S
-            rangeKeyName: Content
+            rangeKeyName: Date
             rangeKeyType: S
-            tableName: ___DYNAMIC_PREFIX___-Todo
+            tableName: ___DYNAMIC_PREFIX___-TodoItems
             tablePrivacy: public
   mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint 
     components:
@@ -66,6 +60,10 @@ features:
       enabled: true
       optional-sign-in: true
     components:
+      sign-in-facebook: !com.amazonaws.mobilehub.v0.StandardIdentityProvider 
+        attributes:
+          provider-id: '217829465690799'
+          provider-name: facebook
       sign-in-user-pools: !com.amazonaws.mobilehub.v0.UserPoolsIdentityProvider 
         attributes:
           user-pool-id: us-east-1_NbFSAqYTr

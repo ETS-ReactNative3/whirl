@@ -21,7 +21,7 @@ const hasDynamicPrefix = true;
 const userIdPresent = false;
 const partitionKeyName = "User";
 const partitionKeyType = "S"
-const sortKeyName = "Content";
+const sortKeyName = "Date";
 const sortKeyType = "S";
 const hasSortKey = true;
 const path = "/Todo";
@@ -90,7 +90,7 @@ app.get('/Todo/:User', function(req, res) {
  * HTTP Get method for get single object *
  *****************************************/
 
-app.get('/Todo/object/:User/:Content', function(req, res) {
+app.get('/Todo/object/:User/:Date', function(req, res) {
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -179,7 +179,7 @@ app.post(path, function(req, res) {
 * HTTP remove method to delete object *
 ***************************************/
 
-app.delete('/Todo/object/:User/:Content', function(req, res) {
+app.delete('/Todo/object/:User/:Date', function(req, res) {
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;

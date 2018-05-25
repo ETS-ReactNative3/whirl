@@ -32,15 +32,19 @@ class Todo extends Component {
       isLoading: true
     });
     console.log('getting list items');
-    const path = '/Todo/' + this.state.email;
+    const path = '/TodoItems/' + this.state.email;
+    console.log(path);
     try {
-      const apiResponse = await API.get('TodoCRUD', path);
+      const apiResponse = await API.get('TodoItemsCRUD', path);
+      console.log('api response 1: ');
+      console.log(apiResponse);
       this.setState({
         apiResponse,
         isLoading: false,
         todoItemCount: apiResponse.length
       });
-      console.log(apiResponse);
+      console.log('api response 2: ');
+      console.log(this.state.apiResponse);
     } catch (e) {
       console.log(e);
     }
@@ -60,12 +64,11 @@ class Todo extends Component {
     );
   }
 
-  async deleteTodo(content, user) {
-    // path is /todo/object/username/contentWithSpacesRemoved
-    const path = '/Todo/object/' + user + '/' + content; //.trim().replace(/\s/g, '+');
+  async deleteTodo(date, user) {
+    const path = '/TodoItems/object/' + user + '/' + date;
     console.log(path);
     try {
-      const apiResponse = await API.del('TodoCRUD', path);
+      const apiResponse = await API.del('TodoItemsCRUD', path);
       console.log(
         'response from deleting note: ' + JSON.stringify(apiResponse)
       );

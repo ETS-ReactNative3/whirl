@@ -12,7 +12,8 @@ import {
   Keyboard,
   TouchableHighlight,
   AsyncStorage,
-  Button
+  Button,
+  Alert
 } from 'react-native';
 
 import { colors, fonts } from '../theme';
@@ -24,8 +25,8 @@ class ModalScreen extends Component {
     allTodo: [],
     modalVisible: false,
     backgroundSource:
-      'https://source.unsplash.com/collection/1065412/900x1600/daily',
-    User: ''
+      'https://source.unsplash.com/collection/1065412/900x1600/daily'
+    // User: 'conorspilsbury.at.outlook.com'
   };
 
   // replace with loading email from storage
@@ -89,14 +90,19 @@ class ModalScreen extends Component {
   saveNote() {
     var date = new Date();
     let newNote = {
+      // body: {
+      //   Completed: 'false',
+      //   Content: this.state.todo.trim(),
+      //   Date: date.getTime()
+      // }
       body: {
-        Date: date.getTime(),
+        Content: this.state.todo.trim(),
         Completed: 'false',
         User: this.state.User,
-        Content: this.state.todo.trim()
+        Date: date.getTime().toString()
       }
     };
-    const path = '/Todo/';
+    const path = '/TodoItems';
 
     console.log(newNote.body.User);
     console.log(newNote.body.Content);
@@ -105,10 +111,15 @@ class ModalScreen extends Component {
 
     // Use the API module to save the note to the database
     try {
-      const apiResponse = API.put('TodoCRUD', path, newNote);
+      const apiResponse = API.put('TodoItemsCRUD', path, newNote).then(
+        value => {
+          if (value !== null) {
+            console.log('value', value);
+          }
+        }
+      );
       console.log('response from saving note: ' + JSON.stringify(apiResponse));
       this.setState({ apiResponse });
-      console.log('modal screen api responses: ');
     } catch (e) {
       console.log(e);
     }
