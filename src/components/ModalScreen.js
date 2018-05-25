@@ -24,9 +24,7 @@ class ModalScreen extends Component {
     todo: '',
     allTodo: [],
     modalVisible: false,
-    backgroundSource:
-      'https://source.unsplash.com/collection/1065412/900x1600/daily'
-    // User: 'conorspilsbury.at.outlook.com'
+    backgroundSource: ''
   };
 
   // replace with loading email from storage
@@ -36,7 +34,7 @@ class ModalScreen extends Component {
     } else {
       var email = content[3]['Value'];
       this.setState({
-        User: email.replace('@', '.at.')
+        User: email
       });
     }
   };

@@ -29,22 +29,26 @@ class TodoItem extends Component {
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'flex-start',
-          justifyContent: 'space-around'
+          alignItems: 'center'
+          // justifyContent: 'space-around'
         }}
       >
         {/* <Image
           source={require('../../assets/icons/circle.png')}
           style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
         /> */}
+        <Image
+          source={require('../../assets/icons/circle.png')}
+          style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
+        />
         <Text style={styles.todoText}>{this.props.todo}</Text>
       </View>
     ) : (
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'flex-start',
-          justifyContent: 'space-around'
+          alignItems: 'center'
+          // justifyContent: 'space-around'
         }}
       >
         {/* <Image
@@ -56,16 +60,20 @@ class TodoItem extends Component {
             marginLeft: 5
           }}
         /> */}
+        <Image
+          source={require('../../assets/icons/circle.png')}
+          style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
+        />
         <Text style={styles.todoTextCompleted}>{this.props.todo}</Text>
       </View>
     );
     return (
       <TouchableOpacity onPress={this.onItemPressed} style={styles.listItem}>
         {/* Bullet point */}
-        <Image
+        {/* <Image
           source={require('../../assets/icons/circle.png')}
           style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
-        />
+        /> */}
         {/* <View style={{ marginRight: 10, marginLeft: 5 }} /> */}
 
         {/* Todo Item */}
@@ -100,7 +108,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontFamily: fonts.base,
     fontSize: 20,
-    textAlign: 'left',
+    // textAlign: 'left',
     paddingRight: 70
     // paddingLeft: 10
   },
@@ -109,12 +117,13 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     fontFamily: fonts.base,
     fontSize: 20,
-    textAlign: 'left',
+    // textAlign: 'left',
     paddingRight: 70
   },
   deleteButton: {
     alignItems: 'center',
-    marginLeft: -60
+    marginLeft: -100,
+    paddingLeft: 20
   }
 });
 

@@ -38,7 +38,8 @@ class Homescreen extends Component {
     loaded: false,
     user: {},
     backgroundSource:
-      'https://source.unsplash.com/collection/1065412/900x1600/daily',
+      // 'https://source.unsplash.com/collection/1065412/900x1600/daily',
+      '',
     textColor: '#ffffff',
     email: '',
     apiResponse: '',
