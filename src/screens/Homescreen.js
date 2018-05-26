@@ -18,32 +18,25 @@ import {
 // components
 import MainFocus from '../components/MainFocus/MainFocus';
 import Todo from '../components/Todo/Todo';
+import StatusBar from '../components/StatusBar';
 
 import { DrawerActions, createStackNavigator } from 'react-navigation';
 
 import Amplify, { Auth, API } from 'aws-amplify';
 import { fonts } from '../theme';
 
-/******************************************
- * TODO:
- *  check to see if there is an email saved to local storage,
- *
- */
-
 class Homescreen extends Component {
   state = {
     name: '',
-    greetingText: 'day',
+    greetingText: '',
     todos: [],
-    loaded: false,
     user: {},
     backgroundSource:
       'https://source.unsplash.com/collection/1457745/900x1600/daily',
     textColor: '#ffffff',
     email: '',
     apiResponse: '',
-    isLoading: true,
-    remount: 0
+    isLoading: true
   };
 
   /**
@@ -193,12 +186,13 @@ class Homescreen extends Component {
   getGreeting() {
     var date = new Date();
     var hour = date.getHours();
+    const text = 'Good ';
     if (hour > 17) {
-      return 'evening';
+      return text + 'evening';
     } else if (hour > 11) {
-      return 'afternoon';
+      return text + 'afternoon';
     } else {
-      return 'morning';
+      return text + 'morning';
     }
   }
 
@@ -228,54 +222,57 @@ class Homescreen extends Component {
     };
 
     return (
-      <ImageBackground
-        style={styles.image}
-        source={{ url: this.state.backgroundSource }}
-        imageStyle={{ resizeMode: 'cover' }}
-      >
-        {/* Add a default ImageBackground here whilst the one above loads? */}
-        {/* {defaultBackground} */}
+      <View style={{ flex: 1 }}>
+        <ImageBackground
+          style={styles.image}
+          source={{ url: this.state.backgroundSource }}
+          imageStyle={{ resizeMode: 'cover' }}
+        >
+          {/* Add a default ImageBackground here whilst the one above loads? */}
+          {/* {defaultBackground} */}
 
-        {/* TouchableWithoutFeedback expects to have only one child element. Therefore 
+          <StatusBar />
+          {/* TouchableWithoutFeedback expects to have only one child element. Therefore 
           wrap everything in a single view */}
-        <View style={{ flex: 1 }}>
-          {/* Header bar for the homescreen. Contains the button for the drawer menu */}
-          <View style={styles.headerBar}>
-            <TouchableOpacity
-              style={styles.headerMenu}
-              onPress={() =>
-                this.props.navigation.dispatch(DrawerActions.openDrawer())
-              }
+          <View style={{ flex: 1 }}>
+            {/* Header bar. Contains the button for the drawer menu */}
+            <View style={styles.headerBar}>
+              <TouchableOpacity
+                style={styles.headerMenu}
+                onPress={() =>
+                  this.props.navigation.dispatch(DrawerActions.openDrawer())
+                }
+              >
+                <Image
+                  source={require('../assets/icons/menuPink.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Page content wrapped in a scroll view */}
+            <ScrollView
+              contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
             >
-              <Image
-                source={require('../assets/icons/menuPink.png')}
-                style={{ width: 30, height: 30 }}
-              />
-            </TouchableOpacity>
+              {/* Greeting */}
+              <Text style={[styles.header, textColorConst]}>
+                {this.state.greetingText}, {'\n'}
+                {this.state.name}
+              </Text>
+
+              {/* Main Focus */}
+              <View style={styles.mainFocus}>
+                <MainFocus color={this.state.textColor} />
+              </View>
+
+              {/* Todo list */}
+              <View style={styles.todos}>
+                <Todo navigation={this.props.navigation} />
+              </View>
+            </ScrollView>
           </View>
-
-          {/* Page content wrapped in a scroll view */}
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
-          >
-            {/* Greeting */}
-            <Text style={[styles.header, textColorConst]}>
-              Good {this.state.greetingText}, {'\n'}
-              {this.state.name}
-            </Text>
-
-            {/* Main Focus */}
-            <View style={styles.mainFocus}>
-              <MainFocus color={this.state.textColor} />
-            </View>
-
-            {/* Todo list */}
-            <View style={styles.todos}>
-              <Todo navigation={this.props.navigation} />
-            </View>
-          </ScrollView>
-        </View>
-      </ImageBackground>
+        </ImageBackground>
+      </View>
     );
   }
 }

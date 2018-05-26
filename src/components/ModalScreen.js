@@ -18,6 +18,7 @@ import {
 
 import { colors, fonts } from '../theme';
 import Amplify, { Auth, API } from 'aws-amplify';
+import StatusBar from './StatusBar';
 
 class ModalScreen extends Component {
   state = {
@@ -131,6 +132,7 @@ class ModalScreen extends Component {
           source={{ url: this.state.backgroundSource }}
           imageStyle={{ resizeMode: 'cover' }}
         >
+          <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
           <TouchableWithoutFeedback
             onPress={Keyboard.dismiss}
             accessible={false}

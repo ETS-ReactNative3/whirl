@@ -18,6 +18,7 @@ import {
 
 import { fonts, colors } from '../theme';
 import CONSTANTS from '../constants';
+import StatusBar from '../components/StatusBar';
 
 export default class Settings extends Component {
   state = {
@@ -157,6 +158,7 @@ export default class Settings extends Component {
         imageStyle={{ resizeMode: 'cover' }}
       >
         {/* Header containing page title and menu icon */}
+        <StatusBar backgroundColor="#ffffff" />
         <View style={styles.headerBar}>
           {/* open drawer menu button */}
           <TouchableOpacity

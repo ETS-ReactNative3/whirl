@@ -14,6 +14,7 @@ import { DrawerActions } from 'react-navigation';
 
 import { logOut } from '../actions';
 import { fonts, colors } from '../theme';
+import StatusBar from '../components/StatusBar';
 
 class LogOut extends Component {
   /**
@@ -45,23 +46,31 @@ class LogOut extends Component {
         source={require('../assets/DefaultBackground2.jpeg')}
         imageStyle={{ resizeMode: 'cover' }}
       >
-        {/* Header bar contains just the menu button */}
-        <TouchableOpacity
-          style={styles.headerBar}
-          onPress={() =>
-            this.props.navigation.dispatch(DrawerActions.openDrawer())
-          }
-        >
-          <Image
-            source={require('../assets/icons/menu.png')}
-            style={{ width: 30, height: 30 }}
-          />
-        </TouchableOpacity>
+        <StatusBar />
+        {/* Header bar. Contains the button for the drawer menu */}
+        <View style={styles.headerBar}>
+          <TouchableOpacity
+            style={styles.headerMenu}
+            onPress={() =>
+              this.props.navigation.dispatch(DrawerActions.openDrawer())
+            }
+          >
+            <Image
+              source={require('../assets/icons/menuPink.png')}
+              style={{ width: 30, height: 30 }}
+            />
+          </TouchableOpacity>
+        </View>
 
         {/* Logout button */}
-        <TouchableOpacity onPress={this.logout.bind(this)} style={{ flex: 1 }}>
-          <Text style={styles.button}>Logout</Text>
-        </TouchableOpacity>
+        <View style={{ alignItems: 'center', flex: 1 }}>
+          <TouchableOpacity
+            onPress={this.logout.bind(this)}
+            // style={{ flex: 1 }}
+          >
+            <Text style={styles.button}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
     );
   }
@@ -79,8 +88,7 @@ const styles = StyleSheet.create({
   image: {
     flexGrow: 1,
     height: null,
-    width: null,
-    alignItems: 'center'
+    width: null
   },
   headerBar: {
     position: 'absolute',
@@ -100,6 +108,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     fontSize: 40,
     borderRadius: 20
+  },
+  headerBar: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginBottom: 20
+  },
+  headerMenu: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    padding: 5,
+    marginLeft: 5
   }
 });
 

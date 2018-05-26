@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,19 +12,20 @@ import {
   Keyboard,
   Image,
   AsyncStorage
-} from "react-native";
+} from 'react-native';
 
-import Input from "../Input";
-import Button from "../Button";
-import { colors, fonts } from "../../theme";
+import Input from '../Input';
+import Button from '../Button';
+import { colors, fonts } from '../../theme';
+import StatusBar from '../StatusBar';
 
 class MainFocusInput extends Component {
   state = {
-    focus: "",
+    focus: '',
     modalVisible: false,
-    textColor: "#ffffff",
+    textColor: '#ffffff',
     backgroundSource:
-      "https://source.unsplash.com/collection/1065412/900x1600/daily",
+      'https://source.unsplash.com/collection/1065412/900x1600/daily',
     mounted: false
   };
 
@@ -38,13 +39,13 @@ class MainFocusInput extends Component {
     this.setValues();
   }
 
-    /**
-     * set mounted to false. Used in conjunction with setValues() to prevent calling
-     * setState on an unmounted component.
-     */
-    componentWillUnmount() {
-      this.mounted = false;
-    }
+  /**
+   * set mounted to false. Used in conjunction with setValues() to prevent calling
+   * setState on an unmounted component.
+   */
+  componentWillUnmount() {
+    this.mounted = false;
+  }
 
   /**
    * Load textColor and backgroundSource values from local storage.
@@ -53,32 +54,32 @@ class MainFocusInput extends Component {
   async setValues() {
     // load textColor hex code from local storage
     try {
-      const value = await AsyncStorage.getItem("textColor").then(keyvalue => {
+      const value = await AsyncStorage.getItem('textColor').then(keyvalue => {
         if (keyvalue !== null) {
           this.setState({
             textColor: keyvalue
           });
-          console.log("MainFocusInput: successfully loaded textColor");
+          console.log('MainFocusInput: successfully loaded textColor');
         } else {
           if (this.mounted) {
             this.setState({
-              textColor: "#ffffff"
+              textColor: '#ffffff'
             });
           } else {
-            console.log("mainfocusinput unmounted");
+            console.log('mainfocusinput unmounted');
           }
-          console.log("MainFocusInput: no textColor item in storage");
+          console.log('MainFocusInput: no textColor item in storage');
         }
       });
     } catch (error) {
       console.log(
-        "MainFocusInput: theres been an error getting the textColor item"
+        'MainFocusInput: theres been an error getting the textColor item'
       );
     }
 
     // load backgroundSource url from local storage
     try {
-      const value = await AsyncStorage.getItem("backgroundSource").then(
+      const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
           if (keyvalue !== null) {
             if (this.mounted) {
@@ -86,17 +87,17 @@ class MainFocusInput extends Component {
                 backgroundSource: keyvalue
               });
             } else {
-              console.log("mainfocusinput unmounted");
+              console.log('mainfocusinput unmounted');
             }
             console.log(keyvalue);
           } else {
-            console.log("MainFocusInput: no backgroundSource item in storage");
+            console.log('MainFocusInput: no backgroundSource item in storage');
           }
         }
       );
     } catch (error) {
       console.log(
-        "MainFocusInput: theres been an error getting the backgroundSource item"
+        'MainFocusInput: theres been an error getting the backgroundSource item'
       );
     }
   }
@@ -112,18 +113,18 @@ class MainFocusInput extends Component {
   };
 
   /**
-   * if the focus input is not an empty string, call the props method 
+   * if the focus input is not an empty string, call the props method
    * to submit the new focus.
    */
   focusAddedHandler = () => {
-    if (this.state.focus.trim() === "") return;
+    if (this.state.focus.trim() === '') return;
 
     this.props.onFocusAdded(this.state.focus);
   };
 
   /**
    * set whether the modal is visible
-   * @param {boolean} visible 
+   * @param {boolean} visible
    */
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -144,8 +145,8 @@ class MainFocusInput extends Component {
       <View>
         <View>
           <Text style={[styles.mainFocusHeader, textColorConst]}>
-            {" "}
-            What is your main focus for today?{" "}
+            {' '}
+            What is your main focus for today?{' '}
           </Text>
         </View>
 
@@ -164,7 +165,7 @@ class MainFocusInput extends Component {
           <ImageBackground
             style={styles.image}
             source={{ url: this.state.backgroundSource }}
-            imageStyle={{ resizeMode: "cover" }}
+            imageStyle={{ resizeMode: 'cover' }}
           >
             {/* TouchAbleWithouFeedback component to close keyboard by pressing anywhere */}
             <TouchableWithoutFeedback
@@ -173,9 +174,11 @@ class MainFocusInput extends Component {
               style={{ flex: 1 }}
             >
               <View style={{ flex: 1 }}>
+                <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
                 {/* Header bar at the top of the page */}
                 <View style={styles.header}>
                   {/* close button in top left */}
+
                   <TouchableHighlight
                     onPress={() => {
                       this.setModalVisible(!this.state.modalVisible);
@@ -183,7 +186,7 @@ class MainFocusInput extends Component {
                     style={styles.close}
                   >
                     <Image
-                      source={require("../../assets/icons/cross.png")}
+                      source={require('../../assets/icons/cross.png')}
                       style={{ width: 50, height: 50 }}
                     />
                   </TouchableHighlight>
@@ -203,7 +206,7 @@ class MainFocusInput extends Component {
                     style={styles.add}
                   >
                     <Image
-                      source={require("../../assets/icons/tick.png")}
+                      source={require('../../assets/icons/tick.png')}
                       style={{ width: 50, height: 50 }}
                     />
                   </TouchableHighlight>
@@ -218,7 +221,7 @@ class MainFocusInput extends Component {
                       autoCapitalize="none"
                       autoCorrect={false}
                       style={styles.input}
-                      placeholder={"Focus"}
+                      placeholder={'Focus'}
                       placeholderTextColor="#ffffff"
                       onChangeText={value => this.onChangeText(value)}
                       underlineColorAndroid="transparent"
@@ -263,10 +266,10 @@ class MainFocusInput extends Component {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    justifyContent: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   container: {
     flex: 1,
@@ -280,9 +283,9 @@ const styles = StyleSheet.create({
   },
   mainFocusHeader: {
     padding: 15,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 30,
-    textShadowColor: "#000000",
+    textShadowColor: '#000000',
     fontFamily: fonts.light
   },
   image: {
@@ -291,14 +294,14 @@ const styles = StyleSheet.create({
     width: null
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center'
   },
   headerText: {
     margin: 5,
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 30,
     fontFamily: fonts.light
   },
@@ -306,31 +309,31 @@ const styles = StyleSheet.create({
   add: {},
   body: {
     marginTop: 20,
-    alignItems: "center",
-    justifyContent: "space-around",
-    backgroundColor: "rgba(0,0,0,0.3)",
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderBottomWidth: 0.2,
     borderColor: colors.primary
   },
   inputLineContainer: {
     marginTop: 20,
-    backgroundColor: "rgba(0,0,0,0.3)"
+    backgroundColor: 'rgba(0,0,0,0.3)'
   },
   button: {
     // flex: 1,
     // top: '-50%',
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
     // margin: 60,
   },
   input: {
-    color: "#ffffff",
+    color: '#ffffff',
     padding: 10,
     borderBottomWidth: 1.5,
     fontSize: 16,
     borderBottomColor: colors.primary,
     fontFamily: fonts.light,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20
   }

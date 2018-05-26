@@ -17,9 +17,11 @@ import About from '../screens/About';
 import LogOut from '../auth/LogOut';
 import Settings from '../screens/Settings';
 import ModalScreen from '../components/ModalScreen';
+import StatusBar from '../components/StatusBar';
 
 const CustomDrawerContentComponent = props => (
   <View style={styles.view}>
+    <StatusBar />
     <View style={{ alignItems: 'center' }}>
       <Image
         source={require('../assets/icons/tornado.png')}

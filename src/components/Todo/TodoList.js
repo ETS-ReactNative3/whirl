@@ -38,6 +38,7 @@ class todoList extends Component {
     return (
       <ListView
         dataSource={this.state.dataSource}
+        enableEmptySections={true}
         renderRow={rowData => (
           <TodoItem
             todo={rowData.Content}

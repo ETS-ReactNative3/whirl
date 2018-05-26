@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import { fonts } from '../theme';
+import StatusBar from '../components/StatusBar';
 
 class About extends Component {
   static navigationOptions = {
@@ -15,6 +16,7 @@ class About extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: 'skyblue' }}>
+        <StatusBar />
         <View style={styles.headerBar}>
           <TouchableOpacity
             style={styles.headerMenu}
