@@ -22,7 +22,14 @@ import StatusBar from '../components/StatusBar';
 const CustomDrawerContentComponent = props => (
   <View style={styles.view}>
     <StatusBar />
-    <View style={{ alignItems: 'center' }}>
+    <View
+      style={{
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center'
+      }}
+    >
+      <Text style={styles.text}> Whirl </Text>
       <Image
         source={require('../assets/icons/tornado.png')}
         style={styles.drawerImage}
@@ -73,6 +80,11 @@ const styles = StyleSheet.create({
   drawerImage: {
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  text: {
+    paddingTop: 10,
+    fontFamily: 'Billabong',
+    fontSize: 36
   }
 });
 
