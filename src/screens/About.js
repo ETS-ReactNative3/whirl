@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  ImageBackground
+  ImageBackground,
+  ScrollView
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import { fonts } from '../theme';
@@ -49,8 +50,8 @@ class About extends Component {
               flexDirection: 'column',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 150,
-              marginTop: 50
+              marginTop: 40,
+              marginBottom: 10
             }}
           >
             <View
@@ -63,14 +64,16 @@ class About extends Component {
               <Image source={require('../assets/icons/tornado.png')} />
             </View>
 
-            <Text style={styles.text}>
-              Built during my third year exams at university, using React Native
-              and Amazon Web Services.
-            </Text>
+            <ScrollView style={{ flex: 1 }}>
+              <View style={{ padding: 20 }}>
+                <Text style={styles.body}>
+                  Built during my third year exams at university, using React
+                  Native and Amazon Web Services.
+                </Text>
+              </View>
+            </ScrollView>
 
-            <View style={{ marginBottom: 50 }} />
-
-            <Text style={styles.text}>Copyright 2018</Text>
+            <Text style={styles.footer}>Copyright 2018</Text>
           </View>
           {/* </View> */}
         </ImageBackground>
@@ -90,9 +93,17 @@ const styles = StyleSheet.create({
     padding: 5,
     marginLeft: 5
   },
-  text: {
+  footer: {
     textAlign: 'center',
-    fontFamily: fonts.base
+    fontFamily: fonts.base,
+    color: '#ffffff'
+  },
+  body: {
+    textAlign: 'center',
+    fontFamily: fonts.base,
+    fontSize: 18,
+    color: '#ffffff',
+    fontWeight: 'bold'
   },
   title: {
     paddingTop: 10,
