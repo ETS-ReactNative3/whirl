@@ -136,7 +136,6 @@ class TodayFocus extends Component {
             source={require('../../assets/icons/cancelWhite.png')}
             style={{ height: 40, width: 40 }}
           />
-          {/* <Text style={styles.deleteButtonText}> X </Text> */}
         </TouchableOpacity>
       </TouchableOpacity>
     );

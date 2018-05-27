@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,13 +6,13 @@ import {
   Button,
   Text,
   AsyncStorage
-} from "react-native";
-import MainFocusInput from "./MainFocusInput";
-import TodayFocus from "./TodayFocus";
+} from 'react-native';
+import MainFocusInput from './MainFocusInput';
+import TodayFocus from './TodayFocus';
 
 class MainFocus extends Component {
   state = {
-    focus: "",
+    focus: '',
     focusAdded: false
   };
 
@@ -21,7 +21,7 @@ class MainFocus extends Component {
    */
   async componentDidMount() {
     try {
-      const value = await AsyncStorage.getItem("focus").then(keyvalue => {
+      const value = await AsyncStorage.getItem('focus').then(keyvalue => {
         if (keyvalue !== null) {
           this.setState({
             focus: keyvalue,
@@ -29,11 +29,11 @@ class MainFocus extends Component {
           });
           console.log(keyvalue);
         } else {
-          console.log("no focus item in storage");
+          console.log('no focus item in storage');
         }
       });
     } catch (error) {
-      console.log("theres been an error getting the focus item");
+      console.log('theres been an error getting the focus item');
     }
   }
 
@@ -43,9 +43,9 @@ class MainFocus extends Component {
    */
   async storeFocus(focus) {
     try {
-      await AsyncStorage.setItem("focus", focus);
+      await AsyncStorage.setItem('focus', focus);
     } catch (error) {
-      console.log("error setting the focus item");
+      console.log('error setting the focus item');
     }
   }
 
@@ -54,9 +54,14 @@ class MainFocus extends Component {
    */
   async removeStorage() {
     try {
-      await AsyncStorage.removeItem("focus");
+      await AsyncStorage.removeItem('focus');
     } catch (error) {
-      console.log("error removing focus from storage");
+      console.log('error removing focus from storage');
+    }
+    try {
+      await AsyncStorage.removeItem('strikethrough');
+    } catch (error) {
+      console.log('error removing strikethrough from storage');
     }
   }
 
@@ -94,7 +99,7 @@ class MainFocus extends Component {
     });
     const res = this.removeStorage();
     console.log(res);
-    this.focusChangedHandler("");
+    this.focusChangedHandler('');
   };
 
   render() {
@@ -115,7 +120,7 @@ class MainFocus extends Component {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    justifyContent: "center"
+    justifyContent: 'center'
   }
 });
 
