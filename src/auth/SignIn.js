@@ -7,31 +7,31 @@ import {
   TouchableOpacity,
   ImageBackground,
   Keyboard,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from 'react-native';
 
-import { Auth } from 'aws-amplify'
-import { connect } from 'react-redux'
+import { Auth } from 'aws-amplify';
+import { connect } from 'react-redux';
 
-import { authenticate, confirmUserLogin } from '../actions'
-import { fonts, colors } from '../theme'
+import { authenticate, confirmUserLogin } from '../actions';
+import { fonts, colors } from '../theme';
 
-import Input from '../components/Input'
-import Button from '../components/Button'
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 class SignIn extends Component {
   state = {
     username: '',
     password: '',
-    greetingText: '',
-  }
+    greetingText: ''
+  };
 
   componentDidMount() {
     this.setState({
-      greetingText: this.getGreeting(),
-    })
+      greetingText: this.getGreeting()
+    });
   }
-  
+
   getGreeting() {
     var date = new Date();
     var hour = date.getHours();
@@ -43,50 +43,57 @@ class SignIn extends Component {
       return 'morning';
     }
   }
-  
+
   onChangeText = (key, value) => {
     this.setState({
       [key]: value
-    })
-  }
+    });
+  };
 
   signIn() {
-    const { username, password } = this.state
-    this.props.dispatchAuthenticate(username, password)
+    const { username, password } = this.state;
+    this.props.dispatchAuthenticate(username, password);
   }
 
   confirm() {
-    const { authCode } = this.state
-    this.props.dispatchConfirmUserLogin(authCode)
+    const { authCode } = this.state;
+    this.props.dispatchConfirmUserLogin(authCode);
   }
-  
+
   render() {
-    const { fontsLoaded } = this.state
-    const { auth: {
-      signInErrorMessage,
-      isAuthenticating,
-      signInError,
-      showSignInConfirmationModal
-    }} = this.props
+    const { fontsLoaded } = this.state;
+    const {
+      auth: {
+        signInErrorMessage,
+        isAuthenticating,
+        signInError,
+        showSignInConfirmationModal
+      }
+    } = this.props;
     return (
       <ImageBackground
-          style={styles.image}
-          source = {require('../assets/DefaultBackground2.jpeg')}
-          imageStyle={{resizeMode: 'cover'}}
+        style={styles.image}
+        source={require('../assets/DefaultBackground3.jpg')}
+        imageStyle={{ resizeMode: 'cover' }}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{flex: 1}}>
+        <TouchableWithoutFeedback
+          onPress={Keyboard.dismiss}
+          accessible={false}
+          style={{ flex: 1 }}
+        >
           <View style={styles.container}>
-            <Text style={[styles.greeting]}>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={styles.title}>Whirl</Text>
+            </View>
+            {/* <Text style={[styles.greeting]}>
               Good {this.state.greetingText}
-            </Text>
-            <Text style={[styles.greeting2]}>
-              Sign in to continue
-            </Text>
+            </Text> */}
+            {/* <Text style={[styles.greeting2]}>Sign in to continue</Text> */}
             <View style={styles.inputContainer}>
               <View style={styles.inputLineContainer}>
                 <Input
                   placeholder="Email Address"
-                  type='username'
+                  type="username"
                   onChangeText={this.onChangeText}
                   value={this.state.username}
                 />
@@ -94,7 +101,7 @@ class SignIn extends Component {
               <View style={styles.inputLineContainer}>
                 <Input
                   placeholder="Password"
-                  type='password'
+                  type="password"
                   onChangeText={this.onChangeText}
                   value={this.state.password}
                   secureTextEntry
@@ -103,9 +110,10 @@ class SignIn extends Component {
             </View>
             <Button
               isLoading={isAuthenticating}
-              title='Sign In'
+              title="Login"
               onPress={this.signIn.bind(this)}
-            />  
+              style={styles.button}
+            />
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
@@ -116,24 +124,27 @@ class SignIn extends Component {
 const mapDispatchToProps = {
   dispatchConfirmUserLogin: authCode => confirmUserLogin(authCode),
   dispatchAuthenticate: (username, password) => authenticate(username, password)
-}
+};
 
 const mapStateToProps = state => ({
   auth: state.auth
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
 
 const styles = StyleSheet.create({
   heading: {
     flexDirection: 'row'
   },
   inputContainer: {
-    marginTop: 20,
+    marginTop: 20
   },
   inputLineContainer: {
     marginTop: 20,
     backgroundColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 5,
+    borderBottomWidth: 1.5,
+    borderBottomColor: colors.primary
   },
   container: {
     flex: 1,
@@ -154,9 +165,19 @@ const styles = StyleSheet.create({
     fontFamily: fonts.light
   },
   image: {
-    flexGrow:1,
+    flexGrow: 1,
     height: null,
-    width:null,
-    alignItems: 'stretch',
+    width: null,
+    alignItems: 'stretch'
   },
+  title: {
+    padding: 10,
+    fontFamily: 'Billabong',
+    fontSize: 60,
+    fontWeight: '200',
+    color: '#ffffff',
+    textShadowColor: '#000000',
+    textShadowRadius: 0.3,
+    textShadowOffset: { width: 0.5, height: 0.5 }
+  }
 });

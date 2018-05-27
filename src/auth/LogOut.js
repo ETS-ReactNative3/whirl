@@ -43,7 +43,7 @@ class LogOut extends Component {
     return (
       <ImageBackground
         style={styles.image}
-        source={require('../assets/DefaultBackground2.jpeg')}
+        source={require('../assets/DefaultBackground4.jpeg')}
         imageStyle={{ resizeMode: 'cover' }}
       >
         <StatusBar />

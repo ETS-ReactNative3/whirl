@@ -188,11 +188,11 @@ class Homescreen extends Component {
     var hour = date.getHours();
     const text = 'Good ';
     if (hour > 17) {
-      return text + 'evening';
+      return text + 'evening,';
     } else if (hour > 11) {
-      return text + 'afternoon';
+      return text + 'afternoon,';
     } else {
-      return text + 'morning';
+      return text + 'morning,';
     }
   }
 
@@ -256,7 +256,7 @@ class Homescreen extends Component {
             >
               {/* Greeting */}
               <Text style={[styles.header, textColorConst]}>
-                {this.state.greetingText}, {'\n'}
+                {this.state.greetingText} {'\n'}
                 {this.state.name}
               </Text>
 

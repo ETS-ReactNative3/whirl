@@ -151,10 +151,17 @@ export default class Settings extends Component {
       <View />
     );
 
+    var textColorConst = '#000000';
+    if (this.state.changes) {
+      textColorConst = {
+        color: '#ffffff'
+      };
+    }
+
     return (
       <ImageBackground
         style={styles.image}
-        source={require('../assets/DefaultBackground2.jpeg')}
+        source={require('../assets/DefaultBackground3.jpg')}
         imageStyle={{ resizeMode: 'cover' }}
       >
         {/* Header containing page title and menu icon */}
@@ -191,7 +198,6 @@ export default class Settings extends Component {
         {/* The settings for the app:
             - Backgrounds
             - Text Color
-            - ?**Password**?
         */}
         <View style={styles.body}>
           {/* Save changes button */}
@@ -242,7 +248,10 @@ export default class Settings extends Component {
           </View>
 
           {/* Change the font colors on the homepage */}
-          <Text style={styles.sectionTitle}> Text color on homepage </Text>
+          <Text style={[styles.sectionTitle, textColorConst]}>
+            {' '}
+            Text color on homepage{' '}
+          </Text>
           <View style={styles.backgroundSelection}>
             {/* Example of how selected text color will look over the selected background */}
             <View style={styles.textImage}>

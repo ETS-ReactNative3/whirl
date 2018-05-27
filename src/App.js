@@ -15,33 +15,33 @@ class App extends Component {
     user: {},
     isLoading: true
   };
-  // async componentDidMount() {
-  //   StatusBar.setHidden(true);
-  //   try {
-  //     const user = await Auth.currentAuthenticatedUser();
-  //     this.setState({ user, isLoading: false });
-  //   } catch (err) {
-  //     this.setState({ isLoading: false });
-  //   }
-  // }
-  // async componentWillReceiveProps(nextProps) {
-  //   try {
-  //     const user = await Auth.currentAuthenticatedUser();
-  //     this.setState({ user });
-  //   } catch (err) {
-  //     this.setState({ user: {} });
-  //   }
-  // }
+  async componentDidMount() {
+    StatusBar.setHidden(true);
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.setState({ user, isLoading: false });
+    } catch (err) {
+      this.setState({ isLoading: false });
+    }
+  }
+  async componentWillReceiveProps(nextProps) {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.setState({ user });
+    } catch (err) {
+      this.setState({ user: {} });
+    }
+  }
   render() {
-    // if (this.state.isLoading) return null;
-    // let loggedIn = false;
-    // if (this.state.user.username) {
-    //   loggedIn = true;
-    // }
-    // if (loggedIn) {
-    return <Nav />;
-    // }
-    // return <Tabs />;
+    if (this.state.isLoading) return null;
+    let loggedIn = false;
+    if (this.state.user.username) {
+      loggedIn = true;
+    }
+    if (loggedIn) {
+      return <Nav />;
+    }
+    return <Tabs />;
   }
 }
 
@@ -49,5 +49,5 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-// export default connect(mapStateToProps)(App);
-export default withAuthenticator(App);
+export default connect(mapStateToProps)(App);
+// export default withAuthenticator(App);

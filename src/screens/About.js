@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ImageBackground
+} from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import { fonts } from '../theme';
 import StatusBar from '../components/StatusBar';
@@ -15,40 +22,58 @@ class About extends Component {
   };
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: 'skyblue' }}>
-        <StatusBar />
-        <View style={styles.headerBar}>
-          <TouchableOpacity
-            style={styles.headerMenu}
-            onPress={() =>
-              this.props.navigation.dispatch(DrawerActions.openDrawer())
-            }
-          >
-            <Image
-              source={require('../assets/icons/menuPink.png')}
-              style={{ width: 30, height: 30 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 150,
-            marginTop: 50
-          }}
+      <View style={{ flex: 1 }}>
+        <ImageBackground
+          style={styles.image}
+          source={require('../assets/DefaultBackground3.jpg')}
+          imageStyle={{ resizeMode: 'cover' }}
         >
-          <Text style={styles.text}>By C2P1</Text>
+          {/* <View style={{ flex: 1, backgroundColor: 'skyblue' }}> */}
+          <StatusBar />
+          <View style={styles.headerBar}>
+            <TouchableOpacity
+              style={styles.headerMenu}
+              onPress={() =>
+                this.props.navigation.dispatch(DrawerActions.openDrawer())
+              }
+            >
+              <Image
+                source={require('../assets/icons/menuPink.png')}
+                style={{ width: 30, height: 30 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 150,
+              marginTop: 50
+            }}
+          >
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={styles.title}> Whirl </Text>
+              <Image source={require('../assets/icons/tornado.png')} />
+            </View>
 
-          <Text style={styles.text}>
-            Built during my third year exams at university, using React Native
-            and Amazon Web Services.
-          </Text>
+            <Text style={styles.text}>
+              Built during my third year exams at university, using React Native
+              and Amazon Web Services.
+            </Text>
 
-          <Text style={styles.text}>Copyright 2018</Text>
-        </View>
+            <View style={{ marginBottom: 50 }} />
+
+            <Text style={styles.text}>Copyright 2018</Text>
+          </View>
+          {/* </View> */}
+        </ImageBackground>
       </View>
     );
   }
@@ -68,6 +93,16 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontFamily: fonts.base
+  },
+  title: {
+    paddingTop: 10,
+    fontFamily: 'Billabong',
+    fontSize: 50
+  },
+  image: {
+    flex: 1,
+    height: null,
+    width: null
   }
 });
 
