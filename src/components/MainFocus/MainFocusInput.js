@@ -18,14 +18,14 @@ import Input from '../Input';
 import Button from '../Button';
 import { colors, fonts } from '../../theme';
 import StatusBar from '../StatusBar';
+import Constants from '../../constants';
 
 class MainFocusInput extends Component {
   state = {
     focus: '',
     modalVisible: false,
     textColor: '#ffffff',
-    backgroundSource:
-      'https://source.unsplash.com/collection/1065412/900x1600/daily',
+    backgroundSource: Constants.BACKGROUNDS.DEFAULT,
     mounted: false
   };
 
@@ -155,9 +155,6 @@ class MainFocusInput extends Component {
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            // alert('Modal has been closed.');
-          }}
           onShow={() => {
             this.textInput.focus();
           }}
@@ -305,8 +302,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: fonts.light
   },
-  close: {},
-  add: {},
   body: {
     marginTop: 20,
     alignItems: 'center',
@@ -319,13 +314,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: 'rgba(0,0,0,0.3)'
   },
-  button: {
-    // flex: 1,
-    // top: '-50%',
-    justifyContent: 'center',
-    alignItems: 'center'
-    // margin: 60,
-  },
+  button: {},
   input: {
     color: '#ffffff',
     padding: 10,

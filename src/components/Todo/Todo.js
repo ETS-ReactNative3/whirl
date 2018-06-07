@@ -5,7 +5,8 @@ import {
   View,
   TouchableOpacity,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 
 import TodoInput from './TodoInput';
@@ -18,13 +19,35 @@ import { colors, fonts } from '../../theme';
 class Todo extends Component {
   state = {
     apiResponse: '',
-    email: 'conorspilsbury.at.outlook.com',
     isLoading: true,
     todoItemCount: 0
   };
 
   async componentDidMount() {
-    this.updateData();
+    try {
+      const value = AsyncStorage.getItem('email').then(keyvalue => {
+        if (keyvalue !== null) {
+          this.setState({
+            email: keyvalue
+          });
+          console.log('Todo: successfully loaded email: ' + this.state.email);
+          console.log('Todo: email loaded as: ' + keyvalue);
+          this.updateData();
+        } else {
+          console.log('Todo: no email item in storage');
+          this.setState({
+            isLoading: false
+          });
+        }
+      });
+    } catch (error) {
+      console.log(
+        'Todo: theres been an error getting the email item: ' + error
+      );
+      this.setState({
+        isLoading: false
+      });
+    }
   }
 
   async updateData() {
@@ -33,7 +56,7 @@ class Todo extends Component {
     });
     console.log('getting list items');
     const path = '/TodoItems/' + this.state.email;
-    console.log(path);
+    console.log('todo path: ' + path);
     try {
       const apiResponse = await API.get('TodoItemsCRUD', path);
       console.log('api response 1: ');
@@ -43,15 +66,20 @@ class Todo extends Component {
         isLoading: false,
         todoItemCount: apiResponse.length
       });
-      console.log('api response 2: ');
+      console.log('state api response 2: ');
       console.log(this.state.apiResponse);
     } catch (e) {
+      console.log('error updating data: ');
       console.log(e);
+      this.setState({
+        isLoading: false
+      });
     }
   }
 
   async todoAdded() {
     const todoItemsUpdatedCount = this.state.todoItemCount + 1;
+    console.log('Todo: in todoAdded');
     do {
       await this.updateData();
     } while (todoItemsUpdatedCount != this.state.todoItemCount);

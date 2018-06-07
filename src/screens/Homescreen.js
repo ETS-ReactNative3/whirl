@@ -24,6 +24,7 @@ import { DrawerActions, createStackNavigator } from 'react-navigation';
 
 import Amplify, { Auth, API } from 'aws-amplify';
 import { fonts } from '../theme';
+import Constants from '../constants';
 
 class Homescreen extends Component {
   state = {
@@ -31,8 +32,7 @@ class Homescreen extends Component {
     greetingText: '',
     todos: [],
     user: {},
-    backgroundSource:
-      'https://source.unsplash.com/collection/1457745/900x1600/daily',
+    backgroundSource: Constants.BACKGROUNDS.DEFAULT,
     textColor: '#ffffff',
     email: '',
     apiResponse: '',
@@ -54,7 +54,7 @@ class Homescreen extends Component {
 
     this.setState({
       name: name,
-      email: email.replace('@', '.at.')
+      email: email
     });
     this.storeName(this.state.name);
     this.storeEmail(this.state.email);
@@ -68,8 +68,9 @@ class Homescreen extends Component {
   async storeName(name) {
     try {
       await AsyncStorage.setItem('name', name);
+      console.log('Home: name successfully stored');
     } catch (error) {
-      console.log('error setting the name item in storage: ');
+      console.log('Home: error setting the name item in storage: ');
       console.log(error);
     }
   }
@@ -81,8 +82,9 @@ class Homescreen extends Component {
   async storeEmail(email) {
     try {
       await AsyncStorage.setItem('email', email);
+      console.log('Home: email successfully stored');
     } catch (error) {
-      console.log('error setting the email item in storage: ');
+      console.log('Home: error setting the email item in storage: ');
       console.log(error);
     }
   }
@@ -262,7 +264,7 @@ class Homescreen extends Component {
 
               {/* Main Focus */}
               <View style={styles.mainFocus}>
-                <MainFocus color={this.state.textColor} />
+                <MainFocus />
               </View>
 
               {/* Todo list */}

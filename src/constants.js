@@ -4,8 +4,7 @@ export default {
   BACKGROUNDS: {
     WALLPAPER: 'https://source.unsplash.com/collection/1065412/900x1600/daily',
     LANDSCAPES: 'https://source.unsplash.com/900x600/daily?landscape',
-    LANDSCAPES2:
-      'https://source.unsplash.com/collection/1457745/900x1600/daily',
+    DEFAULT: 'https://source.unsplash.com/collection/1457745/900x1600/daily',
     NATURE: 'https://source.unsplash.com/900x600/daily?nature',
     SPACE: 'https://source.unsplash.com/collection/1111575/900x1600/daily',
     ROADS: 'https://source.unsplash.com/collection/1525589/900x1600/daily',

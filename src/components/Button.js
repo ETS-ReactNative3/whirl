@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontFamily: fonts.light,
     fontSize: 16,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
+    textAlign: 'center'
   },
   activityIndicator: {
     transform: [{ scale: 0.7 }],

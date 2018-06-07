@@ -22,7 +22,7 @@ import StatusBar from '../components/StatusBar';
 
 export default class Settings extends Component {
   state = {
-    backgroundSource: '',
+    backgroundSource: CONSTANTS.BACKGROUNDS.DEFAULT,
     textColor: '#ffffff',
     changes: false
   };
@@ -41,9 +41,6 @@ export default class Settings extends Component {
             });
             console.log('settings: successfully loaded background source');
           } else {
-            this.setState({
-              backgroundSource: CONSTANTS.BACKGROUNDS.WALLPAPER
-            });
             console.log('Settings: no backgroundSource item in storage');
           }
         }
@@ -151,7 +148,9 @@ export default class Settings extends Component {
       <View />
     );
 
-    var textColorConst = '#000000';
+    var textColorConst = {
+      color: '#000000'
+    };
     if (this.state.changes) {
       textColorConst = {
         color: '#ffffff'
@@ -227,16 +226,16 @@ export default class Settings extends Component {
                 value={CONSTANTS.BACKGROUNDS.NATURE}
               />
               <Picker.Item
-                label="Wallpaper (default)"
-                value={CONSTANTS.BACKGROUNDS.WALLPAPER}
-              />
-              <Picker.Item
-                label="Landscapes"
-                value={CONSTANTS.BACKGROUNDS.LANDSCAPES}
+                label="Landscapes (default)"
+                value={CONSTANTS.BACKGROUNDS.DEFAULT}
               />
               <Picker.Item
                 label="Landscapes 2"
-                value={CONSTANTS.BACKGROUNDS.LANDSCAPES2}
+                value={CONSTANTS.BACKGROUNDS.LANDSCAPES}
+              />
+              <Picker.Item
+                label="Wallpaper"
+                value={CONSTANTS.BACKGROUNDS.WALLPAPER}
               />
               <Picker.Item label="Roads" value={CONSTANTS.BACKGROUNDS.ROADS} />
               <Picker.Item label="Space" value={CONSTANTS.BACKGROUNDS.SPACE} />

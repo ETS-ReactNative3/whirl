@@ -12,37 +12,45 @@ import {
   Keyboard,
   TouchableHighlight,
   AsyncStorage,
-  Button,
   Alert
 } from 'react-native';
 
 import { colors, fonts } from '../theme';
 import Amplify, { Auth, API } from 'aws-amplify';
 import StatusBar from './StatusBar';
+import Constants from '../constants';
+import Button from './Button';
 
 class ModalScreen extends Component {
   state = {
     todo: '',
     allTodo: [],
     modalVisible: false,
-    backgroundSource: ''
-  };
-
-  // replace with loading email from storage
-  getEmail = (err, content) => {
-    if (err) {
-      console.log(err);
-    } else {
-      var email = content[3]['Value'];
-      this.setState({
-        User: email
-      });
-    }
+    backgroundSource: Constants.BACKGROUNDS.DEFAULT
   };
 
   async componentDidMount() {
-    const user = await Auth.currentAuthenticatedUser();
-    user.getUserAttributes(this.getEmail);
+    // load email address
+    try {
+      const value = AsyncStorage.getItem('email').then(keyvalue => {
+        if (keyvalue !== null) {
+          this.setState({
+            User: keyvalue
+          });
+          console.log('Todo: successfully loaded email');
+        } else {
+          console.log('Todo: no email item in storage');
+          this.setState({
+            isLoading: false
+          });
+        }
+      });
+    } catch (error) {
+      console.log(
+        'Todo: theres been an error getting the email item: ' + error
+      );
+    }
+
     try {
       const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
@@ -52,7 +60,7 @@ class ModalScreen extends Component {
             });
             console.log(keyvalue);
           } else {
-            console.log('TodoInput: no backgroundSource item in storage');
+            console.log('ModalScreen: no backgroundSource item in storage');
           }
         }
       );
@@ -78,7 +86,10 @@ class ModalScreen extends Component {
    * Add todo item to database
    */
   todoAddedHandler = () => {
-    if (this.state.todo.trim() === '') return;
+    if (this.state.todo.trim() === '') {
+      Alert.alert('Todo item cannot be empty');
+      return;
+    }
 
     this.saveNote();
     this.props.navigation.goBack();
@@ -89,11 +100,6 @@ class ModalScreen extends Component {
   saveNote() {
     var date = new Date();
     let newNote = {
-      // body: {
-      //   Completed: 'false',
-      //   Content: this.state.todo.trim(),
-      //   Date: date.getTime()
-      // }
       body: {
         Content: this.state.todo.trim(),
         Completed: 'false',
@@ -113,11 +119,10 @@ class ModalScreen extends Component {
       const apiResponse = API.put('TodoItemsCRUD', path, newNote).then(
         value => {
           if (value !== null) {
-            console.log('value', value);
+            console.log('api response: ', value);
           }
         }
       );
-      console.log('response from saving note: ' + JSON.stringify(apiResponse));
       this.setState({ apiResponse });
     } catch (e) {
       console.log(e);
@@ -255,13 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: 'rgba(0,0,0,0.3)'
   },
-  button: {
-    // flex: 1,
-    // top: '-50%',
-    justifyContent: 'center',
-    alignItems: 'center'
-    // margin: 60,
-  },
+  button: {},
   container: {
     flex: 1,
     // justifyContent: 'center',

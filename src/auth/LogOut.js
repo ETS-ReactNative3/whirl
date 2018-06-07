@@ -66,9 +66,9 @@ class LogOut extends Component {
         <View style={{ alignItems: 'center', flex: 1 }}>
           <TouchableOpacity
             onPress={this.logout.bind(this)}
-            // style={{ flex: 1 }}
+            style={styles.button}
           >
-            <Text style={styles.button}>Logout</Text>
+            <Text style={styles.buttonText}>Logout</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -99,13 +99,16 @@ const styles = StyleSheet.create({
     padding: 10
   },
   button: {
+    borderRadius: 10,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1.5
+  },
+  buttonText: {
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: 'bold',
     color: colors.primary,
     fontFamily: fonts.light,
-    top: '40%',
-    backgroundColor: '#ffffff',
     fontSize: 40,
     borderRadius: 20
   },
