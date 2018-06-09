@@ -119,7 +119,7 @@ class MainFocusInput extends Component {
   focusAddedHandler = () => {
     if (this.state.focus.trim() === '') return;
 
-    this.props.onFocusAdded(this.state.focus);
+    this.props.onFocusAdded(this.state.focus.trim());
   };
 
   /**
