@@ -105,10 +105,10 @@ class MainFocusInput extends Component {
   /**
    * update the state of this class to the latest focus
    */
-  onChangeText = value => {
-    console.log(value);
+  onChangeText = (key, value) => {
+    console.log(key + ' ' + value);
     this.setState({
-      focus: value
+      [key]: value
     });
   };
 
@@ -203,16 +203,16 @@ class MainFocusInput extends Component {
                 <View style={styles.container}>
                   {/*  Focus input */}
                   <View style={styles.inputLineContainer}>
-                    <TextInput
-                      autoCapitalize="none"
-                      autoCorrect={false}
+                    <Input
                       style={styles.input}
-                      placeholder={'Focus'}
-                      placeholderTextColor="#ffffff"
-                      onChangeText={value => this.onChangeText(value)}
-                      underlineColorAndroid="transparent"
+                      type="focus"
+                      placeholder="Focus"
+                      autoCorrect={true}
+                      autoCapitalize="sentences"
                       multiline={true}
                       autoFocus={true}
+                      placeholderTextColor="#ffffff"
+                      onChangeText={this.onChangeText}
                     />
                   </View>
 

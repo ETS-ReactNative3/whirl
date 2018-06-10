@@ -20,6 +20,7 @@ import Amplify, { Auth, API } from 'aws-amplify';
 import StatusBar from './StatusBar';
 import Constants from '../constants';
 import Button from './Button';
+import Input from './Input';
 
 class ModalScreen extends Component {
   state = {
@@ -75,10 +76,10 @@ class ModalScreen extends Component {
   /**
    * update the todo value in state as text is being inputted
    */
-  onChangeText = value => {
-    console.log(value);
+  onChangeText = (key, value) => {
+    console.log(key + ' ' + value);
     this.setState({
-      todo: value
+      [key]: value
     });
   };
 
@@ -175,19 +176,16 @@ class ModalScreen extends Component {
               </View>
               <View style={styles.container}>
                 <View style={styles.inputLineContainer}>
-                  <TextInput
-                    autoCapitalize="none"
-                    autoCorrect={false}
+                  <Input
                     style={styles.input}
-                    placeholder={'New Todo'}
-                    placeholderTextColor="#ffffff"
-                    onChangeText={value => this.onChangeText(value)}
-                    underlineColorAndroid="transparent"
+                    type="todo"
+                    placeholder="New Todo"
+                    autoCorrect={true}
+                    autoCapitalize="sentences"
                     multiline={true}
                     autoFocus={true}
-                    ref={input => {
-                      this.textInput = input;
-                    }}
+                    placeholderTextColor="#ffffff"
+                    onChangeText={this.onChangeText}
                   />
                 </View>
                 <View style={styles.button}>

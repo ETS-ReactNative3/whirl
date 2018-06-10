@@ -11,11 +11,12 @@ export default ({
   multiline = false,
   ref,
   autoCapitalize = 'none',
+  autoCorrect = false,
   ...props
 }) => (
   <TextInput
     autoCapitalize={autoCapitalize}
-    autoCorrect={false}
+    autoCorrect={autoCorrect}
     style={[styles.input]}
     placeholder={placeholder}
     placeholderTextColor={placeholderTextColor}
