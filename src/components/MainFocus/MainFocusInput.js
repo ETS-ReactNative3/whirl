@@ -143,13 +143,6 @@ class MainFocusInput extends Component {
 
     return (
       <View>
-        <View>
-          <Text style={[styles.mainFocusHeader, textColorConst]}>
-            {' '}
-            What is your main focus for today?{' '}
-          </Text>
-        </View>
-
         {/* Open a modal for the text input */}
         <Modal
           animationType="slide"
@@ -249,7 +242,14 @@ class MainFocusInput extends Component {
             this.setModalVisible(true);
           }}
           style={[styles.focusInput, borderColor]}
-        />
+        >
+          <View>
+            <Text style={[styles.mainFocusHeader, textColorConst]}>
+              {' '}
+              What is your main focus for today?{' '}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
