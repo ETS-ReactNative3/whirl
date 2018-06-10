@@ -46,7 +46,7 @@ class LogOut extends Component {
         source={require('../assets/DefaultBackground4.jpeg')}
         imageStyle={{ resizeMode: 'cover' }}
       >
-        <StatusBar />
+        <StatusBar backgroundColor="#ffffff" />
         {/* Header bar. Contains the button for the drawer menu */}
         <View style={styles.headerBar}>
           <TouchableOpacity
@@ -124,4 +124,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogOut);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LogOut);
