@@ -10,10 +10,11 @@ export default ({
   placeholderTextColor = '#ffffff',
   multiline = false,
   ref,
+  autoCapitalize = 'none',
   ...props
 }) => (
   <TextInput
-    autoCapitalize="none"
+    autoCapitalize={autoCapitalize}
     autoCorrect={false}
     style={[styles.input]}
     placeholder={placeholder}

@@ -97,6 +97,7 @@ class SignUp extends Component {
                   type="given_name"
                   onChangeText={this.onChangeText}
                   value={this.state.given_name}
+                  autoCapitalize="words"
                 />
               </View>
               <View style={styles.inputLineContainer}>
@@ -140,7 +141,10 @@ const mapDispatchToProps = {
     createUser(username, password, given_name)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignUp);
 
 const styles = StyleSheet.create({
   modal: {
