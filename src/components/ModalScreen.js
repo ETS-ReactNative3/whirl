@@ -175,7 +175,6 @@ class ModalScreen extends Component {
               </View>
               <View style={styles.container}>
                 <View style={styles.inputLineContainer}>
-                  {/* use ref to textinput to open keyboard upon opening modal */}
                   <TextInput
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -185,6 +184,7 @@ class ModalScreen extends Component {
                     onChangeText={value => this.onChangeText(value)}
                     underlineColorAndroid="transparent"
                     multiline={true}
+                    autoFocus={true}
                     ref={input => {
                       this.textInput = input;
                     }}

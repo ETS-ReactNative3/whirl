@@ -155,9 +155,6 @@ class MainFocusInput extends Component {
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
-          onShow={() => {
-            this.textInput.focus();
-          }}
         >
           <ImageBackground
             style={styles.image}
@@ -213,7 +210,6 @@ class MainFocusInput extends Component {
                 <View style={styles.container}>
                   {/*  Focus input */}
                   <View style={styles.inputLineContainer}>
-                    {/* use ref to textinput to open keyboard upon opening modal */}
                     <TextInput
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -223,9 +219,7 @@ class MainFocusInput extends Component {
                       onChangeText={value => this.onChangeText(value)}
                       underlineColorAndroid="transparent"
                       multiline={true}
-                      ref={input => {
-                        this.textInput = input;
-                      }}
+                      autoFocus={true}
                     />
                   </View>
 
