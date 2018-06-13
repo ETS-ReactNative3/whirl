@@ -38,9 +38,9 @@ class ModalScreen extends Component {
           this.setState({
             User: keyvalue
           });
-          console.log('Todo: successfully loaded email');
+          console.log('ModalScreen: successfully loaded email');
         } else {
-          console.log('Todo: no email item in storage');
+          console.log('ModalScreen: no email item in storage');
           this.setState({
             isLoading: false
           });
@@ -48,7 +48,7 @@ class ModalScreen extends Component {
       });
     } catch (error) {
       console.log(
-        'Todo: theres been an error getting the email item: ' + error
+        'ModalScreen: theres been an error getting the email item: ' + error
       );
     }
 
@@ -59,7 +59,6 @@ class ModalScreen extends Component {
             this.setState({
               backgroundSource: keyvalue
             });
-            console.log(keyvalue);
           } else {
             console.log('ModalScreen: no backgroundSource item in storage');
           }
@@ -67,7 +66,7 @@ class ModalScreen extends Component {
       );
     } catch (error) {
       console.log(
-        'TodoInput: theres been an error getting the backgroundSource item'
+        'ModalScreen: theres been an error getting the backgroundSource item'
       );
       console.log(error);
     }
@@ -92,14 +91,8 @@ class ModalScreen extends Component {
       return;
     }
 
-    this.saveNote();
-    this.props.navigation.goBack();
-    this.props.navigation.state.params.updateData();
-  };
-
-  // Create a new Note according to the columns we defined earlier
-  saveNote() {
     var date = new Date();
+
     let newNote = {
       body: {
         Content: this.state.todo.trim(),
@@ -108,22 +101,28 @@ class ModalScreen extends Component {
         Date: date.getTime().toString()
       }
     };
+
+    this.saveNote(newNote);
+    this.props.navigation.goBack();
+    this.props.navigation.state.params.updateData(newNote);
+  };
+
+  // Create a new Note according to the columns we defined earlier
+  saveNote(note) {
     const path = '/TodoItems';
 
-    console.log(newNote.body.User);
-    console.log(newNote.body.Content);
-    console.log(newNote.body.Completed);
-    console.log(newNote.body.Date);
+    console.log(note.body.User);
+    console.log(note.body.Content);
+    console.log(note.body.Completed);
+    console.log(note.body.Date);
 
     // Use the API module to save the note to the database
     try {
-      const apiResponse = API.put('TodoItemsCRUD', path, newNote).then(
-        value => {
-          if (value !== null) {
-            console.log('api response: ', value);
-          }
+      const apiResponse = API.put('TodoItemsCRUD', path, note).then(value => {
+        if (value !== null) {
+          console.log('api response: ', value);
         }
-      );
+      });
       this.setState({ apiResponse });
     } catch (e) {
       console.log(e);

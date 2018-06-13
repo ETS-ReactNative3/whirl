@@ -5,22 +5,24 @@ import {
   View,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native';
 
-import TodoInput from './TodoInput';
 import TodoList from './TodoList';
 
 import Amplify, { API, Auth } from 'aws-amplify';
 
 import { colors, fonts } from '../../theme';
+import Homescreen from '../../screens/Homescreen';
 
 class Todo extends Component {
   state = {
     apiResponse: '',
     isLoading: true,
-    todoItemCount: 0
+    todoItemCount: 0,
+    todoAdded: false,
+    uniqueValue: 1
   };
 
   async componentDidMount() {
@@ -32,7 +34,7 @@ class Todo extends Component {
           });
           console.log('Todo: successfully loaded email: ' + this.state.email);
           console.log('Todo: email loaded as: ' + keyvalue);
-          this.updateData();
+          this.getData();
         } else {
           console.log('Todo: no email item in storage');
           this.setState({
@@ -50,7 +52,7 @@ class Todo extends Component {
     }
   }
 
-  async updateData() {
+  async getData() {
     this.setState({
       isLoading: true
     });
@@ -63,8 +65,9 @@ class Todo extends Component {
       console.log(apiResponse);
       this.setState({
         apiResponse,
-        isLoading: false,
-        todoItemCount: apiResponse.length
+        isLoading: false
+        // mountTodo: true
+        // todoItemCount: apiResponse.length
       });
       console.log('state api response 2: ');
       console.log(this.state.apiResponse);
@@ -77,22 +80,29 @@ class Todo extends Component {
     }
   }
 
-  async todoAdded() {
-    const todoItemsUpdatedCount = this.state.todoItemCount + 1;
-    console.log('Todo: in todoAdded');
-    do {
-      await this.updateData();
-    } while (todoItemsUpdatedCount != this.state.todoItemCount);
-
-    console.log(
-      'updated count: ' +
-        todoItemsUpdatedCount +
-        ' | number downloaded: ' +
-        this.state.todoItemCount
-    );
+  async refreshData(note) {
+    var arr = this.state.apiResponse.push(note.body);
+    this.setState({
+      apiResponse: this.state.apiResponse
+    });
+    this.forceRemount();
+    this.props.scroll.scrollToEnd({ animated: false });
+    // this.props.scroll.scrollTo({x: 1000, y: , animated: false);
   }
 
-  async deleteTodo(date, user) {
+  forceRemount = () => {
+    this.setState(({ uniqueValue }) => ({
+      uniqueValue: uniqueValue + 1
+    }));
+  };
+
+  async deleteTodo(date, user, index) {
+    var array = [...this.state.apiResponse];
+    array.splice(index, 1);
+    this.setState({ apiResponse: array });
+    this.forceRemount();
+    // this.props.scroll.scrollToEnd();
+    console.log('delete index: ' + index);
     const path = '/TodoItems/object/' + user + '/' + date;
     console.log(path);
     try {
@@ -100,43 +110,13 @@ class Todo extends Component {
       console.log(
         'response from deleting note: ' + JSON.stringify(apiResponse)
       );
-      this.setState({
-        apiResponse,
-        isLoading: true
-      });
     } catch (e) {
       console.log(e);
     }
-    this.todoDeleted();
-  }
-
-  async todoDeleted() {
-    const todoItemsUpdatedCount = this.state.todoItemCount - 1;
-    do {
-      await this.updateData();
-    } while (todoItemsUpdatedCount != this.state.todoItemCount);
-
-    console.log(
-      'updated count: ' +
-        todoItemsUpdatedCount +
-        ' | number downloaded: ' +
-        this.state.todoItemCount
-    );
   }
 
   render() {
-    const list = this.state.isLoading ? (
-      <View style={{ flex: 1, paddingTop: 20 }}>
-        <ActivityIndicator />
-      </View>
-    ) : (
-      <TodoList
-        style={styles.TodoList}
-        apiResponse={this.state.apiResponse}
-        onDeletePressed={this.deleteTodo.bind(this)}
-      />
-    );
-
+    const apiR = this.state.apiResponse;
     return (
       <View>
         <Text style={styles.TodoHeader}>Todo:</Text>
@@ -145,7 +125,7 @@ class Todo extends Component {
             style={styles.todoButton}
             onPress={() =>
               this.props.navigation.navigate('MyModal', {
-                updateData: this.todoAdded.bind(this)
+                updateData: this.refreshData.bind(this)
               })
             }
           >
@@ -156,7 +136,18 @@ class Todo extends Component {
             />
           </TouchableOpacity>
         </View>
-        {list}
+        {this.state.isLoading ? (
+          <View>
+            <ActivityIndicator style={{ flex: 1, paddingTop: 20 }} />
+          </View>
+        ) : (
+          <TodoList
+            style={styles.TodoList}
+            apiResponse={apiR}
+            onDeletePressed={this.deleteTodo.bind(this)}
+            key={this.state.uniqueValue}
+          />
+        )}
       </View>
     );
   }

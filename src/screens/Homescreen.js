@@ -254,7 +254,15 @@ class Homescreen extends Component {
 
             {/* Page content wrapped in a scroll view */}
             <ScrollView
-              contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+              ref={ref => (this.scrollView = ref)}
+              onContentSizeChange={(width, height) => {
+                console.log(width, height);
+              }}
+              contentContainerStyle={{
+                flexGrow: 1,
+                paddingBottom: 50,
+                marginBottom: 50
+              }}
             >
               {/* Greeting */}
               <Text style={[styles.header, textColorConst]}>
@@ -269,7 +277,10 @@ class Homescreen extends Component {
 
               {/* Todo list */}
               <View style={styles.todos}>
-                <Todo navigation={this.props.navigation} />
+                <Todo
+                  navigation={this.props.navigation}
+                  scroll={this.scrollView}
+                />
               </View>
             </ScrollView>
           </View>
