@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 
+import SplashScreen from 'react-native-splash-screen';
 import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 
@@ -30,6 +31,7 @@ class SignIn extends Component {
     this.setState({
       greetingText: this.getGreeting()
     });
+    SplashScreen.hide();
   }
 
   getGreeting() {
@@ -130,7 +132,10 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignIn);
 
 const styles = StyleSheet.create({
   heading: {

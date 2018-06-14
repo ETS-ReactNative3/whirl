@@ -15,6 +15,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 
+import SplashScreen from 'react-native-splash-screen';
+
 // components
 import MainFocus from '../components/MainFocus/MainFocus';
 import Todo from '../components/Todo/Todo';
@@ -179,6 +181,7 @@ class Homescreen extends Component {
         'Home: theres been an error getting the textColor item: ' + error
       );
     }
+    SplashScreen.hide();
   }
 
   /**
