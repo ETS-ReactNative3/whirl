@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 // components
 import MainFocus from '../components/MainFocus/MainFocus';
@@ -34,7 +35,7 @@ class Homescreen extends Component {
     greetingText: '',
     todos: [],
     user: {},
-    backgroundSource: Constants.BACKGROUNDS.DEFAULT,
+    backgroundSource: 'DEFAULT',
     textColor: '#ffffff',
     email: '',
     apiResponse: '',
@@ -230,7 +231,13 @@ class Homescreen extends Component {
       <View style={{ flex: 1 }}>
         <ImageBackground
           style={styles.image}
-          source={{ url: this.state.backgroundSource }}
+          source={{
+            uri:
+              '' +
+              Constants.BACKGROUND_LOCATIONS +
+              this.state.backgroundSource +
+              '.jpg'
+          }}
           imageStyle={{ resizeMode: 'cover' }}
         >
           {/* Add a default ImageBackground here whilst the one above loads? */}

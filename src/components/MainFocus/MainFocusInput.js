@@ -25,7 +25,7 @@ class MainFocusInput extends Component {
     focus: '',
     modalVisible: false,
     textColor: '#ffffff',
-    backgroundSource: Constants.BACKGROUNDS.DEFAULT,
+    backgroundSource: 'DEFAULT',
     mounted: false
   };
 
@@ -151,7 +151,13 @@ class MainFocusInput extends Component {
         >
           <ImageBackground
             style={styles.image}
-            source={{ url: this.state.backgroundSource }}
+            source={{
+              uri:
+                '' +
+                Constants.BACKGROUND_LOCATIONS +
+                this.state.backgroundSource +
+                '.jpg'
+            }}
             imageStyle={{ resizeMode: 'cover' }}
           >
             {/* TouchAbleWithouFeedback component to close keyboard by pressing anywhere */}

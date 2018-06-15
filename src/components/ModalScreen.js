@@ -27,7 +27,7 @@ class ModalScreen extends Component {
     todo: '',
     allTodo: [],
     modalVisible: false,
-    backgroundSource: Constants.BACKGROUNDS.DEFAULT
+    backgroundSource: 'DEFAULT'
   };
 
   async componentDidMount() {
@@ -134,7 +134,13 @@ class ModalScreen extends Component {
       <View style={{ flex: 1 }}>
         <ImageBackground
           style={styles.image}
-          source={{ url: this.state.backgroundSource }}
+          source={{
+            uri:
+              '' +
+              Constants.BACKGROUND_LOCATIONS +
+              this.state.backgroundSource +
+              '.jpg'
+          }}
           imageStyle={{ resizeMode: 'cover' }}
         >
           <StatusBar backgroundColor="rgba(0,0,0,0.5)" />

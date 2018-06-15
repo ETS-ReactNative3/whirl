@@ -9,12 +9,9 @@ import {
   Picker,
   AsyncStorage
 } from 'react-native';
-import {
-  StackNavigator,
-  TabNavigator,
-  DrawerNavigator,
-  DrawerActions
-} from 'react-navigation';
+import { DrawerActions } from 'react-navigation';
+
+import RNFetchBlob from 'react-native-fetch-blob';
 
 import { fonts, colors } from '../theme';
 import CONSTANTS from '../constants';
@@ -22,7 +19,7 @@ import StatusBar from '../components/StatusBar';
 
 export default class Settings extends Component {
   state = {
-    backgroundSource: CONSTANTS.BACKGROUNDS.DEFAULT,
+    backgroundSource: 'DEFAULT',
     textColor: '#ffffff',
     changes: false
   };
@@ -216,32 +213,23 @@ export default class Settings extends Component {
               style={{ width: 200 }}
             >
               {/* Background options */}
-              <Picker.Item label="City" value={CONSTANTS.BACKGROUNDS.CITY} />
-              <Picker.Item
-                label="Above the trees"
-                value={CONSTANTS.BACKGROUNDS.ABOVETREE}
-              />
-              <Picker.Item
-                label="Nature"
-                value={CONSTANTS.BACKGROUNDS.NATURE}
-              />
-              <Picker.Item
-                label="Landscapes (default)"
-                value={CONSTANTS.BACKGROUNDS.DEFAULT}
-              />
-              <Picker.Item
-                label="Landscapes 2"
-                value={CONSTANTS.BACKGROUNDS.LANDSCAPES}
-              />
-              <Picker.Item
-                label="Wallpaper"
-                value={CONSTANTS.BACKGROUNDS.WALLPAPER}
-              />
-              <Picker.Item label="Roads" value={CONSTANTS.BACKGROUNDS.ROADS} />
-              <Picker.Item label="Space" value={CONSTANTS.BACKGROUNDS.SPACE} />
+              <Picker.Item label="City" value={'CITY'} />
+              <Picker.Item label="Above the trees" value={'ABOVETREE'} />
+              <Picker.Item label="Nature" value={'NATURE'} />
+              <Picker.Item label="Landscapes (default)" value={'DEFAULT'} />
+              <Picker.Item label="Landscapes 2" value={'LANDSCAPES'} />
+              <Picker.Item label="Wallpaper" value={'WALLPAPER'} />
+              <Picker.Item label="Roads" value={'ROADS'} />
+              <Picker.Item label="Space" value={'SPACE'} />
             </Picker>
             <Image
-              source={{ url: this.state.backgroundSource }}
+              source={{
+                uri:
+                  '' +
+                  CONSTANTS.BACKGROUND_LOCATIONS +
+                  this.state.backgroundSource +
+                  '.jpg'
+              }}
               style={styles.backgroundImage}
             />
           </View>
@@ -255,7 +243,13 @@ export default class Settings extends Component {
             {/* Example of how selected text color will look over the selected background */}
             <View style={styles.textImage}>
               <Image
-                source={{ url: this.state.backgroundSource }}
+                source={{
+                  uri:
+                    '' +
+                    CONSTANTS.BACKGROUND_LOCATIONS +
+                    this.state.backgroundSource +
+                    '.jpg'
+                }}
                 style={styles.backgroundImage}
               />
               <Text
