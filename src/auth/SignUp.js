@@ -32,7 +32,6 @@ class SignUp extends Component {
   state = initialState;
 
   onChangeText = (key, value) => {
-    console.log(key + ' ' + value);
     this.setState({
       [key]: value
     });
