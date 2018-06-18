@@ -5,42 +5,34 @@ import {
   View,
   ImageBackground,
   AsyncStorage,
-  TextInput,
-  FlatList,
   Image,
   TouchableOpacity,
-  Keyboard,
-  TouchableWithoutFeedback,
   ScrollView,
   ActivityIndicator
 } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
-import RNFetchBlob from 'react-native-fetch-blob';
 
 // components
 import MainFocus from '../components/MainFocus/MainFocus';
 import Todo from '../components/Todo/Todo';
 import StatusBar from '../components/StatusBar';
 
-import { DrawerActions, createStackNavigator } from 'react-navigation';
+import { DrawerActions } from 'react-navigation';
 
-import Amplify, { Auth, API } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import { fonts } from '../theme';
 import Constants from '../constants';
 
 class Homescreen extends Component {
-  state = {
-    name: '',
-    greetingText: '',
-    todos: [],
-    user: {},
-    backgroundSource: 'DEFAULT',
-    textColor: '#ffffff',
-    email: '',
-    apiResponse: '',
-    isLoading: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      greetingText: this.getGreeting(),
+      uniqueKey: 1,
+      loading: true
+    };
+  }
 
   /**
    * callback function for getting user attributes.
@@ -48,20 +40,16 @@ class Homescreen extends Component {
    * This function specifically gets and stores both the given_name and
    * email (id) of the user.
    */
-  getName = (err, content) => {
-    console.log(err);
+  getPersonalDetails = (err, content) => {
     var name = content[2]['Value'];
     var email = content[3]['Value'];
-    console.log(content);
-    console.log('name: ' + name);
 
     this.setState({
-      name: name,
-      email: email
+      name: name
     });
-    this.storeName(this.state.name);
-    this.storeEmail(this.state.email);
-    console.log('email: ' + this.state.email);
+
+    this.storeName(name);
+    this.storeEmail(email);
   };
 
   /**
@@ -93,6 +81,22 @@ class Homescreen extends Component {
   }
 
   /**
+   * Store the default values of backgroundSource and textColor to async storage
+   */
+  async storeDefaults() {
+    await AsyncStorage.multiSet([
+      ['backgroundSource', 'DEFAULT'],
+      ['textColor', '#ffffff']
+    ]).then(
+      this.setState({
+        backgroundSource: 'DEFAULT',
+        textColor: '#ffffff',
+        backgroundKey: 'DEFAULT'
+      })
+    );
+  }
+
+  /**
    * Get the current authenticated user and set state values that rely on function output.
    *
    * Loads the required items from async storage; backgroundSource, given_name,
@@ -100,88 +104,33 @@ class Homescreen extends Component {
    */
   async componentDidMount() {
     const user = await Auth.currentAuthenticatedUser();
-    this.setState({
-      greetingText: this.getGreeting(),
-      // user,
-      name: this.props.name
+
+    AsyncStorage.multiGet(
+      ['name', 'backgroundSource', 'textColor'],
+      (err, stores) => {
+        stores.map((result, i, store) => {
+          let key = store[i][0];
+          let value = store[i][1];
+          console.log(key, value);
+          this.setState({
+            [key]: value
+          });
+        });
+        if (this.state.name === undefined || this.state.name === null) {
+          user.getUserAttributes(this.getPersonalDetails);
+          this.storeDefaults();
+        }
+        this.setState({
+          uniqueKey: this.state.uniqueKey + 1,
+          backgroundKey: this.state.backgroundSource
+        });
+      }
+    ).then(() => {
+      this.setState({
+        loading: false
+      });
     });
 
-    // user.getUserAttributes(this.getName);
-    // load the string given_name from local storage
-    try {
-      const value = AsyncStorage.getItem('name').then(keyvalue => {
-        if (keyvalue !== null) {
-          this.setState({
-            name: keyvalue
-          });
-          console.log('Home: successfully loaded name');
-        } else {
-          console.log('Home: no name item in storage');
-          user.getUserAttributes(this.getName);
-        }
-      });
-    } catch (error) {
-      console.log('Home: theres been an error getting the name item: ' + error);
-    }
-
-    try {
-      const value = AsyncStorage.getItem('email').then(keyvalue => {
-        if (keyvalue !== null) {
-          this.setState({
-            email: keyvalue
-          });
-          console.log('Home: successfully loaded email');
-        } else {
-          console.log('Home: no email item in storage');
-          user.getUserAttributes(this.getName);
-        }
-      });
-    } catch (error) {
-      console.log(
-        'Home: theres been an error getting the email item: ' + error
-      );
-    }
-
-    // load the url backgroundSource from local storage
-    try {
-      const value = await AsyncStorage.getItem('backgroundSource').then(
-        keyvalue => {
-          if (keyvalue !== null) {
-            this.setState({
-              backgroundSource: keyvalue
-            });
-            console.log('Home: background source: ' + keyvalue);
-          } else {
-            console.log('Home: no backgroundSource item in storage');
-          }
-        }
-      );
-    } catch (error) {
-      console.log(
-        'Home: theres been an error getting the backgroundSource item: ' + error
-      );
-    }
-
-    // load the hex code string textColor from local storage
-    try {
-      const value = await AsyncStorage.getItem('textColor').then(keyvalue => {
-        if (keyvalue !== null) {
-          this.setState({
-            textColor: keyvalue
-          });
-          console.log('Home: successfully loaded textColor');
-        } else {
-          this.setState({
-            textColor: '#ffffff'
-          });
-          console.log('Home: no textColor item in storage');
-        }
-      });
-    } catch (error) {
-      console.log(
-        'Home: theres been an error getting the textColor item: ' + error
-      );
-    }
     SplashScreen.hide();
   }
 
@@ -200,15 +149,6 @@ class Homescreen extends Component {
     } else {
       return text + 'morning,';
     }
-  }
-
-  forceRemount() {
-    console.log('forcing remount');
-    this.setState(this.state);
-  }
-
-  todoAddedHandler() {
-    this.getListItems();
   }
 
   static navigationOptions = {
@@ -239,13 +179,10 @@ class Homescreen extends Component {
               '.jpg'
           }}
           imageStyle={{ resizeMode: 'cover' }}
+          key={this.state.backgroundKey}
         >
-          {/* Add a default ImageBackground here whilst the one above loads? */}
-          {/* {defaultBackground} */}
-
+          {/* Include status bar to leave width for status bar */}
           <StatusBar />
-          {/* TouchableWithoutFeedback expects to have only one child element. Therefore 
-          wrap everything in a single view */}
           <View style={{ flex: 1 }}>
             {/* Header bar. Contains the button for the drawer menu */}
             <View style={styles.headerBar}>
@@ -265,9 +202,6 @@ class Homescreen extends Component {
             {/* Page content wrapped in a scroll view */}
             <ScrollView
               ref={ref => (this.scrollView = ref)}
-              onContentSizeChange={(width, height) => {
-                console.log(width, height);
-              }}
               contentContainerStyle={{
                 flexGrow: 1,
                 paddingBottom: 50,
@@ -275,23 +209,30 @@ class Homescreen extends Component {
               }}
             >
               {/* Greeting */}
-              <Text style={[styles.header, textColorConst]}>
-                {this.state.greetingText} {'\n'}
-                {this.state.name}
-              </Text>
+              {this.state.loading ? (
+                <View>
+                  <ActivityIndicator style={{ flex: 1, paddingTop: 100 }} />
+                </View>
+              ) : (
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.header, textColorConst]}>
+                    {this.state.greetingText} {'\n'}
+                    {this.state.name}
+                  </Text>
 
-              {/* Main Focus */}
-              <View style={styles.mainFocus}>
-                <MainFocus />
-              </View>
+                  <View style={styles.mainFocus}>
+                    <MainFocus key={this.state.uniqueKey} />
+                  </View>
 
-              {/* Todo list */}
-              <View style={styles.todos}>
-                <Todo
-                  navigation={this.props.navigation}
-                  scroll={this.scrollView}
-                />
-              </View>
+                  <View style={styles.todos}>
+                    <Todo
+                      navigation={this.props.navigation}
+                      scroll={this.scrollView}
+                      key={this.state.uniqueKey}
+                    />
+                  </View>
+                </View>
+              )};
             </ScrollView>
           </View>
         </ImageBackground>
@@ -313,7 +254,8 @@ const styles = StyleSheet.create({
     textShadowRadius: 1,
     fontSize: 45,
     textShadowOffset: { width: 0.5, height: 0.5 },
-    fontFamily: fonts.bold
+    fontFamily: fonts.bold,
+    color: '#ffffff'
   },
   mainFocusHeader: {
     padding: 15,
