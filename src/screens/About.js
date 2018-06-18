@@ -29,7 +29,6 @@ class About extends Component {
           source={require('../assets/DefaultBackground3.jpg')}
           imageStyle={{ resizeMode: 'cover' }}
         >
-          {/* <View style={{ flex: 1, backgroundColor: 'skyblue' }}> */}
           <StatusBar />
           <View style={styles.headerBar}>
             <TouchableOpacity
@@ -67,9 +66,11 @@ class About extends Component {
             <ScrollView style={{ flex: 1 }}>
               <View style={{ padding: 20 }}>
                 <Text style={styles.body}>
-                  Built during my third year exams at university, using React
-                  Native and Amazon Web Services.
+                  Built during my third year exams at university.
                 </Text>
+              </View>
+              <View style={{ padding: 20 }}>
+                <Text style={styles.body}> Contact: whirLList@gmail.com</Text>
               </View>
             </ScrollView>
 

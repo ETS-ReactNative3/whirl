@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, Button } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
 import {
-  StackNavigator,
-  TabNavigator,
-  DrawerNavigator,
   DrawerItems,
-  createStackNavigator,
-  createDrawerNavigator
+  createDrawerNavigator,
+  createSwitchNavigator
 } from 'react-navigation';
 
-import { Auth } from 'aws-amplify';
-import { logOut } from '../actions';
-
+import Start from '../components/Start';
 import Home from '../screens/Homescreen';
 import About from '../screens/About';
 import LogOut from '../auth/LogOut';
 import Settings from '../screens/Settings';
-import ModalScreen from '../components/ModalScreen';
+
 import StatusBar from '../components/StatusBar';
 
 const CustomDrawerContentComponent = props => (
@@ -40,7 +35,6 @@ const CustomDrawerContentComponent = props => (
 );
 
 // screens in the app. They will appear in the menu in the same order
-
 const DrawerNav = createDrawerNavigator(
   {
     Home: { screen: Home },
@@ -54,19 +48,21 @@ const DrawerNav = createDrawerNavigator(
   }
 );
 
-const RootStack = createStackNavigator(
+// load assets on start screen which is covered by the splash screen.
+// once loaded, switch to the mainstack but dont allow back navigation,
+// hence the use of a switch navigator.
+const RootStack = createSwitchNavigator(
   {
+    Start: {
+      screen: Start
+    },
     Main: {
       screen: DrawerNav
-    },
-    MyModal: {
-      screen: ModalScreen
     }
   },
   {
-    mode: 'modal',
     headerMode: 'none',
-    initialRouteName: 'Main'
+    initialRouteName: 'Start'
   }
 );
 

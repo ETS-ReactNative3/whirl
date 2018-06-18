@@ -9,22 +9,19 @@ import {
   Picker,
   AsyncStorage
 } from 'react-native';
-import {
-  StackNavigator,
-  TabNavigator,
-  DrawerNavigator,
-  DrawerActions
-} from 'react-navigation';
+import { DrawerActions } from 'react-navigation';
 
 import { fonts, colors } from '../theme';
 import CONSTANTS from '../constants';
 import StatusBar from '../components/StatusBar';
+import constants from '../constants';
 
 export default class Settings extends Component {
   state = {
-    backgroundSource: CONSTANTS.BACKGROUNDS.DEFAULT,
+    backgroundSource: 'DEFAULT',
     textColor: '#ffffff',
-    changes: false
+    changes: false,
+    imageKey: 'DEFAULT'
   };
 
   /**
@@ -35,13 +32,16 @@ export default class Settings extends Component {
     try {
       const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
-          if (keyvalue !== null) {
+          if (keyvalue !== null && keyvalue !== undefined) {
             this.setState({
-              backgroundSource: keyvalue
+              backgroundSource: keyvalue,
+              imageKey: keyvalue
             });
-            console.log('settings: successfully loaded background source');
           } else {
             console.log('Settings: no backgroundSource item in storage');
+            this.setState({
+              backgroundSource: 'DEFAULT'
+            });
           }
         }
       );
@@ -55,11 +55,10 @@ export default class Settings extends Component {
     // load textColor
     try {
       const value = await AsyncStorage.getItem('textColor').then(keyvalue => {
-        if (keyvalue !== null) {
+        if (keyvalue !== null && keyvalue !== undefined) {
           this.setState({
             textColor: keyvalue
           });
-          console.log('settings: successfully loaded textColor');
         } else {
           this.setState({
             textColor: '#ffffff'
@@ -148,15 +147,6 @@ export default class Settings extends Component {
       <View />
     );
 
-    var textColorConst = {
-      color: '#000000'
-    };
-    if (this.state.changes) {
-      textColorConst = {
-        color: '#ffffff'
-      };
-    }
-
     return (
       <ImageBackground
         style={styles.image}
@@ -203,106 +193,110 @@ export default class Settings extends Component {
           {save_button}
 
           {/* Change the backgrounds */}
-          <Text style={styles.sectionTitle}> Background </Text>
-          <View style={styles.backgroundSelection}>
-            <Picker
-              selectedValue={this.state.backgroundSource}
-              onValueChange={(itemValue, itemIndex) => {
-                this.setState({
-                  backgroundSource: itemValue,
-                  changes: true
-                });
-              }}
-              style={{ width: 200 }}
-            >
-              {/* Background options */}
-              <Picker.Item label="City" value={CONSTANTS.BACKGROUNDS.CITY} />
-              <Picker.Item
-                label="Above the trees"
-                value={CONSTANTS.BACKGROUNDS.ABOVETREE}
+          <View>
+            <View style={styles.sectionBox}>
+              <Text style={styles.sectionTitle}> Background </Text>
+            </View>
+            <View style={styles.backgroundSelection}>
+              <Picker
+                selectedValue={this.state.backgroundSource}
+                onValueChange={(itemValue, itemIndex) => {
+                  this.setState({
+                    backgroundSource: itemValue,
+                    changes: true
+                  });
+                }}
+                style={{ width: 200 }}
+              >
+                {/* Background options */}
+                <Picker.Item label="City" value={'CITY'} />
+                <Picker.Item label="Above the trees" value={'ABOVETREE'} />
+                <Picker.Item label="Nature" value={'NATURE'} />
+                <Picker.Item label="Landscapes (default)" value={'DEFAULT'} />
+                <Picker.Item label="Landscapes 2" value={'LANDSCAPES'} />
+                <Picker.Item label="Wallpaper" value={'WALLPAPER'} />
+                <Picker.Item label="Roads" value={'ROADS'} />
+                <Picker.Item label="Space" value={'SPACE'} />
+              </Picker>
+              <Image
+                source={{
+                  uri:
+                    '' +
+                    CONSTANTS.BACKGROUND_LOCATIONS +
+                    this.state.backgroundSource +
+                    '.jpg'
+                }}
+                style={styles.backgroundImage}
+                key={this.state.imageKey}
               />
-              <Picker.Item
-                label="Nature"
-                value={CONSTANTS.BACKGROUNDS.NATURE}
-              />
-              <Picker.Item
-                label="Landscapes (default)"
-                value={CONSTANTS.BACKGROUNDS.DEFAULT}
-              />
-              <Picker.Item
-                label="Landscapes 2"
-                value={CONSTANTS.BACKGROUNDS.LANDSCAPES}
-              />
-              <Picker.Item
-                label="Wallpaper"
-                value={CONSTANTS.BACKGROUNDS.WALLPAPER}
-              />
-              <Picker.Item label="Roads" value={CONSTANTS.BACKGROUNDS.ROADS} />
-              <Picker.Item label="Space" value={CONSTANTS.BACKGROUNDS.SPACE} />
-            </Picker>
-            <Image
-              source={{ url: this.state.backgroundSource }}
-              style={styles.backgroundImage}
-            />
+            </View>
           </View>
 
           {/* Change the font colors on the homepage */}
-          <Text style={[styles.sectionTitle, textColorConst]}>
-            {' '}
-            Text color on homepage{' '}
-          </Text>
-          <View style={styles.backgroundSelection}>
-            {/* Example of how selected text color will look over the selected background */}
-            <View style={styles.textImage}>
-              <Image
-                source={{ url: this.state.backgroundSource }}
-                style={styles.backgroundImage}
-              />
-              <Text
-                style={{
-                  color: this.state.textColor,
-                  position: 'absolute',
-                  top: 30,
-                  fontWeight: 'bold'
+          <View>
+            <View style={styles.sectionBox}>
+              <Text style={styles.sectionTitle}> Text color on homepage </Text>
+            </View>
+            <View style={styles.backgroundSelection}>
+              {/* Example of how selected text color will look over the selected background */}
+              <View style={styles.textImage}>
+                <Image
+                  source={{
+                    uri:
+                      '' +
+                      CONSTANTS.BACKGROUND_LOCATIONS +
+                      this.state.backgroundSource +
+                      '.jpg'
+                  }}
+                  style={styles.backgroundImage}
+                  key={this.state.imageKey}
+                />
+                <Text
+                  style={{
+                    color: this.state.textColor,
+                    position: 'absolute',
+                    top: 30,
+                    fontWeight: 'bold'
+                  }}
+                >
+                  {' '}
+                  Example{' '}
+                </Text>
+              </View>
+
+              {/* Picker to select the text Color */}
+              <Picker
+                selectedValue={this.state.textColor}
+                onValueChange={(itemValue, itemIndex) => {
+                  this.setState({
+                    textColor: itemValue,
+                    changes: true
+                  });
                 }}
+                style={{ width: 200 }}
+                itemStyle={{ color: 'white' }}
               >
-                {' '}
-                Example{' '}
-              </Text>
+                {/* text color options */}
+                <Picker.Item
+                  label="Pink"
+                  value={colors.primary}
+                  color={colors.primary}
+                />
+                <Picker.Item
+                  label="White (default)"
+                  value={CONSTANTS.colors.white}
+                />
+                <Picker.Item
+                  label="Black"
+                  value={CONSTANTS.colors.black}
+                  color={CONSTANTS.colors.black}
+                />
+              </Picker>
             </View>
 
-            {/* Picker to select the text Color */}
-            <Picker
-              selectedValue={this.state.textColor}
-              onValueChange={(itemValue, itemIndex) => {
-                this.setState({
-                  textColor: itemValue,
-                  changes: true
-                });
-              }}
-              style={{ width: 200 }}
-              itemStyle={{ color: 'white' }}
-            >
-              {/* text color options */}
-              <Picker.Item
-                label="Pink"
-                value={colors.primary}
-                color={colors.primary}
-              />
-              <Picker.Item
-                label="White (default)"
-                value={CONSTANTS.colors.white}
-              />
-              <Picker.Item
-                label="Black"
-                value={CONSTANTS.colors.black}
-                color={CONSTANTS.colors.black}
-              />
-            </Picker>
+            {/* Save changes button */}
+            {save_button}
           </View>
-
-          {/* Save changes button */}
-          {save_button}
         </View>
       </ImageBackground>
     );
@@ -339,8 +333,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   backgroundSelection: {
-    borderColor: '#808080',
-    borderTopWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center'
@@ -351,7 +343,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: fonts.base,
     textAlign: 'center',
-    fontSize: 20
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#ffffff'
+  },
+  sectionBox: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderBottomWidth: 1,
+    borderColor: '#000000'
   },
   SaveButton: {
     backgroundColor: '#61B329',

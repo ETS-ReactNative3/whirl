@@ -16,7 +16,7 @@ class App extends Component {
     isLoading: true
   };
   async componentDidMount() {
-    StatusBar.setHidden(true);
+    // StatusBar.setHidden(true);
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.setState({ user, isLoading: false });

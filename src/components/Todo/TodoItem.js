@@ -30,13 +30,8 @@ class TodoItem extends Component {
         style={{
           flexDirection: 'row',
           alignItems: 'center'
-          // justifyContent: 'space-around'
         }}
       >
-        {/* <Image
-          source={require('../../assets/icons/circle.png')}
-          style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
-        /> */}
         <Image
           source={require('../../assets/icons/circle.png')}
           style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
@@ -48,18 +43,8 @@ class TodoItem extends Component {
         style={{
           flexDirection: 'row',
           alignItems: 'center'
-          // justifyContent: 'space-around'
         }}
       >
-        {/* <Image
-          source={require('../../assets/icons/circle.png')}
-          style={{
-            width: 8,
-            height: 8,
-            marginRight: 5,
-            marginLeft: 5
-          }}
-        /> */}
         <Image
           source={require('../../assets/icons/circle.png')}
           style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
@@ -69,13 +54,6 @@ class TodoItem extends Component {
     );
     return (
       <TouchableOpacity onPress={this.onItemPressed} style={styles.listItem}>
-        {/* Bullet point */}
-        {/* <Image
-          source={require('../../assets/icons/circle.png')}
-          style={{ width: 8, height: 8, marginRight: 10, marginLeft: 5 }}
-        /> */}
-        {/* <View style={{ marginRight: 10, marginLeft: 5 }} /> */}
-
         {/* Todo Item */}
         {text}
 

@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  ListView,
-  ActivityIndicator,
-  Text
-} from 'react-native';
+import { View, StyleSheet, ListView } from 'react-native';
 import TodoItem from './TodoItem';
-import Amplify, { API, Auth } from 'aws-amplify';
 
 class todoList extends Component {
   state = {
@@ -16,9 +8,9 @@ class todoList extends Component {
   };
 
   async componentDidMount() {
-    // const path = '/Todo/' + this.state.email;
-    console.log('Todolist api response: ');
-    console.log(this.props.apiResponse);
+    this.setState({
+      apiResponse: this.props.apiResponse
+    });
     var ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
@@ -26,8 +18,6 @@ class todoList extends Component {
       dataSource: ds.cloneWithRows(this.props.apiResponse),
       isLoading: !this.state.isLoading
     });
-    // console.log('datasource: ');
-    // console.log(dataSource);
   }
 
   render() {
@@ -39,16 +29,28 @@ class todoList extends Component {
       <ListView
         dataSource={this.state.dataSource}
         enableEmptySections={true}
-        renderRow={rowData => (
-          <TodoItem
-            todo={rowData.Content}
-            user={rowData.User}
-            strikethrough={rowData.Strikethrough}
-            onDeletePressed={() =>
-              this.props.onDeletePressed(rowData.Date, rowData.User)
-            }
-          />
-        )}
+        renderRow={(rowData, sectionId, rowId) =>
+          rowId !== this.props.apiResponse.length - 1 ? (
+            <TodoItem
+              todo={rowData.Content}
+              user={rowData.User}
+              strikethrough={rowData.Strikethrough}
+              onDeletePressed={() =>
+                this.props.onDeletePressed(rowData.Date, rowData.User, rowId)
+              }
+            />
+          ) : (
+            <TodoItem
+              todo={rowData.Content}
+              user={rowData.User}
+              strikethrough={rowData.Strikethrough}
+              onDeletePressed={() =>
+                this.props.onDeletePressed(rowData.Date, rowData.User, rowId)
+              }
+              padding={true}
+            />
+          )
+        }
       />
     );
   }

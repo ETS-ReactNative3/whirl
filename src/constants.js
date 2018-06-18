@@ -1,4 +1,5 @@
 import { fonts, colors } from './theme';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 export default {
   BACKGROUNDS: {
@@ -16,5 +17,6 @@ export default {
     white: '#ffffff',
     pink: '#FF1493',
     black: '#000000'
-  }
+  },
+  BACKGROUND_LOCATIONS: RNFetchBlob.fs.dirs.DocumentDir + '/Backgrounds/'
 };

@@ -5,24 +5,31 @@ import {
   View,
   TouchableOpacity,
   Image,
+  AsyncStorage,
   ActivityIndicator,
-  AsyncStorage
+  Modal
 } from 'react-native';
 
-import TodoInput from './TodoInput';
 import TodoList from './TodoList';
 
-import Amplify, { API, Auth } from 'aws-amplify';
+import { API } from 'aws-amplify';
 
-import { colors, fonts } from '../../theme';
+import ModalScreen from '../ModalScreen';
 
 class Todo extends Component {
   state = {
     apiResponse: '',
     isLoading: true,
-    todoItemCount: 0
+    todoItemCount: 0,
+    todoAdded: false,
+    uniqueValue: 1,
+    backgroundSource: '',
+    modalVisible: false
   };
 
+  /**
+   * Load users email address to get their todo items from the database
+   */
   async componentDidMount() {
     try {
       const value = AsyncStorage.getItem('email').then(keyvalue => {
@@ -30,9 +37,7 @@ class Todo extends Component {
           this.setState({
             email: keyvalue
           });
-          console.log('Todo: successfully loaded email: ' + this.state.email);
-          console.log('Todo: email loaded as: ' + keyvalue);
-          this.updateData();
+          this.getData();
         } else {
           console.log('Todo: no email item in storage');
           this.setState({
@@ -50,24 +55,20 @@ class Todo extends Component {
     }
   }
 
-  async updateData() {
+  /**
+   * Load the users data from the database
+   */
+  async getData() {
     this.setState({
       isLoading: true
     });
-    console.log('getting list items');
     const path = '/TodoItems/' + this.state.email;
-    console.log('todo path: ' + path);
     try {
       const apiResponse = await API.get('TodoItemsCRUD', path);
-      console.log('api response 1: ');
-      console.log(apiResponse);
       this.setState({
         apiResponse,
-        isLoading: false,
-        todoItemCount: apiResponse.length
+        isLoading: false
       });
-      console.log('state api response 2: ');
-      console.log(this.state.apiResponse);
     } catch (e) {
       console.log('error updating data: ');
       console.log(e);
@@ -77,77 +78,123 @@ class Todo extends Component {
     }
   }
 
-  async todoAdded() {
-    const todoItemsUpdatedCount = this.state.todoItemCount + 1;
-    console.log('Todo: in todoAdded');
-    do {
-      await this.updateData();
-    } while (todoItemsUpdatedCount != this.state.todoItemCount);
-
-    console.log(
-      'updated count: ' +
-        todoItemsUpdatedCount +
-        ' | number downloaded: ' +
-        this.state.todoItemCount
-    );
+  /**
+   * Upon adding a new todo item, immediately add it to the array of todo items.
+   *
+   * @param todo is the new todo item
+   */
+  refreshData(todo) {
+    console.log('Api response: ', this.state.apiResponse);
+    var arr = this.state.apiResponse.push(todo.body);
+    this.setState({
+      apiResponse: this.state.apiResponse
+    });
+    this.forceRemount();
+    this.props.scroll.scrollToEnd({ animated: false });
   }
 
-  async deleteTodo(date, user) {
+  // used to quickly reflect the changes to the todo items array
+  forceRemount = () => {
+    this.setState(({ uniqueValue }) => ({
+      uniqueValue: uniqueValue + 1
+    }));
+  };
+
+  /**
+   * Add todo item to the array of todo items (so as to be faster, more responsive for the user),
+   * and upload to the database.
+   */
+  todoAddedHandler = todo => {
+    var date = new Date();
+
+    let newNote = {
+      body: {
+        Content: todo.trim(),
+        Completed: 'false',
+        User: this.state.email,
+        Date: date.getTime().toString()
+      }
+    };
+
+    this.refreshData(newNote);
+    this.saveNote(newNote);
+  };
+
+  // Create a new Note according to the columns we defined earlier
+  async saveNote(note) {
+    const path = '/TodoItems';
+
+    // Use the API module to save the note to the database
+    try {
+      const apiResponse = API.put('TodoItemsCRUD', path, note).then(value => {
+        if (value !== null) {
+          if (value['success'] === undefined) {
+            Alert.alert('There was an error saving your todo item.');
+          }
+          this.setState({ value });
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      Alert.alert('There was an error saving your todo item.');
+    }
+  }
+
+  /**
+   * Delete a todo item from the array containing todo items.
+   * Used to quickly reflect changes to the todo items so as to make the
+   * users experience more fluid.
+   */
+  async deleteTodo(date, user, index) {
+    var array = [...this.state.apiResponse];
+    array.splice(index, 1);
+    this.setState({ apiResponse: array });
+    this.forceRemount();
+
     const path = '/TodoItems/object/' + user + '/' + date;
-    console.log(path);
     try {
       const apiResponse = await API.del('TodoItemsCRUD', path);
       console.log(
         'response from deleting note: ' + JSON.stringify(apiResponse)
       );
-      this.setState({
-        apiResponse,
-        isLoading: true
-      });
     } catch (e) {
       console.log(e);
     }
-    this.todoDeleted();
   }
 
-  async todoDeleted() {
-    const todoItemsUpdatedCount = this.state.todoItemCount - 1;
-    do {
-      await this.updateData();
-    } while (todoItemsUpdatedCount != this.state.todoItemCount);
-
-    console.log(
-      'updated count: ' +
-        todoItemsUpdatedCount +
-        ' | number downloaded: ' +
-        this.state.todoItemCount
-    );
+  /**
+   * set whether the modal is visible
+   * @param {boolean} visible
+   */
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
   }
 
   render() {
-    const list = this.state.isLoading ? (
-      <View style={{ flex: 1, paddingTop: 20 }}>
-        <ActivityIndicator />
-      </View>
-    ) : (
-      <TodoList
-        style={styles.TodoList}
-        apiResponse={this.state.apiResponse}
-        onDeletePressed={this.deleteTodo.bind(this)}
-      />
-    );
+    const apiR = this.state.apiResponse;
 
     return (
       <View>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+        >
+          <ModalScreen
+            Header={'Add a Todo'}
+            InputType={'Todo'}
+            InputPlaceholder={'New Todo'}
+            autoCapitalize={'sentences'}
+            ButtonTitle={'Add Todo'}
+            addedHandler={this.todoAddedHandler.bind(this)}
+            setModalVisible={this.setModalVisible.bind(this)}
+          />
+        </Modal>
         <Text style={styles.TodoHeader}>Todo:</Text>
         <View style={styles.inputContainer}>
           <TouchableOpacity
             style={styles.todoButton}
-            onPress={() =>
-              this.props.navigation.navigate('MyModal', {
-                updateData: this.todoAdded.bind(this)
-              })
-            }
+            onPress={() => this.setModalVisible(true)}
           >
             <Text style={styles.todoInput}>New Todo</Text>
             <Image
@@ -156,7 +203,18 @@ class Todo extends Component {
             />
           </TouchableOpacity>
         </View>
-        {list}
+        {this.state.isLoading ? (
+          <View>
+            <ActivityIndicator style={{ flex: 1, paddingTop: 20 }} />
+          </View>
+        ) : (
+          <TodoList
+            style={styles.TodoList}
+            apiResponse={apiR}
+            onDeletePressed={this.deleteTodo.bind(this)}
+            key={this.state.uniqueValue}
+          />
+        )}
       </View>
     );
   }
@@ -191,57 +249,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#808080',
     textAlignVertical: 'top'
-  },
-  image: {
-    flexGrow: 1,
-    height: null,
-    width: null
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center'
-  },
-  headerText: {
-    margin: 5,
-    color: '#ffffff',
-    fontSize: 30,
-    fontFamily: fonts.light
-  },
-  close: {},
-  add: {},
-  body: {
-    marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderBottomWidth: 0.2,
-    borderColor: colors.primary
-  },
-  inputLineContainer: {
-    marginTop: 20,
-    backgroundColor: 'rgba(0,0,0,0.3)'
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  container: {
-    flex: 1,
-    paddingTop: 60,
-    paddingHorizontal: 40
-  },
-  input: {
-    color: '#ffffff',
-    padding: 10,
-    borderBottomWidth: 1.5,
-    fontSize: 16,
-    borderBottomColor: colors.primary,
-    fontFamily: fonts.light,
-    fontWeight: 'bold',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
   }
 });
 

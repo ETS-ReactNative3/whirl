@@ -1,27 +1,17 @@
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 
-const MyStatusBar = ({ backgroundColor = '#00000000' }) => {
-  // const
+const StatusBar = ({ backgroundColor = '#00000000' }) => {
   return (
     <View
-      style={
-        // [styles.statusBar, backgroundColor]
-        {
-          paddingTop: marginTop,
-          backgroundColor: backgroundColor
-        }
-      }
+      style={{
+        paddingTop: marginTop,
+        backgroundColor: backgroundColor
+      }}
     />
   );
 };
 
 const marginTop = Platform.OS === 'ios' ? 20 : 0;
-// const styles = StyleSheet.create({
-//   statusBar: {
-//     paddingTop: marginTop,
-//     backgroundColor: '#00000000'
-//   }
-// });
 
-export default MyStatusBar;
+export default StatusBar;
