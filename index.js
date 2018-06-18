@@ -13,7 +13,11 @@ import Amplify from 'aws-amplify';
 
 // hide isMounted() warnings due to them being in node_modules
 import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated']);
+YellowBox.ignoreWarnings([
+  'Warning: isMounted(...) is deprecated',
+  'Module RCTImageLoader',
+  'Module RNFetchBlob'
+]);
 
 Amplify.configure(config);
 // App
