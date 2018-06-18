@@ -17,19 +17,10 @@ class Start extends Component {
         fileCache: true,
         path: dirs.DocumentDir + '/Backgrounds/' + link + '.jpg',
         appendExt: 'jpg'
-      })
-        .fetch('GET', Constants.BACKGROUNDS[link])
-        .then(res => {
-          this.setState({
-            image:
-              Platform.OS === 'android'
-                ? 'file://' + res.path()
-                : '' + res.path(),
-            isLoading: false
-          });
-        });
+      }).fetch('GET', Constants.BACKGROUNDS[link]);
     }
 
+    console.log(dirs.DocumentDir);
     this.props.navigation.navigate('Home');
   }
 
