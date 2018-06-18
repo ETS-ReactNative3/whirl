@@ -2,30 +2,22 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  TextInput,
   Text,
   TouchableOpacity,
-  TouchableHighlight,
   Modal,
-  ImageBackground,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Image,
   AsyncStorage
 } from 'react-native';
 
-import Input from '../Input';
-import Button from '../Button';
-import { colors, fonts } from '../../theme';
-import StatusBar from '../StatusBar';
-import Constants from '../../constants';
+import { fonts } from '../../theme';
+
+import ModalScreen from '../ModalScreen';
 
 class MainFocusInput extends Component {
   state = {
     focus: '',
     modalVisible: false,
-    textColor: '#ffffff',
-    backgroundSource: 'DEFAULT',
+    textColor: '',
+    backgroundSource: '',
     mounted: false
   };
 
@@ -35,7 +27,7 @@ class MainFocusInput extends Component {
    * preventing the (error) warning: Can't call setState (or forceUpdate) on an unmounted component.
    */
   async componentDidMount() {
-    this.mounted = true;
+    this.state.mounted = true;
     this.setValues();
   }
 
@@ -44,7 +36,7 @@ class MainFocusInput extends Component {
    * setState on an unmounted component.
    */
   componentWillUnmount() {
-    this.mounted = false;
+    this.state.mounted = false;
   }
 
   /**
@@ -56,18 +48,13 @@ class MainFocusInput extends Component {
     try {
       const value = await AsyncStorage.getItem('textColor').then(keyvalue => {
         if (keyvalue !== null) {
-          this.setState({
-            textColor: keyvalue
-          });
+          if (this.state.mounted) {
+            this.setState({
+              textColor: keyvalue
+            });
+          }
           console.log('MainFocusInput: successfully loaded textColor');
         } else {
-          if (this.mounted) {
-            this.setState({
-              textColor: '#ffffff'
-            });
-          } else {
-            console.log('mainfocusinput unmounted');
-          }
           console.log('MainFocusInput: no textColor item in storage');
         }
       });
@@ -77,21 +64,21 @@ class MainFocusInput extends Component {
       );
     }
 
-    // load backgroundSource url from local storage
+    // load backgroundSource from local storage
     try {
       const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
           if (keyvalue !== null) {
-            if (this.mounted) {
+            if (this.state.mounted) {
               this.setState({
                 backgroundSource: keyvalue
               });
-            } else {
-              console.log('mainfocusinput unmounted');
             }
-            console.log(keyvalue);
           } else {
             console.log('MainFocusInput: no backgroundSource item in storage');
+            this.setState({
+              backgroundSource: 'DEFAULT'
+            });
           }
         }
       );
@@ -99,6 +86,9 @@ class MainFocusInput extends Component {
       console.log(
         'MainFocusInput: theres been an error getting the backgroundSource item'
       );
+      this.setState({
+        backgroundSource: 'DEFAULT'
+      });
     }
   }
 
@@ -106,7 +96,6 @@ class MainFocusInput extends Component {
    * update the state of this class to the latest focus
    */
   onChangeText = (key, value) => {
-    console.log(key + ' ' + value);
     this.setState({
       [key]: value
     });
@@ -116,10 +105,10 @@ class MainFocusInput extends Component {
    * if the focus input is not an empty string, call the props method
    * to submit the new focus.
    */
-  focusAddedHandler = () => {
-    if (this.state.focus.trim() === '') return;
+  focusAddedHandler = focus => {
+    if (focus.trim() === '') return;
 
-    this.props.onFocusAdded(this.state.focus.trim());
+    this.props.onFocusAdded(focus.trim());
   };
 
   /**
@@ -131,114 +120,46 @@ class MainFocusInput extends Component {
   }
 
   render() {
-    // get the textColor. Used to override textColor in any styles.
-    const textColorConst = {
-      color: this.state.textColor
-    };
+    /*
+     * set the color of the main focus using the users preference.
+     * If no preference set (in settings), color defaults to #ffffff
+     */
+    var textColorConst;
+    var borderColor;
 
-    // the underline on the homescreen should be set to the same as the textColor
-    const borderColor = {
-      borderColor: this.state.textColor
-    };
+    if (this.state.textColor === '') {
+      textColorConst = {
+        color: '#ffffff'
+      };
+      borderColor = {
+        borderColor: '#ffffff'
+      };
+    } else {
+      textColorConst = {
+        color: this.state.textColor
+      };
+      borderColor = {
+        borderColor: this.state.textColor
+      };
+    }
 
     return (
       <View>
-        {/* Open a modal for the text input */}
+        {/* Input modal */}
         <Modal
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
         >
-          <ImageBackground
-            style={styles.image}
-            source={{
-              uri:
-                '' +
-                Constants.BACKGROUND_LOCATIONS +
-                this.state.backgroundSource +
-                '.jpg'
-            }}
-            imageStyle={{ resizeMode: 'cover' }}
-          >
-            {/* TouchAbleWithouFeedback component to close keyboard by pressing anywhere */}
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}
-              style={{ flex: 1 }}
-            >
-              <View style={{ flex: 1 }}>
-                <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
-                {/* Header bar at the top of the page */}
-                <View style={styles.header}>
-                  {/* close button in top left */}
-
-                  <TouchableHighlight
-                    onPress={() => {
-                      this.setModalVisible(!this.state.modalVisible);
-                    }}
-                    style={styles.close}
-                  >
-                    <Image
-                      source={require('../../assets/icons/cross.png')}
-                      style={{ width: 50, height: 50 }}
-                    />
-                  </TouchableHighlight>
-
-                  {/* Page title */}
-                  <Text style={styles.headerText}>Add a main focus</Text>
-
-                  {/* add button in top right */}
-                  <TouchableHighlight
-                    onPress={() => {
-                      // add the new focus
-                      this.focusAddedHandler();
-
-                      // hide modal at the same time
-                      this.setModalVisible(!this.state.modalVisible);
-                    }}
-                    style={styles.add}
-                  >
-                    <Image
-                      source={require('../../assets/icons/tick.png')}
-                      style={{ width: 50, height: 50 }}
-                    />
-                  </TouchableHighlight>
-                </View>
-
-                {/* Main body of the page */}
-                <View style={styles.container}>
-                  {/*  Focus input */}
-                  <View style={styles.inputLineContainer}>
-                    <Input
-                      style={styles.input}
-                      type="focus"
-                      placeholder="Focus"
-                      autoCorrect={true}
-                      autoCapitalize="sentences"
-                      multiline={true}
-                      autoFocus={true}
-                      placeholderTextColor="#ffffff"
-                      onChangeText={this.onChangeText}
-                    />
-                  </View>
-
-                  {/* Add focus button. Saves the new focus value. */}
-                  <View style={styles.button}>
-                    <Button
-                      title="Add Focus"
-                      onPress={() => {
-                        // add the new focus
-                        this.focusAddedHandler();
-
-                        // hide modal at the same time
-                        this.setModalVisible(!this.state.modalVisible);
-                      }}
-                    />
-                  </View>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </ImageBackground>
+          <ModalScreen
+            Header={'Add a main focus'}
+            InputType={'focus'}
+            InputPlaceholder={'Focus'}
+            autoCapitalize={'sentences'}
+            ButtonTitle={'Add Focus'}
+            addedHandler={this.focusAddedHandler.bind(this)}
+            setModalVisible={this.setModalVisible.bind(this)}
+          />
         </Modal>
 
         {/* This button is the 'input' line seen on the homescreen. 
@@ -262,17 +183,6 @@ class MainFocusInput extends Component {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  container: {
-    flex: 1,
-    paddingTop: 60,
-    paddingHorizontal: 40
-  },
   focusInput: {
     borderBottomWidth: 2,
     paddingTop: 25,
@@ -284,47 +194,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textShadowColor: '#000000',
     fontFamily: fonts.light
-  },
-  image: {
-    flexGrow: 1,
-    height: null,
-    width: null
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center'
-  },
-  headerText: {
-    margin: 5,
-    color: '#ffffff',
-    fontSize: 30,
-    fontFamily: fonts.light
-  },
-  body: {
-    marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderBottomWidth: 0.2,
-    borderColor: colors.primary
-  },
-  inputLineContainer: {
-    marginTop: 20,
-    backgroundColor: 'rgba(0,0,0,0.3)'
-  },
-  button: {},
-  input: {
-    color: '#ffffff',
-    padding: 10,
-    borderBottomWidth: 1.5,
-    fontSize: 16,
-    borderBottomColor: colors.primary,
-    fontFamily: fonts.light,
-    fontWeight: 'bold',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
   }
 });
 

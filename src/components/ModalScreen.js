@@ -24,34 +24,12 @@ import Input from './Input';
 
 class ModalScreen extends Component {
   state = {
-    todo: '',
-    allTodo: [],
-    modalVisible: false,
-    backgroundSource: 'DEFAULT'
+    backgroundSource: '',
+    item: ''
   };
 
   async componentDidMount() {
-    // load email address
-    try {
-      const value = AsyncStorage.getItem('email').then(keyvalue => {
-        if (keyvalue !== null) {
-          this.setState({
-            User: keyvalue
-          });
-          console.log('ModalScreen: successfully loaded email');
-        } else {
-          console.log('ModalScreen: no email item in storage');
-          this.setState({
-            isLoading: false
-          });
-        }
-      });
-    } catch (error) {
-      console.log(
-        'ModalScreen: theres been an error getting the email item: ' + error
-      );
-    }
-
+    // load background
     try {
       const value = await AsyncStorage.getItem('backgroundSource').then(
         keyvalue => {
@@ -73,140 +51,100 @@ class ModalScreen extends Component {
   }
 
   /**
-   * update the todo value in state as text is being inputted
+   * update the item value in state as text is being inputted
    */
   onChangeText = (key, value) => {
-    console.log(key + ' ' + value);
+    console.log(key, value);
     this.setState({
-      [key]: value
+      item: value
     });
   };
 
-  /**
-   * Add todo item to database
-   */
-  todoAddedHandler = () => {
-    if (this.state.todo.trim() === '') {
-      Alert.alert('Todo item cannot be empty');
+  itemAdded() {
+    if (this.state.item.trim() === '') {
+      Alert.alert(this.props.InputType + ' item cannot be empty');
       return;
     }
-
-    var date = new Date();
-
-    let newNote = {
-      body: {
-        Content: this.state.todo.trim(),
-        Completed: 'false',
-        User: this.state.User,
-        Date: date.getTime().toString()
-      }
-    };
-
-    this.saveNote(newNote);
-    this.props.navigation.goBack();
-    this.props.navigation.state.params.updateData(newNote);
-  };
-
-  // Create a new Note according to the columns we defined earlier
-  saveNote(note) {
-    const path = '/TodoItems';
-
-    console.log(note.body.User);
-    console.log(note.body.Content);
-    console.log(note.body.Completed);
-    console.log(note.body.Date);
-
-    // Use the API module to save the note to the database
-    try {
-      const apiResponse = API.put('TodoItemsCRUD', path, note).then(value => {
-        if (value !== null) {
-          console.log('api response: ', value);
-        }
-      });
-      this.setState({ apiResponse });
-    } catch (e) {
-      console.log(e);
-    }
+    this.props.addedHandler(this.state.item);
+    this.props.setModalVisible(false);
   }
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <ImageBackground
-          style={styles.image}
-          source={{
-            uri:
-              '' +
-              Constants.BACKGROUND_LOCATIONS +
-              this.state.backgroundSource +
-              '.jpg'
-          }}
-          imageStyle={{ resizeMode: 'cover' }}
+      <ImageBackground
+        style={styles.image}
+        source={{
+          uri:
+            '' +
+            Constants.BACKGROUND_LOCATIONS +
+            this.state.backgroundSource +
+            '.jpg'
+        }}
+        imageStyle={{ resizeMode: 'cover' }}
+      >
+        <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
+        <TouchableWithoutFeedback
+          onPress={Keyboard.dismiss}
+          accessible={false}
+          style={{ flex: 1 }}
         >
-          <StatusBar backgroundColor="rgba(0,0,0,0.5)" />
-          <TouchableWithoutFeedback
-            onPress={Keyboard.dismiss}
-            accessible={false}
-            style={{ flex: 1 }}
-          >
-            <View style={{ flex: 1 }}>
-              <View style={styles.header}>
-                {/* close button in top left */}
-                <TouchableHighlight
-                  onPress={() => this.props.navigation.goBack()}
-                  style={styles.close}
-                >
-                  <Image
-                    source={require('../assets/icons/cross.png')}
-                    style={{ width: 50, height: 50 }}
-                  />
-                </TouchableHighlight>
+          <View style={{ flex: 1 }}>
+            <View style={styles.header}>
+              {/* close button in top left */}
+              <TouchableHighlight
+                onPress={() => this.props.setModalVisible(false)}
+                style={styles.close}
+              >
+                <Image
+                  source={require('../assets/icons/cross.png')}
+                  style={{ width: 50, height: 50 }}
+                />
+              </TouchableHighlight>
 
-                {/* Page title */}
-                <Text style={styles.headerText}>Add a Todo</Text>
+              {/* Page title */}
+              <Text style={styles.headerText}>{this.props.Header}</Text>
 
-                {/* add button in top right */}
-                <TouchableHighlight
-                  onPress={() => {
-                    // add the new focus
-                    this.todoAddedHandler();
-                  }}
-                  style={styles.add}
-                >
-                  <Image
-                    source={require('../assets/icons/tick.png')}
-                    style={{ width: 50, height: 50 }}
-                  />
-                </TouchableHighlight>
+              {/* add button in top right */}
+              <TouchableHighlight
+                onPress={() => {
+                  // add the new focus
+                  this.itemAdded();
+                }}
+                style={styles.add}
+              >
+                <Image
+                  source={require('../assets/icons/tick.png')}
+                  style={{ width: 50, height: 50 }}
+                />
+              </TouchableHighlight>
+            </View>
+            <View style={styles.container}>
+              <View style={styles.inputLineContainer}>
+                <Input
+                  style={styles.input}
+                  type={this.props.InputType}
+                  placeholder={this.props.InputPlaceholder}
+                  autoCorrect={true}
+                  autoCapitalize={this.props.autoCapitalize}
+                  multiline={true}
+                  autoFocus={true}
+                  placeholderTextColor="#ffffff"
+                  onChangeText={this.onChangeText}
+                />
               </View>
-              <View style={styles.container}>
-                <View style={styles.inputLineContainer}>
-                  <Input
-                    style={styles.input}
-                    type="todo"
-                    placeholder="New Todo"
-                    autoCorrect={true}
-                    autoCapitalize="sentences"
-                    multiline={true}
-                    autoFocus={true}
-                    placeholderTextColor="#ffffff"
-                    onChangeText={this.onChangeText}
-                  />
-                </View>
-                <View style={styles.button}>
-                  <Button
-                    title="Add Todo"
-                    onPress={() => {
-                      // add the new focus
-                      this.todoAddedHandler();
-                    }}
-                  />
-                </View>
+              <View style={styles.button}>
+                <Button
+                  title={this.props.ButtonTitle}
+                  onPress={() => {
+                    // add the new item
+                    this.itemAdded();
+                  }}
+                />
               </View>
             </View>
-          </TouchableWithoutFeedback>
-        </ImageBackground>
-      </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </ImageBackground>
     );
   }
 }
@@ -224,7 +162,7 @@ const styles = StyleSheet.create({
   todoInput: {
     marginTop: 7,
     marginLeft: 10,
-    // marginBottom: 5,
+
     fontSize: 20,
     color: '#808080',
     textAlignVertical: 'top'
@@ -233,8 +171,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     height: null,
     width: null
-    // alignItems: 'center',
-    // justifyContent:'center',
   },
   header: {
     flexDirection: 'row',
@@ -245,12 +181,10 @@ const styles = StyleSheet.create({
   headerText: {
     margin: 5,
     color: '#ffffff',
-    // fontWeight: 'bold',
+
     fontSize: 30,
     fontFamily: fonts.light
   },
-  close: {},
-  add: {},
   body: {
     marginTop: 20,
     alignItems: 'center',
@@ -263,10 +197,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: 'rgba(0,0,0,0.3)'
   },
-  button: {},
+
   container: {
     flex: 1,
-    // justifyContent: 'center',
+
     paddingTop: 60,
     paddingHorizontal: 40
   },
