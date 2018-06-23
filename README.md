@@ -27,22 +27,17 @@ The homescreen contains options for the user to add a main focus for the day (by
 
 <p align="center">
   <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Homescreen.png" width="240">
-</p>
-
-
-Adding a new focus or todo item opens a modal for the users input. Example of the new main focus input is as follows: 
-
-
-<p align="center">
   <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/NewMainFocus.png" width="240">
 </p>
 
 
-This is how the screen looks when populated with a main focus and a couple of todo items.
+The background image and text color of the heads can be changed in the settings page. A live preview of the changes is shown. 
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/populated.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings.png" width= "240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings2.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/SettingsChanged.png" width="240">
 </p>
 
 
