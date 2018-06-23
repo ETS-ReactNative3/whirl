@@ -70,8 +70,7 @@ class Todo extends Component {
         isLoading: false
       });
     } catch (e) {
-      console.log('error updating data: ');
-      console.log(e);
+      console.log('error updating data: ', e);
       this.setState({
         isLoading: false
       });
@@ -84,13 +83,12 @@ class Todo extends Component {
    * @param todo is the new todo item
    */
   refreshData(todo) {
-    console.log('Api response: ', this.state.apiResponse);
     var arr = this.state.apiResponse.push(todo.body);
     this.setState({
       apiResponse: this.state.apiResponse
     });
     this.forceRemount();
-    this.props.scroll.scrollToEnd({ animated: false });
+    this.props.scroll.current.scrollToEnd({ animated: false });
   }
 
   // used to quickly reflect the changes to the todo items array

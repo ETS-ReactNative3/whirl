@@ -10,6 +10,7 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -30,8 +31,11 @@ class Homescreen extends Component {
     this.state = {
       greetingText: this.getGreeting(),
       uniqueKey: 1,
-      loading: true
+      loading: true,
+      backgroundSource: '',
+      textColor: ''
     };
+    this.scrollView = React.createRef();
   }
 
   /**
@@ -74,8 +78,11 @@ class Homescreen extends Component {
     try {
       await AsyncStorage.setItem('email', email);
       console.log('Home: email successfully stored');
+      this.setState({
+        uniqueKey: this.state.uniqueKey + 1
+      });
     } catch (error) {
-      console.log('Home: error setting the email item in storage: ');
+      console.log('Home: error setting the email item in storage: ', error);
       console.log(error);
     }
   }
@@ -83,17 +90,11 @@ class Homescreen extends Component {
   /**
    * Store the default values of backgroundSource and textColor to async storage
    */
-  async storeDefaults() {
-    await AsyncStorage.multiSet([
+  storeDefaults() {
+    AsyncStorage.multiSet([
       ['backgroundSource', 'DEFAULT'],
       ['textColor', '#ffffff']
-    ]).then(
-      this.setState({
-        backgroundSource: 'DEFAULT',
-        textColor: '#ffffff',
-        backgroundKey: 'DEFAULT'
-      })
-    );
+    ]);
   }
 
   /**
@@ -105,7 +106,7 @@ class Homescreen extends Component {
   async componentDidMount() {
     const user = await Auth.currentAuthenticatedUser();
 
-    AsyncStorage.multiGet(
+    await AsyncStorage.multiGet(
       ['name', 'backgroundSource', 'textColor'],
       (err, stores) => {
         stores.map((result, i, store) => {
@@ -118,15 +119,19 @@ class Homescreen extends Component {
         });
         if (this.state.name === undefined || this.state.name === null) {
           user.getUserAttributes(this.getPersonalDetails);
+          this.setState({
+            backgroundSource: 'DEFAULT',
+            textColor: '#ffffff'
+          });
           this.storeDefaults();
         }
         this.setState({
-          uniqueKey: this.state.uniqueKey + 1,
-          backgroundKey: this.state.backgroundSource
+          uniqueKey: this.state.uniqueKey + 1
         });
       }
     ).then(() => {
       this.setState({
+        backgroundSource: this.state.backgroundSource,
         loading: false
       });
     });
@@ -167,19 +172,17 @@ class Homescreen extends Component {
       color: this.state.textColor
     };
 
+    const backgroundLocation = String(
+      Constants.BACKGROUND_LOCATIONS + this.state.backgroundSource + '.jpg'
+    );
+
+    console.log('home bg: ', this.state.backgroundSource);
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground
           style={styles.image}
-          source={{
-            uri:
-              '' +
-              Constants.BACKGROUND_LOCATIONS +
-              this.state.backgroundSource +
-              '.jpg'
-          }}
+          source={{ uri: backgroundLocation }}
           imageStyle={{ resizeMode: 'cover' }}
-          key={this.state.backgroundKey}
         >
           {/* Include status bar to leave width for status bar */}
           <StatusBar />
@@ -198,32 +201,28 @@ class Homescreen extends Component {
                 />
               </TouchableOpacity>
             </View>
-
-            {/* Page content wrapped in a scroll view */}
             <ScrollView
-              ref={ref => (this.scrollView = ref)}
+              ref={this.scrollView}
               contentContainerStyle={{
                 flexGrow: 1,
                 paddingBottom: 50,
                 marginBottom: 50
               }}
+              key={this.state.uniqueKey}
             >
-              {/* Greeting */}
               {this.state.loading ? (
                 <View>
                   <ActivityIndicator style={{ flex: 1, paddingTop: 100 }} />
                 </View>
               ) : (
-                <View style={{ flex: 1 }}>
+                <View>
                   <Text style={[styles.header, textColorConst]}>
                     {this.state.greetingText} {'\n'}
                     {this.state.name}
                   </Text>
-
                   <View style={styles.mainFocus}>
                     <MainFocus key={this.state.uniqueKey} />
                   </View>
-
                   <View style={styles.todos}>
                     <Todo
                       navigation={this.props.navigation}
