@@ -6,9 +6,11 @@ import Amplify, { Auth, API } from 'aws-amplify';
 import aws_exports from './aws-exports';
 
 import { withAuthenticator } from 'aws-amplify-react-native';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 import Tabs from './auth/Tabs';
 import Nav from './nav/Nav';
+import Constants from './constants';
 
 class App extends Component {
   state = {
@@ -17,6 +19,17 @@ class App extends Component {
   };
   async componentDidMount() {
     // StatusBar.setHidden(true);
+
+    // load the default background image
+    let dirs = RNFetchBlob.fs.dirs;
+    const initial = 'DEFAULT';
+    await RNFetchBlob.config({
+      session: 'backgrounds',
+      fileCache: true,
+      path: dirs.DocumentDir + '/Backgrounds/' + initial + '.jpg',
+      appendExt: 'jpg'
+    }).fetch('GET', Constants.BACKGROUNDS[initial]);
+
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.setState({ user, isLoading: false });

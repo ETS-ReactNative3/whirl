@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { View, Platform } from 'react-native';
+import { View } from 'react-native';
 import Constants from '../constants';
 import RNFetchBlob from 'react-native-fetch-blob';
 
 class Start extends Component {
-  state = {
-    image: '',
-    loading: true
-  };
-
-  componentDidMount() {
+  async componentDidMount() {
     let dirs = RNFetchBlob.fs.dirs;
     for (link in Constants.BACKGROUNDS) {
       RNFetchBlob.config({
@@ -20,7 +15,6 @@ class Start extends Component {
       }).fetch('GET', Constants.BACKGROUNDS[link]);
     }
 
-    console.log(dirs.DocumentDir);
     this.props.navigation.navigate('Home');
   }
 
