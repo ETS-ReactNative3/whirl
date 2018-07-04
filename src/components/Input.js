@@ -12,6 +12,7 @@ export default ({
   ref,
   autoCapitalize = 'none',
   autoCorrect = false,
+  keyboadType = 'default',
   ...props
 }) => (
   <TextInput
@@ -24,6 +25,7 @@ export default ({
     underlineColorAndroid="transparent"
     multiline={multiline}
     ref={ref}
+    keyboardType={keyboadType}
     {...props}
   />
 );

@@ -7,10 +7,11 @@ import aws_exports from './aws-exports';
 
 import { withAuthenticator } from 'aws-amplify-react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
+import SplashScreen from 'react-native-splash-screen';
 
-import Tabs from './auth/Tabs';
 import Nav from './nav/Nav';
 import Constants from './constants';
+import AuthNav from './auth/AuthNav';
 
 class App extends Component {
   state = {
@@ -54,7 +55,7 @@ class App extends Component {
     if (loggedIn) {
       return <Nav />;
     }
-    return <Tabs />;
+    return <AuthNav />;
   }
 }
 

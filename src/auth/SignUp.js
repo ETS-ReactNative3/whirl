@@ -7,22 +7,26 @@ import {
   TouchableOpacity,
   ImageBackground,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Animated
 } from 'react-native';
 
 import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 
-import { fonts, colors } from '../theme';
+import { AuthStyles, AuthBackground } from './AuthTheme';
+
 import { createUser, confirmUserSignUp } from '../actions';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
 
 const initialState = {
-  username: '',
-  password: '',
-  given_name: '',
+  username: null,
+  password: null,
+  given_name: null,
   authCode: '',
   modalVisible: false,
   loading: true
@@ -75,8 +79,8 @@ class SignUp extends Component {
 
     return (
       <ImageBackground
-        style={styles.image}
-        source={require('../assets/DefaultBackground3.jpg')}
+        style={AuthStyles.image}
+        source={require('../assets/AuthBackground.jpg')}
         imageStyle={{ resizeMode: 'cover' }}
       >
         <TouchableWithoutFeedback
@@ -84,44 +88,72 @@ class SignUp extends Component {
           accessible={false}
           style={{ flex: 1 }}
         >
-          <View style={styles.container}>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.title}>Whirl</Text>
-            </View>
-            <Text style={styles.greeting2}>Sign up to continue</Text>
-            <View style={styles.inputContainer}>
-              <View style={styles.inputLineContainer}>
-                <Input
-                  placeholder="First Name"
-                  type="given_name"
-                  onChangeText={this.onChangeText}
-                  value={this.state.given_name}
-                  autoCapitalize="words"
-                />
+          <View style={AuthStyles.container}>
+            <KeyboardAvoidingView behavior="position">
+              <View style={{ alignItems: 'center' }}>
+                <Text style={AuthStyles.title}>Whirl</Text>
               </View>
-              <View style={styles.inputLineContainer}>
-                <Input
-                  value={this.state.username}
-                  placeholder="Email address"
-                  type="username"
-                  onChangeText={this.onChangeText}
-                />
+              <Text style={AuthStyles.greeting}>Sign up to continue</Text>
+
+              <View style={AuthStyles.inputContainer}>
+                <View style={AuthStyles.inputLineContainer}>
+                  <Input
+                    placeholder="First Name"
+                    type="given_name"
+                    onChangeText={this.onChangeText}
+                    value={this.state.given_name}
+                    autoCapitalize="words"
+                  />
+                </View>
+                <View style={AuthStyles.inputLineContainer}>
+                  <Input
+                    value={this.state.username}
+                    placeholder="Email address"
+                    type="username"
+                    onChangeText={this.onChangeText}
+                    keyboadType="email-address"
+                  />
+                </View>
+                <View style={AuthStyles.inputLineContainer}>
+                  <Input
+                    value={this.state.password}
+                    placeholder="Password"
+                    secureTextEntry
+                    type="password"
+                    onChangeText={this.onChangeText}
+                    onSubmitEditing={() => this.signUp.bind(this)}
+                  />
+                </View>
               </View>
-              <View style={styles.inputLineContainer}>
-                <Input
-                  value={this.state.password}
-                  placeholder="Password"
-                  secureTextEntry
-                  type="password"
-                  onChangeText={this.onChangeText}
-                />
-              </View>
-            </View>
+            </KeyboardAvoidingView>
+
             <Button
               title="Sign Up"
               onPress={this.signUp.bind(this)}
               isLoading={isAuthenticating}
+              disabled={
+                !this.state.username ||
+                !this.state.password ||
+                !this.state.given_name
+              }
             />
+
+            <View
+              style={{
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                flexDirection: 'row'
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('SignIn')}
+                style={{ alignItems: 'center' }}
+              >
+                <View style={AuthStyles.button}>
+                  <Text style={AuthStyles.buttonText}>Back to Sign In</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
@@ -144,61 +176,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(SignUp);
-
-const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  inputContainer: {
-    marginTop: 10
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 40
-  },
-  greeting: {
-    marginTop: 20,
-    fontFamily: fonts.light,
-    fontSize: 31,
-    fontWeight: '300'
-  },
-  greeting2: {
-    fontFamily: fonts.light,
-    // color: '#a82167',
-    color: colors.primary,
-    textShadowColor: '#000000',
-    textShadowRadius: 0.3,
-    textShadowOffset: { width: 0.2, height: 0.2 },
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginTop: 5,
-    marginLeft: 10,
-    marginBottom: -10
-  },
-  image: {
-    flexGrow: 1,
-    height: null,
-    width: null,
-    alignItems: 'stretch'
-  },
-  inputLineContainer: {
-    marginTop: 20,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 5,
-    borderBottomWidth: 1.5,
-    borderBottomColor: colors.primary
-  },
-  title: {
-    padding: 10,
-    fontFamily: 'Billabong',
-    fontSize: 60,
-    fontWeight: '200',
-    color: '#ffffff',
-    textShadowColor: '#000000',
-    textShadowRadius: 0.3,
-    textShadowOffset: { width: 0.5, height: 0.5 }
-  }
-});
