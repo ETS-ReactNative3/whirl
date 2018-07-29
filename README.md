@@ -3,7 +3,7 @@ Whirl is a mobile application and chrome extension for managing tasks.
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/populated.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/PopulatedExample.png" width="240">
 </p>
 
 
@@ -15,8 +15,8 @@ Built using React-Native and AWS (Cognito, DynamoDB, Api Gateway, Lambda, S3)
 
 Sign in to access your tasks which are synced with those in the chrome extension, or switch tabs to sign up for a new account.    
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Login/LogInScreen.png" width="240">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Login/SignUpScreen.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Login.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/SignUp.png" width="240">
 </p>   
 
 
