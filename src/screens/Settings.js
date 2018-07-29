@@ -7,21 +7,24 @@ import {
   Image,
   StyleSheet,
   Picker,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 
 import { fonts, colors } from '../theme';
 import CONSTANTS from '../constants';
 import StatusBar from '../components/StatusBar';
-import constants from '../constants';
+import RNFetchBlob from 'react-native-fetch-blob';
+// import ProgressiveImage from 'react-progressive-image';
 
 export default class Settings extends Component {
   state = {
     backgroundSource: 'DEFAULT',
     textColor: '#ffffff',
     changes: false,
-    imageKey: 'DEFAULT'
+    imageKey: 'DEFAULT',
+    pickerEnabled: false
   };
 
   /**
@@ -69,6 +72,21 @@ export default class Settings extends Component {
     } catch (error) {
       console.log('Settings: theres been an error getting the textColor item');
     }
+
+    let dirs = RNFetchBlob.fs.dirs;
+
+    // load all backgrounds
+    for (link in CONSTANTS.BACKGROUNDS) {
+      RNFetchBlob.config({
+        session: 'backgrounds',
+        fileCache: true,
+        path: dirs.DocumentDir + '/Backgrounds/' + link + '.jpg',
+        appendExt: 'jpg'
+      }).fetch('GET', CONSTANTS.BACKGROUNDS[link]).progress;
+    }
+    this.setState({
+      pickerEnabled: !this.state.pickerEnabled
+    });
   }
 
   /**
@@ -147,10 +165,23 @@ export default class Settings extends Component {
       <View />
     );
 
+    let source =
+      '' +
+      CONSTANTS.BACKGROUND_LOCATIONS +
+      this.state.backgroundSource +
+      '.jpg';
+
     return (
       <ImageBackground
         style={styles.image}
         source={require('../assets/DefaultBackground3.jpg')}
+        // source={{
+        //   uri:
+        //     '' +
+        //     CONSTANTS.BACKGROUND_LOCATIONS +
+        //     this.state.backgroundSource +
+        //     '.jpg'
+        // }}
         imageStyle={{ resizeMode: 'cover' }}
       >
         {/* Header containing page title and menu icon */}
@@ -207,6 +238,7 @@ export default class Settings extends Component {
                   });
                 }}
                 style={{ width: 200 }}
+                enabled={this.state.pickerEnabled}
               >
                 {/* Background options */}
                 <Picker.Item label="City" value={'CITY'} />
@@ -251,6 +283,18 @@ export default class Settings extends Component {
                   style={styles.backgroundImage}
                   key={this.state.imageKey}
                 />
+                {/* <ProgressiveImage
+                  src={source}
+                  placeholder="../assets/icons/settings.png"
+                >
+                  {(src, loading) => (
+                    <img
+                      style={{ opacity: loading ? 0.5 : 1 }}
+                      src={src}
+                      alt="an image"
+                    />
+                  )}
+                </ProgressiveImage> */}
                 <Text
                   style={{
                     color: this.state.textColor,
@@ -293,10 +337,9 @@ export default class Settings extends Component {
                 />
               </Picker>
             </View>
-
-            {/* Save changes button */}
-            {save_button}
           </View>
+          {/* Save changes button */}
+          {save_button}
         </View>
       </ImageBackground>
     );
