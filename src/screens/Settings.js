@@ -8,13 +8,14 @@ import {
   StyleSheet,
   Picker,
   AsyncStorage,
-  ActivityIndicator
+  Alert
 } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 
 import { fonts, colors } from '../theme';
 import CONSTANTS from '../constants';
 import StatusBar from '../components/StatusBar';
+import Offline from '../components/Offline';
 import RNFetchBlob from 'react-native-fetch-blob';
 // import ProgressiveImage from 'react-progressive-image';
 
@@ -74,19 +75,22 @@ export default class Settings extends Component {
     }
 
     let dirs = RNFetchBlob.fs.dirs;
-
-    // load all backgrounds
-    for (link in CONSTANTS.BACKGROUNDS) {
-      RNFetchBlob.config({
-        session: 'backgrounds',
-        fileCache: true,
-        path: dirs.DocumentDir + '/Backgrounds/' + link + '.jpg',
-        appendExt: 'jpg'
-      }).fetch('GET', CONSTANTS.BACKGROUNDS[link]).progress;
+    try {
+      // load all backgrounds
+      for (link in CONSTANTS.BACKGROUNDS) {
+        RNFetchBlob.config({
+          session: 'backgrounds',
+          fileCache: true,
+          path: dirs.DocumentDir + '/Backgrounds/' + link + '.jpg',
+          appendExt: 'jpg'
+        }).fetch('GET', CONSTANTS.BACKGROUNDS[link]).progress;
+      }
+      this.setState({
+        pickerEnabled: !this.state.pickerEnabled
+      });
+    } catch (error) {
+      Alert.alert('Could not download alternative backgrounds.');
     }
-    this.setState({
-      pickerEnabled: !this.state.pickerEnabled
-    });
   }
 
   /**
@@ -175,13 +179,6 @@ export default class Settings extends Component {
       <ImageBackground
         style={styles.image}
         source={require('../assets/DefaultBackground3.jpg')}
-        // source={{
-        //   uri:
-        //     '' +
-        //     CONSTANTS.BACKGROUND_LOCATIONS +
-        //     this.state.backgroundSource +
-        //     '.jpg'
-        // }}
         imageStyle={{ resizeMode: 'cover' }}
       >
         {/* Header containing page title and menu icon */}
@@ -215,6 +212,7 @@ export default class Settings extends Component {
           </View>
         </View>
 
+        <Offline />
         {/* The settings for the app:
             - Backgrounds
             - Text Color
@@ -283,18 +281,6 @@ export default class Settings extends Component {
                   style={styles.backgroundImage}
                   key={this.state.imageKey}
                 />
-                {/* <ProgressiveImage
-                  src={source}
-                  placeholder="../assets/icons/settings.png"
-                >
-                  {(src, loading) => (
-                    <img
-                      style={{ opacity: loading ? 0.5 : 1 }}
-                      src={src}
-                      alt="an image"
-                    />
-                  )}
-                </ProgressiveImage> */}
                 <Text
                   style={{
                     color: this.state.textColor,
