@@ -18,6 +18,7 @@ import SplashScreen from 'react-native-splash-screen';
 import MainFocus from '../components/MainFocus/MainFocus';
 import Todo from '../components/Todo/Todo';
 import StatusBar from '../components/StatusBar';
+import Offline from '../components/Offline';
 
 import { DrawerActions } from 'react-navigation';
 
@@ -186,6 +187,7 @@ class Homescreen extends Component {
         >
           {/* Include status bar to leave width for status bar */}
           <StatusBar />
+          <Offline />
           <View style={{ flex: 1 }}>
             {/* Header bar. Contains the button for the drawer menu */}
             <View style={styles.headerBar}>

@@ -21,7 +21,6 @@ class Start extends Component {
               backgroundSource: 'DEFAULT'
             });
           }
-
           // download the image
           let dirs = RNFetchBlob.fs.dirs;
           RNFetchBlob.config({
@@ -42,19 +41,8 @@ class Start extends Component {
         }
       );
     } catch (error) {
-      console.log(
-        'Start: theres been an error getting the backgroundSource item'
-      );
-      console.log(error);
-
-      // download default background
-      let dirs = RNFetchBlob.fs.dirs;
-      RNFetchBlob.config({
-        session: 'backgrounds',
-        fileCache: true,
-        path: dirs.DocumentDir + '/Backgrounds/' + 'DEFAULT' + '.jpg',
-        appendExt: 'jpg'
-      }).fetch('GET', Constants.BACKGROUNDS['DEFAULT']);
+      Alert.alert('Oops!', 'There was an issue loading app backgrounds.');
+      this.props.navigation.navigate('Home');
     }
   }
 

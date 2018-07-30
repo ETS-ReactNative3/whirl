@@ -110,8 +110,8 @@ class SignIn extends Component {
             <View
               style={{
                 justifyContent: 'space-around',
-                alignItems: 'center'
-                // flexDirection: 'row'
+                alignItems: 'center',
+                flexDirection: 'column'
               }}
             >
               <TouchableOpacity
