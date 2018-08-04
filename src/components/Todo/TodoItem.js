@@ -5,14 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   Button,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { fonts, colors } from '../../theme';
+import { API } from 'aws-amplify';
 
 class TodoItem extends Component {
   state = {
+    item: this.props.item,
     todo: '',
-    strikethrough: this.props.strikethrough,
+    strikethrough: this.props.strikethrough === 'false',
     user: ''
   };
 
@@ -22,10 +25,39 @@ class TodoItem extends Component {
     });
 
     // update strikethough in dynamo db
+    let newNote = {
+      body: {
+        Content: this.state.item.Content.trim(),
+        Completed: this.state.strikethrough.toString(),
+        User: this.state.item.User,
+        Date: this.state.item.Date
+      }
+    };
+    this.saveNote(newNote);
   };
 
+  // Create a new Note according to the columns we defined earlier
+  async saveNote(note) {
+    const path = '/TodoItems';
+    // Use the API module to save the note to the database
+    try {
+      const apiResponse = API.put('TodoItemsCRUD', path, note).then(value => {
+        console.log('value ', value);
+        if (value !== null) {
+          if (value['success'] === undefined) {
+            Alert.alert('There was an error updating your todo item..');
+          }
+          this.setState({ value });
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      Alert.alert('There was an error updating your todo item.');
+    }
+  }
+
   render() {
-    const text = !this.state.strikethrough ? (
+    const text = this.state.strikethrough ? (
       <View
         style={{
           flexDirection: 'row',
