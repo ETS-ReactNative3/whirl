@@ -32,18 +32,20 @@ class todoList extends Component {
         renderRow={(rowData, sectionId, rowId) =>
           rowId !== this.props.apiResponse.length - 1 ? (
             <TodoItem
+              item={rowData}
               todo={rowData.Content}
               user={rowData.User}
-              strikethrough={rowData.Strikethrough}
+              strikethrough={rowData.Completed}
               onDeletePressed={() =>
                 this.props.onDeletePressed(rowData.Date, rowData.User, rowId)
               }
             />
           ) : (
             <TodoItem
+              item={rowData}
               todo={rowData.Content}
               user={rowData.User}
-              strikethrough={rowData.Strikethrough}
+              strikethrough={rowData.Completed}
               onDeletePressed={() =>
                 this.props.onDeletePressed(rowData.Date, rowData.User, rowId)
               }
