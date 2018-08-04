@@ -20,7 +20,8 @@ function Banner() {
 
 class Offline extends Component {
   state = {
-    isConnected: true
+    isConnected: true,
+    errorMessage: this.props.message
   };
 
   componentDidMount() {
@@ -41,10 +42,7 @@ class Offline extends Component {
     if (isConnected) {
       this.setState({ isConnected });
     } else {
-      Alert.alert(
-        'Oops!',
-        'The internet connection appears to be offline. Cannot get todo items.'
-      );
+      Alert.alert('Oops!', this.state.errorMessage);
       this.setState({ isConnected });
     }
   };

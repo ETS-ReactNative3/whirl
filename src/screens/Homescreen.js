@@ -187,7 +187,7 @@ class Homescreen extends Component {
         >
           {/* Include status bar to leave width for status bar */}
           <StatusBar />
-          <Offline />
+          <Offline message="The internet connection appears to be offline. Cannot get todo items." />
           <View style={{ flex: 1 }}>
             {/* Header bar. Contains the button for the drawer menu */}
             <View style={styles.headerBar}>

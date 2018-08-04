@@ -23,6 +23,7 @@ export default class Settings extends Component {
   state = {
     backgroundSource: 'DEFAULT',
     textColor: '#ffffff',
+    backgroundsLoaded: CONSTANTS.BACKGROUNDS.length,
     changes: false,
     imageKey: 'DEFAULT',
     pickerEnabled: false
@@ -83,11 +84,19 @@ export default class Settings extends Component {
           fileCache: true,
           path: dirs.DocumentDir + '/Backgrounds/' + link + '.jpg',
           appendExt: 'jpg'
-        }).fetch('GET', CONSTANTS.BACKGROUNDS[link]).progress;
+        })
+          .fetch('GET', CONSTANTS.BACKGROUNDS[link])
+          .then(() => {
+            this.setState({
+              backgroundsLoaded: this.state.backgroundsLoaded - 1
+            });
+          });
       }
-      this.setState({
-        pickerEnabled: !this.state.pickerEnabled
-      });
+      if (this.state.backgroundsLoaded === 0) {
+        this.setState({
+          pickerEnabled: !this.state.pickerEnabled
+        });
+      }
     } catch (error) {
       Alert.alert('Could not download alternative backgrounds.');
     }
@@ -212,7 +221,8 @@ export default class Settings extends Component {
           </View>
         </View>
 
-        <Offline />
+        <Offline message="The internet connection appears to be offline. Background images might not have been downloaded." />
+
         {/* The settings for the app:
             - Backgrounds
             - Text Color
