@@ -14,7 +14,7 @@ import { Auth } from 'aws-amplify';
 import { DrawerActions } from 'react-navigation';
 
 import { logOut } from '../actions';
-import { fonts, colors } from '../theme';
+import { fonts } from '../theme';
 import StatusBar from '../components/StatusBar';
 import Constants from '../constants';
 

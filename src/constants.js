@@ -3,16 +3,16 @@ import RNFetchBlob from 'react-native-fetch-blob';
 
 export default {
   BACKGROUNDS: {
-    WALLPAPER: 'https://source.unsplash.com/collection/1065412/900x1600/daily',
-    LANDSCAPES: 'https://source.unsplash.com/900x600/daily?landscape',
-    DEFAULT: 'https://source.unsplash.com/collection/1457745/900x1600/daily',
-    // NATURE: 'https://source.unsplash.com/900x600/daily?nature',
-    NATURE: 'https://source.unsplash.com/collection/1770663/900x1600/daily',
-    SPACE: 'https://source.unsplash.com/collection/1111575/900x1600/daily',
-    ROADS: 'https://source.unsplash.com/collection/1525589/900x1600/daily',
-    CITY: 'https://source.unsplash.com/collection/1976082/900x1600/daily',
-    ABSTRACT: 'https://source.unsplash.com/collection/1242150/900x1600/daily',
-    ABOVETREE: 'https://source.unsplash.com/collection/1525582/900X1600/daily'
+    WALLPAPER: 'https://source.unsplash.com/collection/1065412/1242x2208/daily',
+    LANDSCAPES: 'https://source.unsplash.com/1242x2208/daily?landscape',
+    DEFAULT: 'https://source.unsplash.com/collection/1457745/1242x2208/daily',
+    // NATURE: 'https://source.unsplash.com/1242x2208/daily?nature',
+    NATURE: 'https://source.unsplash.com/collection/1770663/1242x2208/daily',
+    SPACE: 'https://source.unsplash.com/collection/1111575/1242x2208/daily',
+    ROADS: 'https://source.unsplash.com/collection/1525589/1242x2208/daily',
+    CITY: 'https://source.unsplash.com/collection/1976082/1242x2208/daily',
+    ABSTRACT: 'https://source.unsplash.com/collection/1242150/1242x2208/daily',
+    ABOVETREE: 'https://source.unsplash.com/collection/1525582/1242x2208/daily'
   },
   colors: {
     white: '#ffffff',

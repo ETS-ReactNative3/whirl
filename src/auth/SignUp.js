@@ -2,21 +2,16 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  TextInput,
-  StyleSheet,
   TouchableOpacity,
   ImageBackground,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Animated
+  KeyboardAvoidingView
 } from 'react-native';
 
-import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 
-import { AuthStyles, AuthBackground } from './AuthTheme';
+import { AuthStyles } from './AuthTheme';
 
 import { createUser, confirmUserSignUp } from '../actions';
 

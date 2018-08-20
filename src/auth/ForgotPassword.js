@@ -3,7 +3,6 @@ import {
   Alert,
   View,
   Text,
-  StyleSheet,
   ImageBackground,
   TouchableWithoutFeedback,
   Keyboard,
@@ -13,7 +12,7 @@ import { Auth } from 'aws-amplify';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
-import { AuthStyles, AuthBackground } from './AuthTheme';
+import { AuthStyles } from './AuthTheme';
 
 import { AuthExceptions } from './AuthExceptions';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
-import { colors, fonts } from '../theme';
+import { fonts } from '../theme';
 
 export default ({
   placeholder,

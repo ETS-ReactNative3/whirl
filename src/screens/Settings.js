@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  ImageBackground,
   TouchableOpacity,
   Image,
   StyleSheet,
@@ -17,7 +16,6 @@ import CONSTANTS from '../constants';
 import StatusBar from '../components/StatusBar';
 import Offline from '../components/Offline';
 import RNFetchBlob from 'react-native-fetch-blob';
-// import ProgressiveImage from 'react-progressive-image';
 
 export default class Settings extends Component {
   state = {

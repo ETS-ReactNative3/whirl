@@ -10,7 +10,6 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native';
-import RNFetchBlob from 'react-native-fetch-blob';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -64,7 +63,6 @@ class Homescreen extends Component {
   async storeName(name) {
     try {
       await AsyncStorage.setItem('name', name);
-      console.log('Home: name successfully stored');
     } catch (error) {
       console.log('Home: error setting the name item in storage: ');
       console.log(error);
@@ -78,7 +76,6 @@ class Homescreen extends Component {
   async storeEmail(email) {
     try {
       await AsyncStorage.setItem('email', email);
-      console.log('Home: email successfully stored');
       this.setState({
         uniqueKey: this.state.uniqueKey + 1
       });
@@ -177,7 +174,6 @@ class Homescreen extends Component {
       Constants.BACKGROUND_LOCATIONS + this.state.backgroundSource + '.jpg'
     );
 
-    console.log('home bg: ', this.state.backgroundSource);
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground
@@ -233,7 +229,8 @@ class Homescreen extends Component {
                     />
                   </View>
                 </View>
-              )};
+              )}
+              ;
             </ScrollView>
           </View>
         </ImageBackground>

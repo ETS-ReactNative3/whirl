@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, AsyncStorage } from 'react-native';
 import Constants from '../constants';
 import RNFetchBlob from 'react-native-fetch-blob';
-import SplashScreen from 'react-native-splash-screen';
 
 class Start extends Component {
   async componentDidMount() {

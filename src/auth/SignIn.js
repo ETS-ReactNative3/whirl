@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
@@ -12,12 +11,10 @@ import {
 } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
-import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 
 import { authenticate, confirmUserLogin } from '../actions';
-import { fonts, colors } from '../theme';
-import { AuthStyles, AuthBackground } from './AuthTheme';
+import { AuthStyles } from './AuthTheme';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -133,7 +130,8 @@ class SignIn extends Component {
               >
                 <View style={AuthStyles.button}>
                   <Text style={[AuthStyles.buttonText]}>
-                    Don't have an account yet?{'   '}
+                    Don't have an account yet?
+                    {'   '}
                   </Text>
                   <Text style={[AuthStyles.buttonText, styles.SignUpText]}>
                     Create one.

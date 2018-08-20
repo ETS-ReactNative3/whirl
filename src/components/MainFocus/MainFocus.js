@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Button,
-  Text,
-  AsyncStorage
-} from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import MainFocusInput from './MainFocusInput';
 import TodayFocus from './TodayFocus';
 
