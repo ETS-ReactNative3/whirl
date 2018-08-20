@@ -185,11 +185,7 @@ export default class Settings extends Component {
       '.jpg';
 
     return (
-      <ImageBackground
-        style={styles.image}
-        source={require('../assets/DefaultBackground3.jpg')}
-        imageStyle={{ resizeMode: 'cover' }}
-      >
+      <View style={{ flex: 1, backgroundColor: '#125688' }}>
         {/* Header containing page title and menu icon */}
         <StatusBar backgroundColor="#ffffff" />
         <View style={styles.headerBar}>
@@ -337,7 +333,7 @@ export default class Settings extends Component {
           {/* Save changes button */}
           {save_button}
         </View>
-      </ImageBackground>
+      </View>
     );
   }
 }
