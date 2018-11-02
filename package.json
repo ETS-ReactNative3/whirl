@@ -10,29 +10,30 @@
     "aws-amplify": "^0.4.1",
     "aws-amplify-react-native": "^0.2.12",
     "aws-sdk": "^2.242.1",
+    "merge": ">=1.2.1",
     "react": "^16.3.2",
     "react-native": "^0.57.2",
     "react-native-fetch-blob": "^0.10.8",
-    "react-native-splash-screen": "^3.0.9",
+    "react-native-splash-screen": "^3.1.1",
     "react-navigation": "^2.0.1",
     "react-redux": "^5.0.7",
     "react-thunk": "^1.0.0",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.2.0",
-    "merge": ">=1.2.1"
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-jest": "22.4.4",
     "babel-preset-react-native": "4.0.0",
     "jest": "22.4.4",
-    "react-test-renderer": "16.3.2"
+    "react-test-renderer": "16.3.2",
+    "schedule": "^0.4.0"
   },
   "jest": {
     "preset": "react-native"
   },
   "rnpm": {
     "assets": [
-      "src/assets/fonts"
+      "./src/assets/fonts"
     ]
   }
 }
