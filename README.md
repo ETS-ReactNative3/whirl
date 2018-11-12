@@ -37,9 +37,9 @@ The background image and text color of the heads can be changed in the settings 
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings.png" width= "240">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings2.png" width="240">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/SettingsChanged.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings_BackgroundText_change1.png" width= "240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings_BackgroundText_change2.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Settings_BackgroundText_change3.png" width="240">
 </p>
 
 
