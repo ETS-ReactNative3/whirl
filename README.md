@@ -28,8 +28,8 @@ The homescreen contains options for the user to add a main focus for the day (by
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Homescreen.png" width="240">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/NewMainFocus.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/HomescreenAutumnal.png" width="240">
+  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/AddMainFocusAutumnal.png" width="240">
 </p>
 
 
