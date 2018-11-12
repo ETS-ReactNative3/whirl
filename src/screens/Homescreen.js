@@ -230,7 +230,6 @@ class Homescreen extends Component {
                   </View>
                 </View>
               )}
-              ;
             </ScrollView>
           </View>
         </ImageBackground>
