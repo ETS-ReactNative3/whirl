@@ -5,7 +5,7 @@ Whirl is a mobile application and chrome extension for managing tasks.
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/PopulatedExample.png" width="240">
+  <img src="https://github.com/C2P1/whirl/blob/master/assets/imgs/PopulatedExample.png" width="240">
 </p>
 
 
@@ -17,8 +17,8 @@ Built using React-Native and AWS (Cognito, DynamoDB, Api Gateway, Lambda, S3)
 
 Sign in to access your tasks which are synced with those in the chrome extension, or switch tabs to sign up for a new account.    
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/Login.png" width="240">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/SignUp.png" width="240">
+  <img src="https://github.com/C2P1/whirl/blob/master/assets/imgs/Login.png" width="240">
+  <img src="https://github.com/C2P1/whirl/blob/master/assets/imgs/SignUp.png" width="240">
 </p>   
 
 
@@ -28,8 +28,8 @@ The homescreen contains options for the user to add a main focus for the day (by
 
 
 <p align="center">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/HomescreenAutumnal.png" width="240">
-  <img src="https://s3-eu-west-1.amazonaws.com/whirl101/images/AddMainFocusAutumnal.png" width="240">
+  <img src="https://github.com/C2P1/whirl/blob/master/assets/imgs/HomescreenAutumnal.png" width="240">
+  <img src="https://github.com/C2P1/whirl/blob/master/assets/imgs/AddMainFocusAutumnal.png" width="240">
 </p>
 
 
